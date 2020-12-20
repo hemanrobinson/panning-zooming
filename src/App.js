@@ -1,13 +1,9 @@
-import React, { useState } from 'react';
-import { Button, Slider } from '@material-ui/core';
+import React from 'react';
 import Plot from './Plot';
 import './App.css';
 
 // Application:  Side-by-side scatter plots.
 const App = () => {
-    
-    // Create state.
-    const [ size, setSize ] = useState( 100 );
     
     // Return the App.
     return (
@@ -15,18 +11,15 @@ const App = () => {
             <div className="Description">
                 <h1>Implementing Shneiderman's Mantra<br/>for Aggregate Graphs</h1>
                 <p>
-                Shneiderman taught us all to <a href="http://www.cs.umd.edu/~ben/papers/Shneiderman1996eyes.pdf">"Overview first, zoom and filter, then details-on-demand"</a>.  For graphs that display individual points, like scatter plots, zooming requires a simple rescaling.  On the Web, a familiar user interface displays plus (+) and minus (-) buttons, sometimes with adjustable scroll bars.
+                Shneiderman taught us all to <a href="http://www.cs.umd.edu/~ben/papers/Shneiderman1996eyes.pdf">"Overview first, zoom and filter, then details-on-demand"</a>.  For graphs that display individual points, like scatter plots, zooming requires a simple rescaling.  On the Web, a familiar user interface displays plus (+) and minus (-) buttons with scroll bars.
                 </p>
             </div>
             <div className="Graph">
-                <Plot dataSet={ "Cytometry" } size={size} />
-                <Slider defaultValue={ 10 } step={ 1 } min={ 0 } max={ 20 }
-                    valueLabelDisplay="auto" marks valueLabelFormat={( value ) => value * value }
-                    onChangeCommitted={( event, value ) => setSize( value * value )} />
+                <Plot dataSet={ "Cytometry" } />
             </div>
             <div className="Description">
                 <p>
-                For aggregate graphs, which do not display individual points, rescaling is necessary but not sufficient.  For example, in a histogram, users can't explore their data by simply adjusting the scale; they must also adjust the bin widths.
+                For aggregate graphs, which do not display individual points, rescaling is necessary but not sufficient.  For example, in a histogram, users can't explore their data by only adjusting the scale; they must also adjust the bin widths.
                 </p>
             </div>
             <div className="Description">
