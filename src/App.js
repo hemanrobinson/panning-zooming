@@ -1,25 +1,48 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import { Button, Slider } from '@material-ui/core';
+import Plot from './Plot';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+// Application:  Side-by-side scatter plots.
+const App = () => {
+    
+    // Create state.
+    const [ size, setSize ] = useState( 100 );
+    
+    // Return the App.
+    return (
+        <div className="Column">
+            <div className="Description">
+                <h1>Implementing Shneiderman's Mantra<br/>for Aggregate Graphs</h1>
+                <p>
+                Shneiderman taught us all to <a href="http://www.cs.umd.edu/~ben/papers/Shneiderman1996eyes.pdf">"Overview first, zoom and filter, then details-on-demand"</a>.  For graphs that display individual points, like scatter plots, zooming requires a simple rescaling.  On the Web, a familiar user interface displays plus (+) and minus (-) buttons, sometimes with adjustable scroll bars.
+                </p>
+            </div>
+            <div className="Graph">
+                <Plot dataSet={ "Cytometry" } size={size} />
+                <Slider defaultValue={ 10 } step={ 1 } min={ 0 } max={ 20 }
+                    valueLabelDisplay="auto" marks valueLabelFormat={( value ) => value * value }
+                    onChangeCommitted={( event, value ) => setSize( value * value )} />
+            </div>
+            <div className="Description">
+                <p>
+                For aggregate graphs, which do not display individual points, rescaling is necessary but not sufficient.  For example, in a histogram, users can't explore their data by simply adjusting the scale; they must also adjust the bin widths.
+                </p>
+            </div>
+            <div className="Description">
+                <h2>Notes</h2>
+                <p>
+                Display primary controls on hover or click.
+                </p>
+                <p>
+                Display secondary controls in a dialog.
+                </p>
+                <p>
+                It's important that scaling and "bin-zooming" be independent controls.
+                </p>
+            </div>
+        </div>
+    );
 }
 
 export default App;

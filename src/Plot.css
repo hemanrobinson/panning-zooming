@@ -1,0 +1,11 @@
+/* SVG element. */
+svg {
+    border: 1px solid black;
+    font-size: 10px;
+}
+
+/* Axis */
+.axis path,
+.axis line {
+    stroke: #a0a0a0;
+}
