@@ -7,23 +7,21 @@ import './Plot.css';
 // Scatter plot in an SVG element.
 const Plot = ( props ) => {
     
-    // Create state.
+    // Initialization.
+    const padding = 20, marginAxis = 50, buttonSize = 30, scrollSize = 15, height = 400, width = 400;
     let { dataSet } = props,
         data = Data.getValues( dataSet ),
         xMin0 = d3.min( data, d => d[ 2 ]),
         xMax0 = d3.max( data, d => d[ 2 ]),
         yMin0 = d3.min( data, d => d[ 1 ]),
-        yMax0 = d3.max( data, d => d[ 1 ]);
-    
-    // Create reference and scales.
-    const padding = 20, marginAxis = 50, buttonSize = 30, height = 400, width = 400;
-    let ref = useRef(),
+        yMax0 = d3.max( data, d => d[ 1 ]),
         xScale = d3.scaleLinear().domain([ xMin0, xMax0 ]).range([ marginAxis + padding, width - padding ]),
-        yScale = d3.scaleLinear().domain([ yMin0, yMax0 ]).range([ height - marginAxis - padding, padding ]);
+        yScale = d3.scaleLinear().domain([ yMin0, yMax0 ]).range([ height - marginAxis - padding, padding ]),
+        ref = useRef();
     
     // Set hook to draw on mounting, or on any other lifecycle update.
     useEffect(() => {
-        Plot.draw( height, width, marginAxis, padding, ref, xScale, yScale, dataSet, 100 );
+        Plot.draw( height, width, marginAxis, padding, scrollSize, ref, xScale, yScale, xMin0, xMax0, yMin0, yMax0, dataSet, 100 );
     });
     
     // Zoom in or out.
@@ -44,7 +42,7 @@ const Plot = ( props ) => {
             }
             xScale.domain([ xMin, xMax ]);
             yScale.domain([ yMin, yMax ]);
-            Plot.draw( height, width, marginAxis, padding, ref, xScale, yScale, dataSet, 100 );
+            Plot.draw( height, width, marginAxis, padding, scrollSize, ref, xScale, yScale, xMin0, xMax0, yMin0, yMax0, dataSet, 100 );
         },
         onZoomIn  = () => { onZoom( true  ); },
         onZoomOut = () => { onZoom( false ); };
@@ -58,7 +56,7 @@ const Plot = ( props ) => {
 };
     
 // Draws the points.
-Plot.draw = ( height, width, marginAxis, padding, ref, xScale, yScale, dataSet, size ) => {
+Plot.draw = ( height, width, marginAxis, padding, scrollSize, ref, xScale, yScale, xMin0, xMax0, yMin0, yMax0, dataSet, size ) => {
     
     // Initialization.
     const svg = d3.select( ref.current );
@@ -77,6 +75,12 @@ Plot.draw = ( height, width, marginAxis, padding, ref, xScale, yScale, dataSet, 
     });
     
     // Draw the X axis.
+    svg.append( "rect" )
+        .attr( "x", 0 )
+        .attr( "y", height - marginAxis )
+        .attr( "width", width )
+        .attr( "height", marginAxis )
+        .style( "fill", "#ffffff" );
     svg.append( "g" )
         .attr( "class", "axis" )
         .attr( "transform", "translate( 0, " + ( height - marginAxis ) + " )" )
@@ -85,8 +89,32 @@ Plot.draw = ( height, width, marginAxis, padding, ref, xScale, yScale, dataSet, 
         .attr( "transform", "translate( " + ( width / 2 ) + " ," + ( height - padding ) + ")" )
         .style( "text-anchor", "middle" )
         .text( columnNames[ 2 ]);
+    
+    // Draw the X scrollbar.
+    let x = marginAxis + padding,
+        w = width - padding - x + 1,
+        xMin = x + w * ( xScale.domain()[ 0 ] - xMin0 ) / ( xMax0 - xMin0 ),
+        xMax = x + w * ( xScale.domain()[ 1 ] - xMin0 ) / ( xMax0 - xMin0 );
+    svg.append( "rect" )
+        .attr( "x", x )
+        .attr( "y", height - scrollSize )
+        .attr( "width", w )
+        .attr( "height", scrollSize )
+        .style( "fill", "#eeeeee" );
+    svg.append( "rect" )
+        .attr( "x", xMin )
+        .attr( "y", height - scrollSize )
+        .attr( "width", xMax - xMin )
+        .attr( "height", scrollSize )
+        .style( "fill", "#cccccc" );
         
     // Draw the Y axis.
+    svg.append( "rect" )
+        .attr( "x", 0 )
+        .attr( "y", 0 )
+        .attr( "width", marginAxis )
+        .attr( "height", height )
+        .style( "fill", "#ffffff" );
     svg.append( "g" )
         .attr( "class", "axis" )
         .attr( "transform", "translate( " + marginAxis + ", 0 )" )
@@ -97,6 +125,24 @@ Plot.draw = ( height, width, marginAxis, padding, ref, xScale, yScale, dataSet, 
         .attr( "y", padding * 1.5 )
         .style( "text-anchor", "middle" )
         .text( columnNames[ 1 ]);
+        
+    // Draw the Y scrollbar.
+    let y = padding,
+        h = height - marginAxis - padding - y + 1,
+        yMin = y + h * ( 1 - ( yScale.domain()[ 0 ] - yMin0 ) / ( yMax0 - yMin0 )),
+        yMax = y + h * ( 1 - ( yScale.domain()[ 1 ] - yMin0 ) / ( yMax0 - yMin0 ));
+    svg.append( "rect" )
+        .attr( "x", 0 )
+        .attr( "y", y )
+        .attr( "width", scrollSize )
+        .attr( "height", h )
+        .style( "fill", "#eeeeee" );
+    svg.append( "rect" )
+        .attr( "x", 0 )
+        .attr( "y", yMax )
+        .attr( "width", scrollSize )
+        .attr( "height", yMin - yMax )
+        .style( "fill", "#cccccc" );
 };
 
 export default Plot;

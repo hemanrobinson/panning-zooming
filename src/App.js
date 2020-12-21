@@ -9,9 +9,9 @@ const App = () => {
     return (
         <div className="Column">
             <div className="Description">
-                <h1>Implementing Shneiderman's Mantra<br/>for Aggregate Graphs</h1>
+                <h1>Applying Shneiderman's Mantra<br/>to Aggregate Graphs</h1>
                 <p>
-                Shneiderman taught us all to <a href="http://www.cs.umd.edu/~ben/papers/Shneiderman1996eyes.pdf">"Overview first, zoom and filter, then details-on-demand"</a>.  For graphs that display individual points, like scatter plots, zooming requires a simple rescaling.  On the Web, a familiar user interface displays plus (+) and minus (-) buttons with scroll bars.
+                Shneiderman taught us all to <a href="http://www.cs.umd.edu/~ben/papers/Shneiderman1996eyes.pdf">"Overview first, zoom and filter, then details-on-demand"</a>.  For graphs that display individual points, like scatter plots, zooming requires a simple rescaling.  On the Web, a familiar user interface displays plus (+) and minus (-) buttons.  Scroll bars provide user feedback and one-dimensional zooming.
                 </p>
             </div>
             <div className="Graph">
