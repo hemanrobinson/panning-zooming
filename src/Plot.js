@@ -17,14 +17,16 @@ const Plot = ( props ) => {
         yMax0 = d3.max( data, d => d[ 1 ]),
         xScale = d3.scaleLinear().domain([ xMin0, xMax0 ]).range([ marginAxis + padding, width - padding ]),
         yScale = d3.scaleLinear().domain([ yMin0, yMax0 ]).range([ height - marginAxis - padding, padding ]),
-        ref = useRef();
+        ref = useRef(),
+        xDown, yDown,
+        isX = false, isY = false, isMin = false, isMax = false;
     
     // Set hook to draw on mounting, or on any other lifecycle update.
     useEffect(() => {
         Plot.draw( height, width, marginAxis, padding, scrollSize, ref, xScale, yScale, xMin0, xMax0, yMin0, yMax0, dataSet, 100 );
     });
     
-    // Zoom in or out.
+    // Zoom in two dimensions.
     let onZoom = ( isIn ) => {
             const d = 8, f = ( d - 1 ) / ( 2 * d );
             let xDomain = xScale.domain(), xMin = xDomain[ 0 ], xMax = xDomain[ 1 ], xRange = xMax - xMin,
@@ -46,6 +48,53 @@ const Plot = ( props ) => {
         },
         onZoomIn  = () => { onZoom( true  ); },
         onZoomOut = () => { onZoom( false ); };
+        
+    // Zoom in one dimension.
+    svg.on( "mousedown", function( event ) {
+        const endCapSize = 0.8 * scrollSize;
+        let x = event.offsetX, y = event.offsetY;
+        xDown = undefined;
+        yDown = undefined;
+        isX = false;
+        isY = false;
+        isMin = false;
+        isMax = false;
+        if(( marginAxis + padding <= x ) && ( x <= width - padding ) && ( height - scrollSize <= y ) && ( y <= height )) {
+            xDown = x;
+            yDown = y;
+            isX = true;
+            if( x < xMin + endCapSize ) {
+                isMin = true;
+                console.log( "mousedown: xMin  " + x );
+            } else if( x > xMax - endCapSize ) {
+                isMax = true;
+                console.log( "mousedown: xMax  " + x );
+            } else {
+                console.log( "mousedown: x  " + x );
+            }
+        } else if(( 0 <= x ) && ( x <= scrollSize ) && ( padding <= y ) && ( y <= height - marginAxis - padding )) {
+            xDown = x;
+            yDown = y;
+            isY = true;
+            if( y < yMax + endCapSize ) {
+                isMax = true;
+                console.log( "mousedown: yMax  " + y );
+            } else if( y > yMin - endCapSize ) {
+                isMin = true;
+                console.log( "mousedown: yMin  " + y );
+            } else {
+                console.log( "mousedown: y  " + y );
+            }
+        }
+        svg.selectAll( "g" )
+            .attr( "stroke", "green" );
+    });
+    svg.on( "mouseup", function( event ) {
+        let x = event.offsetX, y = event.offsetY;
+        console.log( "mouseup: " + x + "  " + y );
+        svg.selectAll( "g" )
+            .attr( "stroke", "black" );
+    });
     
     // Return the component.
     return <div style={{width: width, height: height}} className="parent">
