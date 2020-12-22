@@ -59,7 +59,8 @@ const Plot = ( props ) => {
 Plot.draw = ( height, width, marginAxis, padding, scrollSize, ref, xScale, yScale, xMin0, xMax0, yMin0, yMax0, dataSet, size ) => {
     
     // Initialization.
-    const svg = d3.select( ref.current );
+    const svg = d3.select( ref.current ),
+        halfScrollSize = scrollSize / 2;
     let data = Data.getValues( dataSet ),
         columnNames = Data.getColumnNames( dataSet ),
         symbolScale = d3.scaleOrdinal( data.map( datum => datum[ 0 ]), d3.symbols.map( s => d3.symbol().type( s ).size( size )()));
@@ -101,12 +102,28 @@ Plot.draw = ( height, width, marginAxis, padding, scrollSize, ref, xScale, yScal
         .attr( "width", w )
         .attr( "height", scrollSize )
         .style( "fill", "#eeeeee" );
-    svg.append( "rect" )
-        .attr( "x", xMin )
-        .attr( "y", height - scrollSize )
-        .attr( "width", xMax - xMin )
-        .attr( "height", scrollSize )
-        .style( "fill", "#cccccc" );
+    svg.append( "line" )
+        .attr( "x1", xMin + halfScrollSize )
+        .attr( "y1", height - halfScrollSize )
+        .attr( "x2", xMax - halfScrollSize )
+        .attr( "y2", height - halfScrollSize )
+        .style( "stroke-width", scrollSize )
+        .style( "stroke", "#cccccc" )
+        .style( "stroke-linecap", "round" );
+    svg.append( "line" )
+        .attr( "x1", xMin + halfScrollSize + 1 )
+        .attr( "y1", height - scrollSize )
+        .attr( "x2", xMin + halfScrollSize + 1 )
+        .attr( "y2", height )
+        .style( "stroke-width", 1 )
+        .style( "stroke", "#ffffff" );
+    svg.append( "line" )
+        .attr( "x1", xMax - halfScrollSize - 1 )
+        .attr( "y1", height - scrollSize )
+        .attr( "x2", xMax - halfScrollSize - 1 )
+        .attr( "y2", height )
+        .style( "stroke-width", 1 )
+        .style( "stroke", "#ffffff" );
         
     // Draw the Y axis.
     svg.append( "rect" )
@@ -137,12 +154,28 @@ Plot.draw = ( height, width, marginAxis, padding, scrollSize, ref, xScale, yScal
         .attr( "width", scrollSize )
         .attr( "height", h )
         .style( "fill", "#eeeeee" );
-    svg.append( "rect" )
-        .attr( "x", 0 )
-        .attr( "y", yMax )
-        .attr( "width", scrollSize )
-        .attr( "height", yMin - yMax )
-        .style( "fill", "#cccccc" );
+    svg.append( "line" )
+        .attr( "x1", halfScrollSize )
+        .attr( "y1", yMax + halfScrollSize )
+        .attr( "x2", halfScrollSize )
+        .attr( "y2", yMin - halfScrollSize )
+        .style( "stroke-width", scrollSize )
+        .style( "stroke", "#cccccc" )
+        .style( "stroke-linecap", "round" );
+    svg.append( "line" )
+        .attr( "x1", 0 )
+        .attr( "y1", yMax + halfScrollSize + 1 )
+        .attr( "x2", scrollSize )
+        .attr( "y2", yMax + halfScrollSize + 1 )
+        .style( "stroke-width", 1 )
+        .style( "stroke", "#ffffff" );
+    svg.append( "line" )
+        .attr( "x1", 0 )
+        .attr( "y1", yMin - halfScrollSize - 1 )
+        .attr( "x2", scrollSize )
+        .attr( "y2", yMin - halfScrollSize - 1 )
+        .style( "stroke-width", 1 )
+        .style( "stroke", "#ffffff" );
 };
 
 export default Plot;
