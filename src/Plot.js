@@ -50,48 +50,57 @@ const Plot = ( props ) => {
         onZoomOut = () => { onZoom( false ); };
         
     // Zoom in one dimension.
+    const svg = d3.select( ref.current );
     svg.on( "mousedown", function( event ) {
         const endCapSize = 0.8 * scrollSize;
-        let x = event.offsetX, y = event.offsetY;
+        let x0 = event.offsetX, y0 = event.offsetY,
+        x = marginAxis + padding,
+        y = padding,
+        w = width - padding - x + 1,
+        h = height - marginAxis - padding - y + 1,
+        xMin = x + w * ( xScale.domain()[ 0 ] - xMin0 ) / ( xMax0 - xMin0 ),
+        xMax = x + w * ( xScale.domain()[ 1 ] - xMin0 ) / ( xMax0 - xMin0 ),
+        yMin = y + h * ( 1 - ( yScale.domain()[ 0 ] - yMin0 ) / ( yMax0 - yMin0 )),
+        yMax = y + h * ( 1 - ( yScale.domain()[ 1 ] - yMin0 ) / ( yMax0 - yMin0 ));
         xDown = undefined;
         yDown = undefined;
         isX = false;
         isY = false;
         isMin = false;
         isMax = false;
-        if(( marginAxis + padding <= x ) && ( x <= width - padding ) && ( height - scrollSize <= y ) && ( y <= height )) {
-            xDown = x;
-            yDown = y;
+        if(( marginAxis + padding <= x0 ) && ( x0 <= width - padding ) && ( height - scrollSize <= y0 ) && ( y0 <= height )) {
+            xDown = x0;
+            yDown = y0;
             isX = true;
-            if( x < xMin + endCapSize ) {
+            if( x0 < xMin + endCapSize ) {
                 isMin = true;
-                console.log( "mousedown: xMin  " + x );
-            } else if( x > xMax - endCapSize ) {
+                console.log( "mousedown: xMin  " + x0 );
+            } else if( x0 > xMax - endCapSize ) {
                 isMax = true;
-                console.log( "mousedown: xMax  " + x );
+                console.log( "mousedown: xMax  " + x0 );
             } else {
-                console.log( "mousedown: x  " + x );
+                console.log( "mousedown: x  " + x0 );
             }
-        } else if(( 0 <= x ) && ( x <= scrollSize ) && ( padding <= y ) && ( y <= height - marginAxis - padding )) {
-            xDown = x;
-            yDown = y;
+        } else if(( 0 <= x0 ) && ( x0 <= scrollSize ) && ( padding <= y0 ) && ( y0 <= height - marginAxis - padding )) {
+            xDown = x0;
+            yDown = y0;
             isY = true;
-            if( y < yMax + endCapSize ) {
+            if( y0 < yMax + endCapSize ) {
                 isMax = true;
-                console.log( "mousedown: yMax  " + y );
-            } else if( y > yMin - endCapSize ) {
+                console.log( "mousedown: yMax  " + y0 );
+            } else if( y0 > yMin - endCapSize ) {
                 isMin = true;
-                console.log( "mousedown: yMin  " + y );
+                console.log( "mousedown: yMin  " + y0 );
             } else {
-                console.log( "mousedown: y  " + y );
+                console.log( "mousedown: y  " + y0 );
             }
         }
         svg.selectAll( "g" )
             .attr( "stroke", "green" );
     });
     svg.on( "mouseup", function( event ) {
-        let x = event.offsetX, y = event.offsetY;
-        console.log( "mouseup: " + x + "  " + y );
+        let x0 = event.offsetX, y0 = event.offsetY;
+        console.log( "mouseup: " + x0 + "  " + y0 );
         svg.selectAll( "g" )
             .attr( "stroke", "black" );
     });
@@ -139,6 +148,24 @@ Plot.draw = ( height, width, marginAxis, padding, scrollSize, ref, xScale, yScal
         .attr( "transform", "translate( " + ( width / 2 ) + " ," + ( height - padding ) + ")" )
         .style( "text-anchor", "middle" )
         .text( columnNames[ 2 ]);
+        
+    // Draw the Y axis.
+    svg.append( "rect" )
+        .attr( "x", 0 )
+        .attr( "y", 0 )
+        .attr( "width", marginAxis )
+        .attr( "height", height )
+        .style( "fill", "#ffffff" );
+    svg.append( "g" )
+        .attr( "class", "axis" )
+        .attr( "transform", "translate( " + marginAxis + ", 0 )" )
+        .call( d3.axisLeft( yScale ).ticks( 3 ).tickFormat(( x ) => { return x.toFixed( 1 )}));
+    svg.append( "text" )
+        .attr( "transform", "rotate( -90 )" )
+        .attr( "x", -height / 2 )
+        .attr( "y", padding * 1.5 )
+        .style( "text-anchor", "middle" )
+        .text( columnNames[ 1 ]);
     
     // Draw the X scrollbar.
     let x = marginAxis + padding,
@@ -173,24 +200,6 @@ Plot.draw = ( height, width, marginAxis, padding, scrollSize, ref, xScale, yScal
         .attr( "y2", height )
         .style( "stroke-width", 1 )
         .style( "stroke", "#ffffff" );
-        
-    // Draw the Y axis.
-    svg.append( "rect" )
-        .attr( "x", 0 )
-        .attr( "y", 0 )
-        .attr( "width", marginAxis )
-        .attr( "height", height )
-        .style( "fill", "#ffffff" );
-    svg.append( "g" )
-        .attr( "class", "axis" )
-        .attr( "transform", "translate( " + marginAxis + ", 0 )" )
-        .call( d3.axisLeft( yScale ).ticks( 3 ).tickFormat(( x ) => { return x.toFixed( 1 )}));
-    svg.append( "text" )
-        .attr( "transform", "rotate( -90 )" )
-        .attr( "x", -height / 2 )
-        .attr( "y", padding * 1.5 )
-        .style( "text-anchor", "middle" )
-        .text( columnNames[ 1 ]);
         
     // Draw the Y scrollbar.
     let y = padding,
