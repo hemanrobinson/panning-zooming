@@ -74,12 +74,8 @@ const Plot = ( props ) => {
             isX = true;
             if( x0 < xMin + endCapSize ) {
                 isMin = true;
-                console.log( "mousedown: xMin  " + x0 );
             } else if( x0 > xMax - endCapSize ) {
                 isMax = true;
-                console.log( "mousedown: xMax  " + x0 );
-            } else {
-                console.log( "mousedown: x  " + x0 );
             }
         } else if(( 0 <= x0 ) && ( x0 <= scrollSize ) && ( padding <= y0 ) && ( y0 <= height - marginAxis - padding )) {
             xDown = x0;
@@ -87,22 +83,52 @@ const Plot = ( props ) => {
             isY = true;
             if( y0 < yMax + endCapSize ) {
                 isMax = true;
-                console.log( "mousedown: yMax  " + y0 );
             } else if( y0 > yMin - endCapSize ) {
                 isMin = true;
-                console.log( "mousedown: yMin  " + y0 );
-            } else {
-                console.log( "mousedown: y  " + y0 );
             }
         }
-        svg.selectAll( "g" )
-            .attr( "stroke", "green" );
+        
+        console.log( "mousedown" + x0 + "  " + y0 + "  " + isX + "  " + isY + "  " + isMin + "  " + isMax );
     });
     svg.on( "mouseup", function( event ) {
-        let x0 = event.offsetX, y0 = event.offsetY;
-        console.log( "mouseup: " + x0 + "  " + y0 );
-        svg.selectAll( "g" )
-            .attr( "stroke", "black" );
+        let xUp = event.offsetX, yUp = event.offsetY;
+        if( isX ) {
+            let x = marginAxis + padding,
+                w = width - padding - x + 1,
+                dif = ( xUp - xDown ) * ( xScale.domain()[ 1 ] - xScale.domain()[ 0 ]) / ( w - x );
+                
+            console.log( "isX: " + dif );
+            
+            if( isMin ) {
+                xScale.domain([ Math.max( xMin0, xScale.domain()[ 0 ] + dif ), xScale.domain()[ 1 ]]);
+            } else if( isMax ) {
+                xScale.domain([ xScale.domain()[ 0 ], Math.min( xMax0, xScale.domain()[ 1 ] + dif )]);
+            } else {
+                xScale.domain([ Math.max( xMin0, xScale.domain()[ 0 ] + dif ), Math.min( xMax0, xScale.domain()[ 1 ] + dif )]);
+            }
+            Plot.draw( height, width, marginAxis, padding, scrollSize, ref, xScale, yScale, xMin0, xMax0, yMin0, yMax0, dataSet, 100 );
+        } else if( isY ) {
+            let y = padding,
+                h = height - marginAxis - padding - y + 1,
+                dif = ( yUp - yDown ) * ( yScale.domain()[ 1 ] - yScale.domain()[ 0 ]) / ( h - y );
+                
+            console.log( "isY: " + dif );
+            
+            if( isMin ) {
+                yScale.domain([ Math.max( yMin0, yScale.domain()[ 0 ] + dif ), yScale.domain()[ 1 ]]);
+            } else if( isMax ) {
+                yScale.domain([ yScale.domain()[ 0 ], Math.min( yMax0, yScale.domain()[ 1 ] + dif )]);
+            } else {
+                yScale.domain([ Math.max( yMin0, yScale.domain()[ 0 ] + dif ), Math.min( yMax0, yScale.domain()[ 1 ] + dif )]);
+            }
+            Plot.draw( height, width, marginAxis, padding, scrollSize, ref, xScale, yScale, xMin0, xMax0, yMin0, yMax0, dataSet, 100 );
+        }
+        if( event.type === "mouseup" ) {
+            isX = false;
+            isY = false;
+            isMin = false;
+            isMax = false;
+        }
     });
     
     // Return the component.
