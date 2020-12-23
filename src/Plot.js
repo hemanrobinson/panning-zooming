@@ -1,5 +1,5 @@
 import React, { useRef, useEffect }  from 'react';
-import { Slider } from '@material-ui/core';
+//import { Slider } from '@material-ui/core';
 import * as d3 from 'd3';
 import Data from './Data';
 import './Plot.css';
@@ -52,6 +52,9 @@ const Plot = ( props ) => {
     // Zoom in one dimension.
     const svg = d3.select( ref.current );
     svg.on( "mousedown", function( event ) {
+    
+        console.log( event.type );
+        
         const endCapSize = 0.8 * scrollSize;
         let x0 = event.offsetX, y0 = event.offsetY,
         x = marginAxis + padding,
@@ -87,18 +90,16 @@ const Plot = ( props ) => {
                 isMin = true;
             }
         }
-        
-        console.log( "mousedown" + x0 + "  " + y0 + "  " + isX + "  " + isY + "  " + isMin + "  " + isMax );
     });
-    svg.on( "mouseup", function( event ) {
+    svg.on( "mousemove mouseup", function( event ) {
+    
+        console.log( event.type );
+        
         let xUp = event.offsetX, yUp = event.offsetY;
         if( isX ) {
             let x = marginAxis + padding,
                 w = width - padding - x + 1,
                 dif = ( xUp - xDown ) * ( xScale.domain()[ 1 ] - xScale.domain()[ 0 ]) / ( w - x );
-                
-            console.log( "isX: " + dif );
-            
             if( isMin ) {
                 xScale.domain([ Math.max( xMin0, xScale.domain()[ 0 ] + dif ), xScale.domain()[ 1 ]]);
             } else if( isMax ) {
@@ -111,9 +112,6 @@ const Plot = ( props ) => {
             let y = padding,
                 h = height - marginAxis - padding - y + 1,
                 dif = ( yUp - yDown ) * ( yScale.domain()[ 1 ] - yScale.domain()[ 0 ]) / ( h - y );
-                
-            console.log( "isY: " + dif );
-            
             if( isMin ) {
                 yScale.domain([ Math.max( yMin0, yScale.domain()[ 0 ] + dif ), yScale.domain()[ 1 ]]);
             } else if( isMax ) {
@@ -128,6 +126,9 @@ const Plot = ( props ) => {
             isY = false;
             isMin = false;
             isMax = false;
+        } else {
+            xDown = xUp;
+            yDown = yUp;
         }
     });
     
