@@ -11,7 +11,10 @@ const App = () => {
             <div className="Description">
                 <h1>Applying Shneiderman's Mantra<br/>to Aggregate Graphs</h1>
                 <p>
-                Shneiderman taught us all to <a href="http://www.cs.umd.edu/~ben/papers/Shneiderman1996eyes.pdf">"Overview first, zoom and filter, then details-on-demand"</a>.  For graphs that display individual points, like scatter plots, zooming requires a simple rescaling.  On the Web, a familiar user interface displays plus (+) and minus (-) buttons.  Scroll bars provide user feedback and one-dimensional zooming.
+                Shneiderman taught us all to <a href="http://www.cs.umd.edu/~ben/papers/Shneiderman1996eyes.pdf">"Overview first, zoom and filter, then details-on-demand"</a>.
+                </p>
+                <p>
+                For graphs that display individual points, like scatter plots, zooming requires a simple rescaling.  On the Web, a familiar user interface displays plus (+) and minus (-) buttons.  Scroll bars provide both user feedback and one-dimensional zooming.
                 </p>
             </div>
             <div className="Graph">
@@ -19,7 +22,7 @@ const App = () => {
             </div>
             <div className="Description">
                 <p>
-                Aggregate graphs display grouped data, rather than individual points.  For this reason, exploring data requires zooming both the scales and the groups.  To maximize the user's flexibility, scales and groups must be independently adjustable.
+                Aggregate graphs display grouped data, rather than individual points.  So for aggregate graphs, exploring data requires zooming both the scales and the groups.  To maximize the user's power, scales and groups must be independently adjustable.
                 </p>
                 <p>
                 For example, in a histogram, users can explore their data by zooming both the scales and the bin widths.
