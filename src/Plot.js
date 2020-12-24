@@ -21,42 +21,33 @@ const Plot = ( props ) => {
         xDown, yDown,
         isX = false, isY = false, isMin = false, isMax = false;
     
-    // Set hook to draw on mounting, or on any other lifecycle update.
-    useEffect(() => {
-        Plot.draw( height, width, marginAxis, padding, scrollSize, ref, xScale, yScale, xMin0, xMax0, yMin0, yMax0, dataSet, 100 );
-    });
-    
     // Zoom in two dimensions.
-    let onZoom = ( isIn ) => {
-            const d = 8, f = ( d - 1 ) / ( 2 * d );
-            let xDomain = xScale.domain(), xMin = xDomain[ 0 ], xMax = xDomain[ 1 ], xRange = xMax - xMin,
-                yDomain = yScale.domain(), yMin = yDomain[ 0 ], yMax = yDomain[ 1 ], yRange = yMax - yMin;
-            if( isIn ) {
-                xMin = Math.min( xMin0 + ( xMax0 - xMin0 ) * f, xMin + xRange / d );
-                xMax = Math.max( xMax0 - ( xMax0 - xMin0 ) * f, xMax - xRange / d );
-                yMin = Math.min( yMin0 + ( yMax0 - yMin0 ) * f, yMin + yRange / d );
-                yMax = Math.max( yMax0 - ( yMax0 - yMin0 ) * f, yMax - yRange / d );
-            } else {
-                xMin = Math.max( xMin0, xMin - xRange / ( d - 2 ));
-                xMax = Math.min( xMax0, xMax + xRange / ( d - 2 ));
-                yMin = Math.max( yMin0, yMin - yRange / ( d - 2 ));
-                yMax = Math.min( yMax0, yMax + yRange / ( d - 2 ));
-            }
-            xScale.domain([ xMin, xMax ]);
-            yScale.domain([ yMin, yMax ]);
-            Plot.draw( height, width, marginAxis, padding, scrollSize, ref, xScale, yScale, xMin0, xMax0, yMin0, yMax0, dataSet, 100 );
-        },
-        onZoomIn  = () => { onZoom( true  ); },
-        onZoomOut = () => { onZoom( false ); };
-        
-    // Zoom in one dimension.
-    const svg = d3.select( ref.current );
-    svg.on( "mousedown", function( event ) {
+    let onZoom2D = ( isIn ) => {
+        const d = 8, f = ( d - 1 ) / ( 2 * d );
+        let xDomain = xScale.domain(), xMin = xDomain[ 0 ], xMax = xDomain[ 1 ], xRange = xMax - xMin,
+            yDomain = yScale.domain(), yMin = yDomain[ 0 ], yMax = yDomain[ 1 ], yRange = yMax - yMin;
+        if( isIn ) {
+            xMin = Math.min( xMin0 + ( xMax0 - xMin0 ) * f, xMin + xRange / d );
+            xMax = Math.max( xMax0 - ( xMax0 - xMin0 ) * f, xMax - xRange / d );
+            yMin = Math.min( yMin0 + ( yMax0 - yMin0 ) * f, yMin + yRange / d );
+            yMax = Math.max( yMax0 - ( yMax0 - yMin0 ) * f, yMax - yRange / d );
+        } else {
+            xMin = Math.max( xMin0, xMin - xRange / ( d - 2 ));
+            xMax = Math.min( xMax0, xMax + xRange / ( d - 2 ));
+            yMin = Math.max( yMin0, yMin - yRange / ( d - 2 ));
+            yMax = Math.min( yMax0, yMax + yRange / ( d - 2 ));
+        }
+        xScale.domain([ xMin, xMax ]);
+        yScale.domain([ yMin, yMax ]);
+        Plot.draw( height, width, marginAxis, padding, scrollSize, ref, xScale, yScale, xMin0, xMax0, yMin0, yMax0, dataSet, 100 );
+    },
+    onZoomIn  = () => { onZoom2D( true  ); },
+    onZoomOut = () => { onZoom2D( false ); };
     
-        console.log( event.type );
-        
+    // Zoom in one dimension.
+    let onMouseDown = ( event ) => {
         const endCapSize = 0.8 * scrollSize;
-        let x0 = event.offsetX, y0 = event.offsetY,
+        let x0 = event.nativeEvent.offsetX, y0 = event.nativeEvent.offsetY,
         x = marginAxis + padding,
         y = padding,
         w = width - padding - x + 1,
@@ -90,12 +81,9 @@ const Plot = ( props ) => {
                 isMin = true;
             }
         }
-    });
-    svg.on( "mousemove mouseup", function( event ) {
-    
-        console.log( event.type );
-        
-        let xUp = event.offsetX, yUp = event.offsetY;
+    },
+    onMouseUp = ( event ) => {
+        let xUp = event.nativeEvent.offsetX, yUp = event.nativeEvent.offsetY;
         if( isX ) {
             let x = marginAxis + padding,
                 w = width - padding - x + 1,
@@ -111,7 +99,7 @@ const Plot = ( props ) => {
         } else if( isY ) {
             let y = padding,
                 h = height - marginAxis - padding - y + 1,
-                dif = ( yUp - yDown ) * ( yScale.domain()[ 1 ] - yScale.domain()[ 0 ]) / ( h - y );
+                dif = ( yDown - yUp ) * ( yScale.domain()[ 1 ] - yScale.domain()[ 0 ]) / ( h - y );
             if( isMin ) {
                 yScale.domain([ Math.max( yMin0, yScale.domain()[ 0 ] + dif ), yScale.domain()[ 1 ]]);
             } else if( isMax ) {
@@ -130,11 +118,16 @@ const Plot = ( props ) => {
             xDown = xUp;
             yDown = yUp;
         }
+    };
+    
+    // Set hook to draw on mounting, or on any other lifecycle update.
+    useEffect(() => {
+        Plot.draw( height, width, marginAxis, padding, scrollSize, ref, xScale, yScale, xMin0, xMax0, yMin0, yMax0, dataSet, 100 );
     });
     
     // Return the component.
     return <div style={{width: width, height: height}} className="parent">
-            <svg width={width} height={height} ref={ref}></svg>
+            <svg width={width} height={height} ref={ref} onMouseDown={onMouseDown} onMouseMove={onMouseUp} onMouseUp={onMouseUp} />
             <input type="button" value="+" onClick={onZoomIn } style={{ width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1 }} />
             <input type="button" value="-" onClick={onZoomOut} style={{ width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1 + buttonSize }} />
         </div>;
