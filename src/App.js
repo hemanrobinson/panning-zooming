@@ -19,7 +19,10 @@ const App = () => {
             </div>
             <div className="Description">
                 <p>
-                For aggregate graphs, which do not display individual points, rescaling is necessary but not sufficient.  For example, in a histogram, users can't explore their data by only adjusting the scale; they must also adjust the bin widths.
+                Aggregate graphs display grouped data, rather than individual points.  For this reason, exploring data requires zooming both the scales and the groups.  To maximize the user's flexibility, scales and groups must be independently adjustable.
+                </p>
+                <p>
+                For example, in a histogram, users can explore their data by zooming both the scales and the bin widths.
                 </p>
             </div>
             <div className="Description">
@@ -29,9 +32,6 @@ const App = () => {
                 </p>
                 <p>
                 Display secondary controls in a dialog.
-                </p>
-                <p>
-                It's important that scaling and "bin-zooming" be independent controls.
                 </p>
             </div>
         </div>
