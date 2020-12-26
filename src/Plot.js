@@ -181,9 +181,8 @@ Plot.draw = ( height, width, marginAxis, padding, scrollSize, ref, xScale, yScal
         .attr( "transform", "translate( " + marginAxis + ", 0 )" )
         .call( d3.axisLeft( yScale ).ticks( 3 ).tickFormat(( x ) => { return x.toFixed( 1 )}));
     svg.append( "text" )
-        .attr( "transform", "rotate( -90 )" )
-        .attr( "x", -height / 2 )
-        .attr( "y", padding * 1.5 )
+        .attr( "x", marginAxis )
+        .attr( "y", padding * 0.7 )
         .style( "text-anchor", "middle" )
         .text( columnNames[ 1 ]);
     

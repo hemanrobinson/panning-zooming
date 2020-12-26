@@ -1,5 +1,6 @@
 import React from 'react';
 import Plot from './Plot';
+import Histogram from './Histogram';
 import './App.css';
 
 // Application:  Side-by-side scatter plots.
@@ -18,7 +19,7 @@ const App = () => {
                 </p>
             </div>
             <div className="Graph">
-                <Plot dataSet={ "Cytometry" } />
+                <Plot dataSet={ "Iris" } />
             </div>
             <div className="Description">
                 <p>
@@ -27,6 +28,9 @@ const App = () => {
                 <p>
                 For example, in a histogram, users can explore their data by zooming both the scales and the bin widths.
                 </p>
+            </div>
+            <div className="Graph">
+                <Histogram dataSet={ "Iris" } />
             </div>
             <div className="Description">
                 <h2>Notes</h2>
