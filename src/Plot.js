@@ -8,7 +8,7 @@ import './Plot.css';
 const Plot = ( props ) => {
 
     // Initialization.
-    const width = 400, height = 400, padding = 20, marginAxis = 50, scrollSize = 15;
+    const width = 400, height = 400, padding = { top: 20, right: 20, bottom: 20, left: 20 }, margin = { top: 50, right: 50, bottom: 50, left: 50 }, scrollSize = 15;
     let ref = useRef(),
         { dataSet } = props,
         data = Data.getValues( dataSet ),
@@ -16,21 +16,21 @@ const Plot = ( props ) => {
         xMax0 = d3.max( data, d => d[ 2 ]),
         yMin0 = d3.min( data, d => d[ 1 ]),
         yMax0 = d3.max( data, d => d[ 1 ]),
-        xScale = d3.scaleLinear().domain([ xMin0, xMax0 ]).range([ marginAxis + padding, width - padding ]),
-        yScale = d3.scaleLinear().domain([ yMin0, yMax0 ]).range([ height - marginAxis - padding, padding ]),
+        xScale = d3.scaleLinear().domain([ xMin0, xMax0 ]).range([ margin.left + padding.left, width - padding.right ]),
+        yScale = d3.scaleLinear().domain([ yMin0, yMax0 ]).range([ height - margin.bottom - padding.bottom, padding.top ]),
         xDown, yDown, isX = false, isY = false, isMin = false, isMax = false;
     
     // Zoom in two dimensions.
     let onZoom2D = ( isIn ) => {
         Graph.onZoom2D( xScale, yScale, xMin0, xMax0, yMin0, yMax0, isIn );
-        Plot.draw( ref, height, width, marginAxis, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, dataSet, 100 );
+        Plot.draw( ref, height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, dataSet, 100 );
     },
     onZoomIn  = () => { onZoom2D( true  ); },
     onZoomOut = () => { onZoom2D( false ); };
     
     // Zoom in one dimension.
     let onMouseDown = ( event ) => {
-        let result = Graph.onMouseDown( height, width, marginAxis, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event );
+        let result = Graph.onMouseDown( height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event );
         xDown = result[ 0 ];
         yDown = result[ 1 ];
         isX   = result[ 2 ];
@@ -39,9 +39,9 @@ const Plot = ( props ) => {
         isMax = result[ 5 ];
     },
     onMouseUp = ( event ) => {
-        let result = Graph.onMouseUp( xDown, yDown, isX, isY, isMin, isMax, height, width, marginAxis, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event );
+        let result = Graph.onMouseUp( xDown, yDown, isX, isY, isMin, isMax, height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event );
         if( isX || isY ) {
-            Plot.draw( ref, height, width, marginAxis, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, dataSet, 100 );
+            Plot.draw( ref, height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, dataSet, 100 );
         }
         xDown = result[ 0 ];
         yDown = result[ 1 ];
@@ -53,7 +53,7 @@ const Plot = ( props ) => {
     
     // Set hook to draw on mounting, or on any other lifecycle update.
     useEffect(() => {
-        Plot.draw( ref, height, width, marginAxis, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, dataSet, 100 );
+        Plot.draw( ref, height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, dataSet, 100 );
     });
     
     // Return the component.
@@ -63,7 +63,7 @@ const Plot = ( props ) => {
 };
     
 // Draws the points.
-Plot.draw = ( ref, height, width, marginAxis, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, dataSet, size ) => {
+Plot.draw = ( ref, height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, dataSet, size ) => {
     
     // Initialization.
     const svg = d3.select( ref.current );
@@ -82,7 +82,7 @@ Plot.draw = ( ref, height, width, marginAxis, padding, scrollSize, xScale, yScal
     });
     
     // Draw the axes and scroll bars.
-    Graph.draw( ref, height, width, marginAxis, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, columnNames[ 2 ], columnNames[ 1 ], size );
+    Graph.draw( ref, height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, columnNames[ 2 ], columnNames[ 1 ], size );
 };
 
 export default Plot;

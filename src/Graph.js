@@ -38,13 +38,13 @@ Graph.onZoom2D = ( xScale, yScale, xMin0, xMax0, yMin0, yMax0, isIn ) => {
 };
     
 // Zooms in one dimension.
-Graph.onMouseDown = ( height, width, marginAxis, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event ) => {
+Graph.onMouseDown = ( height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event ) => {
     const endCapSize = 0.8 * scrollSize;
     let x0 = event.nativeEvent.offsetX, y0 = event.nativeEvent.offsetY,
-    x = marginAxis + padding,
-    y = padding,
-    w = width - padding - x + 1,
-    h = height - marginAxis - padding - y + 1,
+    x = margin.left + padding.left,
+    y = padding.top,
+    w = width - padding.right - x + 1,
+    h = height - margin.bottom - padding.bottom - y + 1,
     xMin = x + w * ( xScale.domain()[ 0 ] - xMin0 ) / ( xMax0 - xMin0 ),
     xMax = x + w * ( xScale.domain()[ 1 ] - xMin0 ) / ( xMax0 - xMin0 ),
     yMin = y + h * ( 1 - ( yScale.domain()[ 0 ] - yMin0 ) / ( yMax0 - yMin0 )),
@@ -55,7 +55,7 @@ Graph.onMouseDown = ( height, width, marginAxis, padding, scrollSize, xScale, yS
     isY = false,
     isMin = false,
     isMax = false;
-    if(( marginAxis + padding <= x0 ) && ( x0 <= width - padding ) && ( height - scrollSize <= y0 ) && ( y0 <= height )) {
+    if(( margin.left + padding.left <= x0 ) && ( x0 <= width - padding.right ) && ( height - scrollSize <= y0 ) && ( y0 <= height )) {
         xDown = x0;
         yDown = y0;
         isX = true;
@@ -64,7 +64,7 @@ Graph.onMouseDown = ( height, width, marginAxis, padding, scrollSize, xScale, yS
         } else if( x0 > xMax - endCapSize ) {
             isMax = true;
         }
-    } else if(( 0 <= x0 ) && ( x0 <= scrollSize ) && ( padding <= y0 ) && ( y0 <= height - marginAxis - padding )) {
+    } else if(( 0 <= x0 ) && ( x0 <= scrollSize ) && ( padding.top <= y0 ) && ( y0 <= height - margin.bottom - padding.bottom )) {
         xDown = x0;
         yDown = y0;
         isY = true;
@@ -76,11 +76,11 @@ Graph.onMouseDown = ( height, width, marginAxis, padding, scrollSize, xScale, yS
     }
     return [ xDown, yDown, isX, isY, isMin, isMax ];
 };
-Graph.onMouseUp = ( xDown, yDown, isX, isY, isMin, isMax, height, width, marginAxis, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event ) => {
+Graph.onMouseUp = ( xDown, yDown, isX, isY, isMin, isMax, height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event ) => {
     let xUp = event.nativeEvent.offsetX, yUp = event.nativeEvent.offsetY;
     if( isX ) {
-        let x = marginAxis + padding,
-            w = width - padding - x + 1,
+        let x = margin.left + padding.left,
+            w = width - padding.right - x + 1,
             dif = ( xUp - xDown ) * ( xScale.domain()[ 1 ] - xScale.domain()[ 0 ]) / ( w - x );
         if( isMin ) {
             xScale.domain([ Math.max( xMin0, xScale.domain()[ 0 ] + dif ), xScale.domain()[ 1 ]]);
@@ -90,8 +90,8 @@ Graph.onMouseUp = ( xDown, yDown, isX, isY, isMin, isMax, height, width, marginA
             xScale.domain([ Math.max( xMin0, xScale.domain()[ 0 ] + dif ), Math.min( xMax0, xScale.domain()[ 1 ] + dif )]);
         }
     } else if( isY ) {
-        let y = padding,
-            h = height - marginAxis - padding - y + 1,
+        let y = padding.top,
+            h = height - margin.bottom - padding.bottom - y + 1,
             dif = ( yDown - yUp ) * ( yScale.domain()[ 1 ] - yScale.domain()[ 0 ]) / ( h - y );
         if( isMin ) {
             yScale.domain([ Math.max( yMin0, yScale.domain()[ 0 ] + dif ), yScale.domain()[ 1 ]]);
@@ -114,7 +114,7 @@ Graph.onMouseUp = ( xDown, yDown, isX, isY, isMin, isMax, height, width, marginA
 };
     
 // Draws the graph.
-Graph.draw = ( ref, height, width, marginAxis, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, xLabel, yLabel, size ) => {
+Graph.draw = ( ref, height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, xLabel, yLabel, size ) => {
     
     // Initialization.
     const svg = d3.select( ref.current ),
@@ -123,16 +123,16 @@ Graph.draw = ( ref, height, width, marginAxis, padding, scrollSize, xScale, ySca
     // Draw the X axis.
     svg.append( "rect" )
         .attr( "x", 0 )
-        .attr( "y", height - marginAxis )
+        .attr( "y", height - margin.bottom )
         .attr( "width", width )
-        .attr( "height", marginAxis )
+        .attr( "height", margin.bottom )
         .style( "fill", "#ffffff" );
     svg.append( "g" )
         .attr( "class", "axis" )
-        .attr( "transform", "translate( 0, " + ( height - marginAxis ) + " )" )
+        .attr( "transform", "translate( 0, " + ( height - margin.bottom ) + " )" )
         .call( d3.axisBottom( xScale ).ticks( 3 ).tickFormat(( x ) => { return x.toFixed( 1 )}));
     svg.append( "text" )
-        .attr( "transform", "translate( " + ( width / 2 ) + " ," + ( height - padding ) + ")" )
+        .attr( "transform", "translate( " + ( width / 2 ) + " ," + ( height - padding.bottom ) + ")" )
         .style( "text-anchor", "middle" )
         .text( xLabel );
         
@@ -140,22 +140,22 @@ Graph.draw = ( ref, height, width, marginAxis, padding, scrollSize, xScale, ySca
     svg.append( "rect" )
         .attr( "x", 0 )
         .attr( "y", 0 )
-        .attr( "width", marginAxis )
+        .attr( "width", margin.left )
         .attr( "height", height )
         .style( "fill", "#ffffff" );
     svg.append( "g" )
         .attr( "class", "axis" )
-        .attr( "transform", "translate( " + marginAxis + ", 0 )" )
+        .attr( "transform", "translate( " + margin.left + ", 0 )" )
         .call( d3.axisLeft( yScale ).ticks( 3 ).tickFormat(( x ) => { return x.toFixed( 1 )}));
     svg.append( "text" )
-        .attr( "x", marginAxis )
-        .attr( "y", padding * 0.7 )
+        .attr( "x", margin.left )
+        .attr( "y", padding.top * 0.7 )
         .style( "text-anchor", "middle" )
         .text( yLabel );
     
     // Draw the X scrollbar.
-    let x = marginAxis + padding,
-        w = width - padding - x + 1,
+    let x = margin.left + padding.left,
+        w = width - padding.right - x + 1,
         xMin = x + w * ( xScale.domain()[ 0 ] - xMin0 ) / ( xMax0 - xMin0 ),
         xMax = x + w * ( xScale.domain()[ 1 ] - xMin0 ) / ( xMax0 - xMin0 );
     svg.append( "rect" )
@@ -188,13 +188,10 @@ Graph.draw = ( ref, height, width, marginAxis, padding, scrollSize, xScale, ySca
         .style( "stroke", "#ffffff" );
         
     // Draw the Y scrollbar.
-    let y = padding,
-        h = height - marginAxis - padding - y + 1,
+    let y = padding.top,
+        h = height - margin.bottom - padding.bottom - y + 1,
         yMin = y + h * ( 1 - ( yScale.domain()[ 0 ] - yMin0 ) / ( yMax0 - yMin0 )),
         yMax = y + h * ( 1 - ( yScale.domain()[ 1 ] - yMin0 ) / ( yMax0 - yMin0 ));
-        
-    console.log( yMin0 + "  " + yMax0 + "  " + yScale.domain() + "  " + yMin + "  " + yMax );
-        
     svg.append( "rect" )
         .attr( "x", 0 )
         .attr( "y", y )

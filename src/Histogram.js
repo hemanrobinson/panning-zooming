@@ -9,7 +9,7 @@ import './Histogram.css';
 const Histogram = ( props ) => {
     
     // Initialization.
-    const width = 400, height = 400, padding = 20, marginAxis = 50, scrollSize = 15;
+    const width = 400, height = 400, padding = { top: 20, right: 20, bottom: 0, left: 20 }, margin = { top: 50, right: 50, bottom: 50, left: 50 }, scrollSize = 15;
     let ref = useRef(),
         { dataSet } = props,
         data = Data.getValues( dataSet ),
@@ -17,7 +17,7 @@ const Histogram = ( props ) => {
         xMax0 = d3.max( data, d => d[ 2 ]),
         yMin0,
         yMax0,
-        xScale = d3.scaleLinear().domain([ xMin0, xMax0 ]).range([ marginAxis + padding, width - padding ]),
+        xScale = d3.scaleLinear().domain([ xMin0, xMax0 ]).range([ margin.left + padding.left, width - padding.right ]),
         yScale, histogram, bins,
         xDown, yDown,
         isX = false, isY = false, isMin = false, isMax = false;
@@ -25,14 +25,14 @@ const Histogram = ( props ) => {
     // Zoom in two dimensions.
     let onZoom2D = ( isIn ) => {
         Graph.onZoom2D( xScale, yScale, xMin0, xMax0, yMin0, yMax0, isIn );
-        Histogram.draw( height, width, marginAxis, padding, scrollSize, ref, xScale, yScale, histogram, bins, xMin0, xMax0, yMin0, yMax0, dataSet, 100 );
+        Histogram.draw( height, width, margin, padding, scrollSize, ref, xScale, yScale, histogram, bins, xMin0, xMax0, yMin0, yMax0, dataSet, 100 );
     },
     onZoomIn  = () => { onZoom2D( true  ); },
     onZoomOut = () => { onZoom2D( false ); };
     
     // Zoom in one dimension.
     let onMouseDown = ( event ) => {
-        let result = Graph.onMouseDown( height, width, marginAxis, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event );
+        let result = Graph.onMouseDown( height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event );
         xDown = result[ 0 ];
         yDown = result[ 1 ];
         isX   = result[ 2 ];
@@ -41,9 +41,9 @@ const Histogram = ( props ) => {
         isMax = result[ 5 ];
     },
     onMouseUp = ( event ) => {
-        let result = Graph.onMouseUp( xDown, yDown, isX, isY, isMin, isMax, height, width, marginAxis, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event );
+        let result = Graph.onMouseUp( xDown, yDown, isX, isY, isMin, isMax, height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event );
         if( isX || isY ) {
-            Histogram.draw( height, width, marginAxis, padding, scrollSize, ref, xScale, yScale, histogram, bins, xMin0, xMax0, yMin0, yMax0, dataSet, 100 );
+            Histogram.draw( height, width, margin, padding, scrollSize, ref, xScale, yScale, histogram, bins, xMin0, xMax0, yMin0, yMax0, dataSet, 100 );
         }
         xDown = result[ 0 ];
         yDown = result[ 1 ];
@@ -66,12 +66,12 @@ const Histogram = ( props ) => {
     yMin0 = 0;
     yMax0 = d3.max( bins, d => d.length );
     yScale = d3.scaleLinear()
-        .range([ height - marginAxis - padding, padding ])
+        .range([ height - margin.bottom - padding.bottom, padding.top ])
         .domain([ yMin0, yMax0 ]);
     
     // Set hook to draw on mounting, or on any other lifecycle update.
     useEffect(() => {
-        Histogram.draw( height, width, marginAxis, padding, scrollSize, ref, xScale, yScale, histogram, bins, xMin0, xMax0, yMin0, yMax0, dataSet, 100 );
+        Histogram.draw( height, width, margin, padding, scrollSize, ref, xScale, yScale, histogram, bins, xMin0, xMax0, yMin0, yMax0, dataSet, 100 );
     });
     
     // Return the component.
@@ -81,7 +81,7 @@ const Histogram = ( props ) => {
 };
     
 // Draws the points.
-Histogram.draw = ( height, width, marginAxis, padding, scrollSize, ref, xScale, yScale, histogram, bins, xMin0, xMax0, yMin0, yMax0, dataSet, size ) => {
+Histogram.draw = ( height, width, margin, padding, scrollSize, ref, xScale, yScale, histogram, bins, xMin0, xMax0, yMin0, yMax0, dataSet, size ) => {
     
     // Initialization.
     const svg = d3.select( ref.current );
@@ -96,11 +96,11 @@ Histogram.draw = ( height, width, marginAxis, padding, scrollSize, ref, xScale, 
         .attr( "x", 1 )
         .attr( "transform", bin => ( "translate( " + xScale( bin.x0 ) + "," + yScale( bin.length ) + " )" ))
         .attr( "width", bin => (( bin.x1 === bin.x0 ) ? 0 : ( xScale( bin.x1 ) - xScale( bin.x0 ) - 1 )))
-        .attr( "height", bin => ( height - marginAxis - padding - yScale( bin.length )))
+        .attr( "height", bin => Math.max( 0, ( height - margin.bottom - padding.bottom - yScale( bin.length ))))
         .style( "fill", "#99bbdd" );
     
     // Draw the axes and scroll bars.
-    Graph.draw( ref, height, width, marginAxis, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, columnNames[ 2 ], "Frequency", size );
+    Graph.draw( ref, height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, columnNames[ 2 ], "Frequency", size );
 };
 
 export default Histogram;
