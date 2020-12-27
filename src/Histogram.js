@@ -15,8 +15,8 @@ const Histogram = ( props ) => {
         data = Data.getValues( dataSet ),
         xMin0 = d3.min( data, d => d[ 2 ]),
         xMax0 = d3.max( data, d => d[ 2 ]),
-        yMin0 = d3.min( data, d => d[ 1 ]),
-        yMax0 = d3.max( data, d => d[ 1 ]),
+        yMin0,
+        yMax0,
         xScale = d3.scaleLinear().domain([ xMin0, xMax0 ]).range([ marginAxis + padding, width - padding ]),
         yScale, histogram, bins,
         xDown, yDown,
@@ -63,9 +63,11 @@ const Histogram = ( props ) => {
     bins = histogram( data );
 
     // Get the Y scale.
+    yMin0 = 0;
+    yMax0 = d3.max( bins, d => d.length );
     yScale = d3.scaleLinear()
-        .range([ height - marginAxis, padding ])
-        .domain([ 0, d3.max( bins, d => d.length )]);
+        .range([ height - marginAxis - padding, padding ])
+        .domain([ yMin0, yMax0 ]);
     
     // Set hook to draw on mounting, or on any other lifecycle update.
     useEffect(() => {
@@ -83,8 +85,7 @@ Histogram.draw = ( height, width, marginAxis, padding, scrollSize, ref, xScale, 
     
     // Initialization.
     const svg = d3.select( ref.current );
-    let data = Data.getValues( dataSet ),
-        columnNames = Data.getColumnNames( dataSet );
+    let columnNames = Data.getColumnNames( dataSet );
     svg.selectAll( "*" ).remove();
 
     // Draw the bars.
@@ -95,7 +96,7 @@ Histogram.draw = ( height, width, marginAxis, padding, scrollSize, ref, xScale, 
         .attr( "x", 1 )
         .attr( "transform", bin => ( "translate( " + xScale( bin.x0 ) + "," + yScale( bin.length ) + " )" ))
         .attr( "width", bin => (( bin.x1 === bin.x0 ) ? 0 : ( xScale( bin.x1 ) - xScale( bin.x0 ) - 1 )))
-        .attr( "height", bin => ( height - marginAxis - yScale( bin.length )))
+        .attr( "height", bin => ( height - marginAxis - padding - yScale( bin.length )))
         .style( "fill", "#99bbdd" );
     
     // Draw the axes and scroll bars.

@@ -192,6 +192,9 @@ Graph.draw = ( ref, height, width, marginAxis, padding, scrollSize, xScale, ySca
         h = height - marginAxis - padding - y + 1,
         yMin = y + h * ( 1 - ( yScale.domain()[ 0 ] - yMin0 ) / ( yMax0 - yMin0 )),
         yMax = y + h * ( 1 - ( yScale.domain()[ 1 ] - yMin0 ) / ( yMax0 - yMin0 ));
+        
+    console.log( yMin0 + "  " + yMax0 + "  " + yScale.domain() + "  " + yMin + "  " + yMax );
+        
     svg.append( "rect" )
         .attr( "x", 0 )
         .attr( "y", y )
