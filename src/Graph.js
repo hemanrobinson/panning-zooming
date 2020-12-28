@@ -40,20 +40,15 @@ Graph.onZoom2D = ( xScale, yScale, xMin0, xMax0, yMin0, yMax0, isIn ) => {
 // Zooms in one dimension.
 Graph.onMouseDown = ( height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event, mouseState ) => {
     const endCapSize = 0.8 * scrollSize;
-    let x0 = event.nativeEvent.offsetX, y0 = event.nativeEvent.offsetY,
-    x = margin.left + padding.left,
-    y = margin.top + padding.top,
-    w = width - margin.right - padding.right - x + 1,
-    h = height - margin.bottom - padding.bottom - y + 1,
-    xMin = x + w * ( xScale.domain()[ 0 ] - xMin0 ) / ( xMax0 - xMin0 ),
-    xMax = x + w * ( xScale.domain()[ 1 ] - xMin0 ) / ( xMax0 - xMin0 ),
-    yMin = y + h * ( 1 - ( yScale.domain()[ 0 ] - yMin0 ) / ( yMax0 - yMin0 )),
-    yMax = y + h * ( 1 - ( yScale.domain()[ 1 ] - yMin0 ) / ( yMax0 - yMin0 ));
+    let x0 = event.nativeEvent.offsetX, y0 = event.nativeEvent.offsetY;
     mouseState.isX = false;
     mouseState.isY = false;
     mouseState.isMin = false;
     mouseState.isMax = false;
     if(( margin.left + padding.left <= x0 ) && ( x0 <= width - margin.right - padding.right ) && ( height - scrollSize <= y0 ) && ( y0 <= height )) {
+        let w = width - margin.right - padding.right - margin.left - padding.left + 1,
+            xMin = margin.left + padding.left + w * ( xScale.domain()[ 0 ] - xMin0 ) / ( xMax0 - xMin0 ),
+            xMax = margin.left + padding.left + w * ( xScale.domain()[ 1 ] - xMin0 ) / ( xMax0 - xMin0 );
         mouseState.xDown = x0;
         mouseState.yDown = y0;
         mouseState.isX = true;
@@ -63,6 +58,9 @@ Graph.onMouseDown = ( height, width, margin, padding, scrollSize, xScale, yScale
             mouseState.isMax = true;
         }
     } else if(( 0 <= x0 ) && ( x0 <= scrollSize ) && ( margin.top + padding.top <= y0 ) && ( y0 <= height - margin.bottom - padding.bottom )) {
+        let h = height - margin.bottom - padding.bottom - margin.top - padding.top + 1,
+            yMin = margin.top + padding.top + h * ( 1 - ( yScale.domain()[ 0 ] - yMin0 ) / ( yMax0 - yMin0 )),
+            yMax = margin.top + padding.top + h * ( 1 - ( yScale.domain()[ 1 ] - yMin0 ) / ( yMax0 - yMin0 ));
         mouseState.xDown = x0;
         mouseState.yDown = y0;
         mouseState.isY = true;
@@ -76,8 +74,10 @@ Graph.onMouseDown = ( height, width, margin, padding, scrollSize, xScale, yScale
 Graph.onMouseUp = ( height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event, mouseState ) => {
     let xUp = event.nativeEvent.offsetX, yUp = event.nativeEvent.offsetY;
     if( mouseState.isX ) {
-        let dif = ( xMax0 - xMin0 ) * ( xUp - mouseState.xDown ) / ( width - margin.right - padding.right - margin.left - padding.left + 1 ),
-            xMin = xScale.domain()[ 0 ], xMax = xScale.domain()[ 1 ];
+        let w = width - margin.right - padding.right - margin.left - padding.left + 1,
+            dif = ( xMax0 - xMin0 ) * ( xUp - mouseState.xDown ) / w,
+            xMin = xScale.domain()[ 0 ],
+            xMax = xScale.domain()[ 1 ];
         if( mouseState.isMin ) {
             dif = Math.max( dif, xMin0 - xMin );
             xScale.domain([ xMin + dif, xMax ]);
@@ -90,8 +90,10 @@ Graph.onMouseUp = ( height, width, margin, padding, scrollSize, xScale, yScale, 
             xScale.domain([ xMin + dif, xMax + dif ]);
         }
     } else if( mouseState.isY ) {
-        let dif = ( yMax0 - yMin0 ) * ( mouseState.yDown - yUp ) / ( height - margin.bottom - padding.bottom - margin.top - padding.top + 1 ),
-            yMin = yScale.domain()[ 0 ], yMax = yScale.domain()[ 1 ];;
+        let h = height - margin.bottom - padding.bottom - margin.top - padding.top + 1,
+            dif = ( yMax0 - yMin0 ) * ( mouseState.yDown - yUp ) / h,
+            yMin = yScale.domain()[ 0 ],
+            yMax = yScale.domain()[ 1 ];;
         if( mouseState.isMin ) {
             dif = Math.max( dif, yMin0 - yMin );
             yScale.domain([ yMin + dif, yMax ]);
