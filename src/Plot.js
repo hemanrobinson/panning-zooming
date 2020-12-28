@@ -18,7 +18,7 @@ const Plot = ( props ) => {
         yMax0 = d3.max( data, d => d[ 1 ]),
         xScale = d3.scaleLinear().domain([ xMin0, xMax0 ]).range([ margin.left + padding.left, width - margin.right - padding.right ]),
         yScale = d3.scaleLinear().domain([ yMin0, yMax0 ]).range([ height - margin.bottom - padding.bottom, margin.top + padding.top ]),
-        xDown, yDown, isX = false, isY = false, isMin = false, isMax = false;
+        mouseState = { xDown: 0, yDown: 0, isX: false, isY: false, isMin: false, isMax: false };
     
     // Zoom in two dimensions.
     let onZoom2D = ( isIn ) => {
@@ -30,25 +30,13 @@ const Plot = ( props ) => {
     
     // Zoom in one dimension.
     let onMouseDown = ( event ) => {
-        let result = Graph.onMouseDown( height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event );
-        xDown = result[ 0 ];
-        yDown = result[ 1 ];
-        isX   = result[ 2 ];
-        isY   = result[ 3 ];
-        isMin = result[ 4 ];
-        isMax = result[ 5 ];
+        Graph.onMouseDown( height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event, mouseState );
     },
     onMouseUp = ( event ) => {
-        let result = Graph.onMouseUp( xDown, yDown, isX, isY, isMin, isMax, height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event );
-        if( isX || isY ) {
+        Graph.onMouseUp( height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event, mouseState );
+        if( mouseState.isX || mouseState.isY ) {
             Plot.draw( ref, height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, dataSet, 100 );
         }
-        xDown = result[ 0 ];
-        yDown = result[ 1 ];
-        isX   = result[ 2 ];
-        isY   = result[ 3 ];
-        isMin = result[ 4 ];
-        isMax = result[ 5 ];
     };
     
     // Set hook to draw on mounting, or on any other lifecycle update.

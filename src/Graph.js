@@ -38,7 +38,7 @@ Graph.onZoom2D = ( xScale, yScale, xMin0, xMax0, yMin0, yMax0, isIn ) => {
 };
     
 // Zooms in one dimension.
-Graph.onMouseDown = ( height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event ) => {
+Graph.onMouseDown = ( height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event, mouseState ) => {
     const endCapSize = 0.8 * scrollSize;
     let x0 = event.nativeEvent.offsetX, y0 = event.nativeEvent.offsetY,
     x = margin.left + padding.left,
@@ -48,89 +48,71 @@ Graph.onMouseDown = ( height, width, margin, padding, scrollSize, xScale, yScale
     xMin = x + w * ( xScale.domain()[ 0 ] - xMin0 ) / ( xMax0 - xMin0 ),
     xMax = x + w * ( xScale.domain()[ 1 ] - xMin0 ) / ( xMax0 - xMin0 ),
     yMin = y + h * ( 1 - ( yScale.domain()[ 0 ] - yMin0 ) / ( yMax0 - yMin0 )),
-    yMax = y + h * ( 1 - ( yScale.domain()[ 1 ] - yMin0 ) / ( yMax0 - yMin0 )),
-    xDown,
-    yDown,
-    isX = false,
-    isY = false,
-    isMin = false,
-    isMax = false;
+    yMax = y + h * ( 1 - ( yScale.domain()[ 1 ] - yMin0 ) / ( yMax0 - yMin0 ));
+    mouseState.isX = false;
+    mouseState.isY = false;
+    mouseState.isMin = false;
+    mouseState.isMax = false;
     if(( margin.left + padding.left <= x0 ) && ( x0 <= width - margin.right - padding.right ) && ( height - scrollSize <= y0 ) && ( y0 <= height )) {
-        xDown = x0;
-        yDown = y0;
-        isX = true;
+        mouseState.xDown = x0;
+        mouseState.yDown = y0;
+        mouseState.isX = true;
         if( x0 < xMin + endCapSize ) {
-            isMin = true;
+            mouseState.isMin = true;
         } else if( x0 > xMax - endCapSize ) {
-            isMax = true;
+            mouseState.isMax = true;
         }
     } else if(( 0 <= x0 ) && ( x0 <= scrollSize ) && ( margin.top + padding.top <= y0 ) && ( y0 <= height - margin.bottom - padding.bottom )) {
-        xDown = x0;
-        yDown = y0;
-        isY = true;
+        mouseState.xDown = x0;
+        mouseState.yDown = y0;
+        mouseState.isY = true;
         if( y0 < yMax + endCapSize ) {
-            isMax = true;
+            mouseState.isMax = true;
         } else if( y0 > yMin - endCapSize ) {
-            isMin = true;
+            mouseState.isMin = true;
         }
     }
-    return [ xDown, yDown, isX, isY, isMin, isMax ];
 };
-Graph.onMouseUp = ( xDown, yDown, isX, isY, isMin, isMax, height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event ) => {
+Graph.onMouseUp = ( height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event, mouseState ) => {
     let xUp = event.nativeEvent.offsetX, yUp = event.nativeEvent.offsetY;
-    if( isX ) {
-        let dif = ( xMax0 - xMin0 ) * ( xUp - xDown ) / ( width - margin.right - padding.right - margin.left - padding.left + 1 );
-        if( isMin ) {
-            if( dif < xMin0 - xScale.domain()[ 0 ]) {
-                dif = xMin0 - xScale.domain()[ 0 ];
-            }
-            xScale.domain([ xScale.domain()[ 0 ] + dif, xScale.domain()[ 1 ]]);
-        } else if( isMax ) {
-            if( dif > xMax0 - xScale.domain()[ 1 ]) {
-                dif = xMax0 - xScale.domain()[ 1 ];
-            }
-            xScale.domain([ xScale.domain()[ 0 ], xScale.domain()[ 1 ] + dif ]);
+    if( mouseState.isX ) {
+        let dif = ( xMax0 - xMin0 ) * ( xUp - mouseState.xDown ) / ( width - margin.right - padding.right - margin.left - padding.left + 1 ),
+            xMin = xScale.domain()[ 0 ], xMax = xScale.domain()[ 1 ];
+        if( mouseState.isMin ) {
+            dif = Math.max( dif, xMin0 - xMin );
+            xScale.domain([ xMin + dif, xMax ]);
+        } else if( mouseState.isMax ) {
+            dif = Math.min( dif, xMax0 - xMax );
+            xScale.domain([ xMin, xMax + dif ]);
         } else {
-            if( dif < xMin0 - xScale.domain()[ 0 ]) {
-                dif = xMin0 - xScale.domain()[ 0 ];
-            }
-            if( dif > xMax0 - xScale.domain()[ 1 ]) {
-                dif = xMax0 - xScale.domain()[ 1 ];
-            }
-            xScale.domain([ xScale.domain()[ 0 ] + dif, xScale.domain()[ 1 ] + dif ]);
+            dif = Math.max( dif, xMin0 - xMin );
+            dif = Math.min( dif, xMax0 - xMax );
+            xScale.domain([ xMin + dif, xMax + dif ]);
         }
-    } else if( isY ) {
-        let dif = ( yMax0 - yMin0 ) * ( yDown - yUp ) / ( height - margin.bottom - padding.bottom - margin.top - padding.top + 1 );
-        if( isMin ) {
-            if( dif < yMin0 - yScale.domain()[ 0 ]) {
-                dif = yMin0 - yScale.domain()[ 0 ];
-            }
-            yScale.domain([ yScale.domain()[ 0 ] + dif, yScale.domain()[ 1 ]]);
-        } else if( isMax ) {
-            if( dif > yMax0 - yScale.domain()[ 1 ]) {
-                dif = yMax0 - yScale.domain()[ 1 ];
-            }
-            yScale.domain([ yScale.domain()[ 0 ], yScale.domain()[ 1 ] + dif ]);
+    } else if( mouseState.isY ) {
+        let dif = ( yMax0 - yMin0 ) * ( mouseState.yDown - yUp ) / ( height - margin.bottom - padding.bottom - margin.top - padding.top + 1 ),
+            yMin = yScale.domain()[ 0 ], yMax = yScale.domain()[ 1 ];;
+        if( mouseState.isMin ) {
+            dif = Math.max( dif, yMin0 - yMin );
+            yScale.domain([ yMin + dif, yMax ]);
+        } else if( mouseState.isMax ) {
+            dif = Math.min( dif, yMax0 - yMax );
+            yScale.domain([ yMin, yMax + dif ]);
         } else {
-            if( dif < yMin0 - yScale.domain()[ 0 ]) {
-                dif = yMin0 - yScale.domain()[ 0 ];
-            }
-            if( dif > yMax0 - yScale.domain()[ 1 ]) {
-                dif = yMax0 - yScale.domain()[ 1 ];
-            }
-            yScale.domain([ yScale.domain()[ 0 ] + dif, yScale.domain()[ 1 ] + dif ]);
+            dif = Math.max( dif, yMin0 - yMin );
+            dif = Math.min( dif, yMax0 - yMax );
+            yScale.domain([ yMin + dif, yMax + dif ]);
         }
     }
     if( event.type === "mouseup" ) {
-        isX = false;
-        isY = false;
-        isMin = false;
-        isMax = false;
+        mouseState.isX = false;
+        mouseState.isY = false;
+        mouseState.isMin = false;
+        mouseState.isMax = false;
     } else {
-        xDown = xUp;
-        yDown = yUp;
+        mouseState.xDown = xUp;
+        mouseState.yDown = yUp;
     }
-    return [ xDown, yDown, isX, isY, isMin, isMax ];
 };
     
 // Draws the graph.

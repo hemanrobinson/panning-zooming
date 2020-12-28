@@ -19,8 +19,7 @@ const Histogram = ( props ) => {
         yMax0,
         xScale = d3.scaleLinear().domain([ xMin0, xMax0 ]).range([ margin.left + padding.left, width - margin.right - padding.right ]),
         yScale, histogram, bins,
-        xDown, yDown,
-        isX = false, isY = false, isMin = false, isMax = false;
+        mouseState = { xDown: 0, yDown: 0, isX: false, isY: false, isMin: false, isMax: false };
     
     // Zoom in two dimensions.
     let onZoom2D = ( isIn ) => {
@@ -32,25 +31,13 @@ const Histogram = ( props ) => {
     
     // Zoom in one dimension.
     let onMouseDown = ( event ) => {
-        let result = Graph.onMouseDown( height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event );
-        xDown = result[ 0 ];
-        yDown = result[ 1 ];
-        isX   = result[ 2 ];
-        isY   = result[ 3 ];
-        isMin = result[ 4 ];
-        isMax = result[ 5 ];
+        Graph.onMouseDown( height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event, mouseState );
     },
     onMouseUp = ( event ) => {
-        let result = Graph.onMouseUp( xDown, yDown, isX, isY, isMin, isMax, height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event );
-        if( isX || isY ) {
+        Graph.onMouseUp( height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event, mouseState );
+        if( mouseState.isX || mouseState.isY ) {
             Histogram.draw( height, width, margin, padding, scrollSize, ref, xScale, yScale, histogram, bins, xMin0, xMax0, yMin0, yMax0, dataSet, 100 );
         }
-        xDown = result[ 0 ];
-        yDown = result[ 1 ];
-        isX   = result[ 2 ];
-        isY   = result[ 3 ];
-        isMin = result[ 4 ];
-        isMax = result[ 5 ];
     };
 
     // Create the histogram function.
