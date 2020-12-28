@@ -81,24 +81,48 @@ Graph.onMouseUp = ( xDown, yDown, isX, isY, isMin, isMax, height, width, margin,
     if( isX ) {
         let x = margin.left + padding.left,
             w = width - padding.right - x + 1,
-            dif = ( xUp - xDown ) * ( xScale.domain()[ 1 ] - xScale.domain()[ 0 ]) / ( w - x );
+            dif = ( xScale.domain()[ 1 ] - xScale.domain()[ 0 ]) * ( xUp - xDown ) / ( w - x );
         if( isMin ) {
-            xScale.domain([ Math.max( xMin0, xScale.domain()[ 0 ] + dif ), xScale.domain()[ 1 ]]);
+            if( dif < xMin0 - xScale.domain()[ 0 ]) {
+                dif = xMin0 - xScale.domain()[ 0 ];
+            }
+            xScale.domain([ xScale.domain()[ 0 ] + dif, xScale.domain()[ 1 ]]);
         } else if( isMax ) {
-            xScale.domain([ xScale.domain()[ 0 ], Math.min( xMax0, xScale.domain()[ 1 ] + dif )]);
+            if( dif > xMax0 - xScale.domain()[ 1 ]) {
+                dif = xMax0 - xScale.domain()[ 1 ];
+            }
+            xScale.domain([ xScale.domain()[ 0 ], xScale.domain()[ 1 ] + dif ]);
         } else {
-            xScale.domain([ Math.max( xMin0, xScale.domain()[ 0 ] + dif ), Math.min( xMax0, xScale.domain()[ 1 ] + dif )]);
+            if( dif < xMin0 - xScale.domain()[ 0 ]) {
+                dif = xMin0 - xScale.domain()[ 0 ];
+            }
+            if( dif > xMax0 - xScale.domain()[ 1 ]) {
+                dif = xMax0 - xScale.domain()[ 1 ];
+            }
+            xScale.domain([ xScale.domain()[ 0 ] + dif, xScale.domain()[ 1 ] + dif ]);
         }
     } else if( isY ) {
         let y = padding.top,
             h = height - margin.bottom - padding.bottom - y + 1,
-            dif = ( yDown - yUp ) * ( yScale.domain()[ 1 ] - yScale.domain()[ 0 ]) / ( h - y );
+            dif = ( yScale.domain()[ 1 ] - yScale.domain()[ 0 ]) * ( yDown - yUp ) / ( h - y );
         if( isMin ) {
-            yScale.domain([ Math.max( yMin0, yScale.domain()[ 0 ] + dif ), yScale.domain()[ 1 ]]);
+            if( dif < yMin0 - yScale.domain()[ 0 ]) {
+                dif = yMin0 - yScale.domain()[ 0 ];
+            }
+            yScale.domain([ yScale.domain()[ 0 ] + dif, yScale.domain()[ 1 ]]);
         } else if( isMax ) {
-            yScale.domain([ yScale.domain()[ 0 ], Math.min( yMax0, yScale.domain()[ 1 ] + dif )]);
+            if( dif > yMax0 - yScale.domain()[ 1 ]) {
+                dif = yMax0 - yScale.domain()[ 1 ];
+            }
+            yScale.domain([ yScale.domain()[ 0 ], yScale.domain()[ 1 ] + dif ]);
         } else {
-            yScale.domain([ Math.max( yMin0, yScale.domain()[ 0 ] + dif ), Math.min( yMax0, yScale.domain()[ 1 ] + dif )]);
+            if( dif < yMin0 - yScale.domain()[ 0 ]) {
+                dif = yMin0 - yScale.domain()[ 0 ];
+            }
+            if( dif > yMax0 - yScale.domain()[ 1 ]) {
+                dif = yMax0 - yScale.domain()[ 1 ];
+            }
+            yScale.domain([ yScale.domain()[ 0 ] + dif, yScale.domain()[ 1 ] + dif ]);
         }
     }
     if( event.type === "mouseup" ) {
