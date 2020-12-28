@@ -19,9 +19,14 @@ const Graph = React.forwardRef(( props, ref ) => {
     
 // Zooms in two dimensions.
 Graph.onZoom2D = ( xScale, yScale, xMin0, xMax0, yMin0, yMax0, isIn ) => {
-    const d = 8, f = ( d - 1 ) / ( 2 * d );
-    let xDomain = xScale.domain(), xMin = xDomain[ 0 ], xMax = xDomain[ 1 ], xRange = xMax - xMin,
-        yDomain = yScale.domain(), yMin = yDomain[ 0 ], yMax = yDomain[ 1 ], yRange = yMax - yMin;
+    const d = 8,
+        f = ( d - 1 ) / ( 2 * d );
+    let xMin = xScale.domain()[ 0 ],
+        xMax = xScale.domain()[ 1 ],
+        xRange = xMax - xMin,
+        yMin = yScale.domain()[ 0 ],
+        yMax = yScale.domain()[ 1 ],
+        yRange = yMax - yMin;
     if( isIn ) {
         xMin = Math.min( xMin0 + ( xMax0 - xMin0 ) * f, xMin + xRange / d );
         xMax = Math.max( xMax0 - ( xMax0 - xMin0 ) * f, xMax - xRange / d );
