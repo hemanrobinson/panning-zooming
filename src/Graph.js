@@ -11,7 +11,7 @@ const Graph = React.forwardRef(( props, ref ) => {
     
     // Return the component.
     return <div style={{width: width, height: height}} className="parent">
-            <svg width={width} height={height} onMouseDown={onMouseDown} onMouseUp={onMouseUp} ref={ref} />
+            <svg width={width} height={height} onMouseDown={onMouseDown} onMouseMove={onMouseUp} onMouseUp={onMouseUp} ref={ref} />
             <input type="button" value="+" onClick={onZoomIn } style={{ width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1 }} />
             <input type="button" value="-" onClick={onZoomOut} style={{ width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1 + buttonSize }} />
         </div>;
@@ -79,9 +79,7 @@ Graph.onMouseDown = ( height, width, margin, padding, scrollSize, xScale, yScale
 Graph.onMouseUp = ( xDown, yDown, isX, isY, isMin, isMax, height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event ) => {
     let xUp = event.nativeEvent.offsetX, yUp = event.nativeEvent.offsetY;
     if( isX ) {
-        let x = margin.left + padding.left,
-            w = width - margin.right - padding.right - x + 1,
-            dif = ( xScale.domain()[ 1 ] - xScale.domain()[ 0 ]) * ( xUp - xDown ) / ( w - x );
+        let dif = ( xMax0 - xMin0 ) * ( xUp - xDown ) / ( width - margin.right - padding.right - margin.left - padding.left + 1 );
         if( isMin ) {
             if( dif < xMin0 - xScale.domain()[ 0 ]) {
                 dif = xMin0 - xScale.domain()[ 0 ];
@@ -102,9 +100,7 @@ Graph.onMouseUp = ( xDown, yDown, isX, isY, isMin, isMax, height, width, margin,
             xScale.domain([ xScale.domain()[ 0 ] + dif, xScale.domain()[ 1 ] + dif ]);
         }
     } else if( isY ) {
-        let y = margin.top + padding.top,
-            h = height - margin.bottom - padding.bottom - y + 1,
-            dif = ( yScale.domain()[ 1 ] - yScale.domain()[ 0 ]) * ( yDown - yUp ) / ( h - y );
+        let dif = ( yMax0 - yMin0 ) * ( yDown - yUp ) / ( height - margin.bottom - padding.bottom - margin.top - padding.top + 1 );
         if( isMin ) {
             if( dif < yMin0 - yScale.domain()[ 0 ]) {
                 dif = yMin0 - yScale.domain()[ 0 ];
