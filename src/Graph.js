@@ -77,22 +77,23 @@ Graph.onMouseDown = ( height, width, margin, padding, scrollSize, xScale, yScale
     }
 };
 Graph.onMouseUp = ( height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event, mouseState ) => {
+    const d = 8;
     let xUp = event.nativeEvent.offsetX, yUp = event.nativeEvent.offsetY;
     if( mouseState.isX ) {
-        const d = ( xMax0 - xMin0 ) / 8;
+        const f = ( xMax0 - xMin0 ) / d;
         let w = width - margin.right - padding.right - margin.left - padding.left + 1,
             dif = ( xMax0 - xMin0 ) * ( xUp - mouseState.xDown ) / w,
             xMin = xScale.domain()[ 0 ],
             xMax = xScale.domain()[ 1 ];
         if( mouseState.isMin ) {
             dif = Math.max( dif, xMin0 - xMin );
-            if( dif > xMax - xMin - d ) {
+            if( dif > xMax - xMin - f ) {
                 dif = 0;
             }
             xScale.domain([ xMin + dif, xMax ]);
         } else if( mouseState.isMax ) {
             dif = Math.min( dif, xMax0 - xMax );
-            if( dif < d - xMax + xMin ) {
+            if( dif < f - xMax + xMin ) {
                 dif = 0;
             }
             xScale.domain([ xMin, xMax + dif ]);
@@ -102,20 +103,20 @@ Graph.onMouseUp = ( height, width, margin, padding, scrollSize, xScale, yScale, 
             xScale.domain([ xMin + dif, xMax + dif ]);
         }
     } else if( mouseState.isY ) {
-        const d = ( yMax0 - yMin0 ) / 8;
+        const f = ( yMax0 - yMin0 ) / d;
         let h = height - margin.bottom - padding.bottom - margin.top - padding.top + 1,
             dif = ( yMax0 - yMin0 ) * ( mouseState.yDown - yUp ) / h,
             yMin = yScale.domain()[ 0 ],
             yMax = yScale.domain()[ 1 ];;
         if( mouseState.isMin ) {
             dif = Math.max( dif, yMin0 - yMin );
-            if( dif > yMax - yMin - d ) {
+            if( dif > yMax - yMin - f ) {
                 dif = 0;
             }
             yScale.domain([ yMin + dif, yMax ]);
         } else if( mouseState.isMax ) {
             dif = Math.min( dif, yMax0 - yMax );
-            if( dif < d - yMax + yMin ) {
+            if( dif < f - yMax + yMin ) {
                 dif = 0;
             }
             yScale.domain([ yMin, yMax + dif ]);
