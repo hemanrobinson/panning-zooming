@@ -9,7 +9,7 @@ import './Histogram.css';
 const Histogram = ( props ) => {
     
     // Initialization.
-    const width = 400, height = 400, padding = { top: 20, right: 20, bottom: 0, left: 20 }, margin = { top: 50, right: 50, bottom: 50, left: 50 }, scrollSize = 15;
+    const width = 400, height = 400, padding = { top: 20, right: 20, bottom: 0, left: 20 }, margin = { top: 0, right: 0, bottom: 50, left: 50 }, scrollSize = 15;
     let ref = useRef(),
         { dataSet } = props,
         data = Data.getValues( dataSet ),
@@ -17,7 +17,7 @@ const Histogram = ( props ) => {
         xMax0 = d3.max( data, d => d[ 2 ]),
         yMin0,
         yMax0,
-        xScale = d3.scaleLinear().domain([ xMin0, xMax0 ]).range([ margin.left + padding.left, width - padding.right ]),
+        xScale = d3.scaleLinear().domain([ xMin0, xMax0 ]).range([ margin.left + padding.left, width - margin.right - padding.right ]),
         yScale, histogram, bins,
         xDown, yDown,
         isX = false, isY = false, isMin = false, isMax = false;
@@ -66,7 +66,7 @@ const Histogram = ( props ) => {
     yMin0 = 0;
     yMax0 = d3.max( bins, d => d.length );
     yScale = d3.scaleLinear()
-        .range([ height - margin.bottom - padding.bottom, padding.top ])
+        .range([ height - margin.bottom - padding.bottom, margin.top + padding.top ])
         .domain([ yMin0, yMax0 ]);
     
     // Set hook to draw on mounting, or on any other lifecycle update.

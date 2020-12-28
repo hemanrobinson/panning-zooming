@@ -11,7 +11,7 @@ const Graph = React.forwardRef(( props, ref ) => {
     
     // Return the component.
     return <div style={{width: width, height: height}} className="parent">
-            <svg width={width} height={height} onMouseDown={onMouseDown} onMouseMove={onMouseUp} onMouseUp={onMouseUp} ref={ref} />
+            <svg width={width} height={height} onMouseDown={onMouseDown} onMouseUp={onMouseUp} ref={ref} />
             <input type="button" value="+" onClick={onZoomIn } style={{ width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1 }} />
             <input type="button" value="-" onClick={onZoomOut} style={{ width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1 + buttonSize }} />
         </div>;
@@ -42,8 +42,8 @@ Graph.onMouseDown = ( height, width, margin, padding, scrollSize, xScale, yScale
     const endCapSize = 0.8 * scrollSize;
     let x0 = event.nativeEvent.offsetX, y0 = event.nativeEvent.offsetY,
     x = margin.left + padding.left,
-    y = padding.top,
-    w = width - padding.right - x + 1,
+    y = margin.top + padding.top,
+    w = width - margin.right - padding.right - x + 1,
     h = height - margin.bottom - padding.bottom - y + 1,
     xMin = x + w * ( xScale.domain()[ 0 ] - xMin0 ) / ( xMax0 - xMin0 ),
     xMax = x + w * ( xScale.domain()[ 1 ] - xMin0 ) / ( xMax0 - xMin0 ),
@@ -55,7 +55,7 @@ Graph.onMouseDown = ( height, width, margin, padding, scrollSize, xScale, yScale
     isY = false,
     isMin = false,
     isMax = false;
-    if(( margin.left + padding.left <= x0 ) && ( x0 <= width - padding.right ) && ( height - scrollSize <= y0 ) && ( y0 <= height )) {
+    if(( margin.left + padding.left <= x0 ) && ( x0 <= width - margin.right - padding.right ) && ( height - scrollSize <= y0 ) && ( y0 <= height )) {
         xDown = x0;
         yDown = y0;
         isX = true;
@@ -64,7 +64,7 @@ Graph.onMouseDown = ( height, width, margin, padding, scrollSize, xScale, yScale
         } else if( x0 > xMax - endCapSize ) {
             isMax = true;
         }
-    } else if(( 0 <= x0 ) && ( x0 <= scrollSize ) && ( padding.top <= y0 ) && ( y0 <= height - margin.bottom - padding.bottom )) {
+    } else if(( 0 <= x0 ) && ( x0 <= scrollSize ) && ( margin.top + padding.top <= y0 ) && ( y0 <= height - margin.bottom - padding.bottom )) {
         xDown = x0;
         yDown = y0;
         isY = true;
@@ -80,7 +80,7 @@ Graph.onMouseUp = ( xDown, yDown, isX, isY, isMin, isMax, height, width, margin,
     let xUp = event.nativeEvent.offsetX, yUp = event.nativeEvent.offsetY;
     if( isX ) {
         let x = margin.left + padding.left,
-            w = width - padding.right - x + 1,
+            w = width - margin.right - padding.right - x + 1,
             dif = ( xScale.domain()[ 1 ] - xScale.domain()[ 0 ]) * ( xUp - xDown ) / ( w - x );
         if( isMin ) {
             if( dif < xMin0 - xScale.domain()[ 0 ]) {
@@ -102,7 +102,7 @@ Graph.onMouseUp = ( xDown, yDown, isX, isY, isMin, isMax, height, width, margin,
             xScale.domain([ xScale.domain()[ 0 ] + dif, xScale.domain()[ 1 ] + dif ]);
         }
     } else if( isY ) {
-        let y = padding.top,
+        let y = margin.top + padding.top,
             h = height - margin.bottom - padding.bottom - y + 1,
             dif = ( yScale.domain()[ 1 ] - yScale.domain()[ 0 ]) * ( yDown - yUp ) / ( h - y );
         if( isMin ) {
@@ -143,14 +143,34 @@ Graph.draw = ( ref, height, width, margin, padding, scrollSize, xScale, yScale, 
     // Initialization.
     const svg = d3.select( ref.current ),
         halfScrollSize = scrollSize / 2;
-    
-    // Draw the X axis.
+        
+    // Clear the margins.
+    svg.append( "rect" )
+        .attr( "x", 0 )
+        .attr( "y", 0 )
+        .attr( "width", width )
+        .attr( "height", margin.top )
+        .style( "fill", "#ffffff" );
+    svg.append( "rect" )
+        .attr( "x", width - margin.right )
+        .attr( "y", 0 )
+        .attr( "width", margin.right )
+        .attr( "height", height )
+        .style( "fill", "#ffffff" );
     svg.append( "rect" )
         .attr( "x", 0 )
         .attr( "y", height - margin.bottom )
         .attr( "width", width )
         .attr( "height", margin.bottom )
         .style( "fill", "#ffffff" );
+    svg.append( "rect" )
+        .attr( "x", 0 )
+        .attr( "y", 0 )
+        .attr( "width", margin.left )
+        .attr( "height", height )
+        .style( "fill", "#ffffff" );
+    
+    // Draw the X axis.
     svg.append( "g" )
         .attr( "class", "axis" )
         .attr( "transform", "translate( 0, " + ( height - margin.bottom ) + " )" )
@@ -161,25 +181,19 @@ Graph.draw = ( ref, height, width, margin, padding, scrollSize, xScale, yScale, 
         .text( xLabel );
         
     // Draw the Y axis.
-    svg.append( "rect" )
-        .attr( "x", 0 )
-        .attr( "y", 0 )
-        .attr( "width", margin.left )
-        .attr( "height", height )
-        .style( "fill", "#ffffff" );
     svg.append( "g" )
         .attr( "class", "axis" )
         .attr( "transform", "translate( " + margin.left + ", 0 )" )
         .call( d3.axisLeft( yScale ).ticks( 3 ).tickFormat(( x ) => { return x.toFixed( 1 )}));
     svg.append( "text" )
         .attr( "x", margin.left )
-        .attr( "y", padding.top * 0.7 )
+        .attr( "y", margin.top + padding.top * 0.7 )
         .style( "text-anchor", "middle" )
         .text( yLabel );
     
     // Draw the X scrollbar.
     let x = margin.left + padding.left,
-        w = width - padding.right - x + 1,
+        w = width - margin.right - padding.right - x + 1,
         xMin = x + w * ( xScale.domain()[ 0 ] - xMin0 ) / ( xMax0 - xMin0 ),
         xMax = x + w * ( xScale.domain()[ 1 ] - xMin0 ) / ( xMax0 - xMin0 );
     svg.append( "rect" )
@@ -212,7 +226,7 @@ Graph.draw = ( ref, height, width, margin, padding, scrollSize, xScale, yScale, 
         .style( "stroke", "#ffffff" );
         
     // Draw the Y scrollbar.
-    let y = padding.top,
+    let y = margin.top + padding.top,
         h = height - margin.bottom - padding.bottom - y + 1,
         yMin = y + h * ( 1 - ( yScale.domain()[ 0 ] - yMin0 ) / ( yMax0 - yMin0 )),
         yMax = y + h * ( 1 - ( yScale.domain()[ 1 ] - yMin0 ) / ( yMax0 - yMin0 ));

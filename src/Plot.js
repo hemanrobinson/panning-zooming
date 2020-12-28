@@ -8,7 +8,7 @@ import './Plot.css';
 const Plot = ( props ) => {
 
     // Initialization.
-    const width = 400, height = 400, padding = { top: 20, right: 20, bottom: 20, left: 20 }, margin = { top: 50, right: 50, bottom: 50, left: 50 }, scrollSize = 15;
+    const width = 400, height = 400, padding = { top: 20, right: 20, bottom: 20, left: 20 }, margin = { top: 0, right: 0, bottom: 50, left: 50 }, scrollSize = 15;
     let ref = useRef(),
         { dataSet } = props,
         data = Data.getValues( dataSet ),
@@ -16,8 +16,8 @@ const Plot = ( props ) => {
         xMax0 = d3.max( data, d => d[ 2 ]),
         yMin0 = d3.min( data, d => d[ 1 ]),
         yMax0 = d3.max( data, d => d[ 1 ]),
-        xScale = d3.scaleLinear().domain([ xMin0, xMax0 ]).range([ margin.left + padding.left, width - padding.right ]),
-        yScale = d3.scaleLinear().domain([ yMin0, yMax0 ]).range([ height - margin.bottom - padding.bottom, padding.top ]),
+        xScale = d3.scaleLinear().domain([ xMin0, xMax0 ]).range([ margin.left + padding.left, width - margin.right - padding.right ]),
+        yScale = d3.scaleLinear().domain([ yMin0, yMax0 ]).range([ height - margin.bottom - padding.bottom, margin.top + padding.top ]),
         xDown, yDown, isX = false, isY = false, isMin = false, isMax = false;
     
     // Zoom in two dimensions.
