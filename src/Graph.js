@@ -1,5 +1,6 @@
 import React from 'react';
 import * as d3 from 'd3';
+import { Slider } from '@material-ui/core';
 import './Graph.css';
 
 // Graph in an SVG element.
@@ -7,13 +8,14 @@ const Graph = React.forwardRef(( props, ref ) => {
     
     // Initialization.
     const buttonSize = 30;
-    let { width, height, onMouseDown, onMouseUp, onZoomIn, onZoomOut } = props;
+    let { width, height, margin, padding, onMouseDown, onMouseUp, onZoomIn, onZoomOut, onGroup } = props;
     
     // Return the component.
     return <div style={{width: width, height: height}} className="parent">
             <svg width={width} height={height} onMouseDown={onMouseDown} onMouseMove={onMouseUp} onMouseUp={onMouseUp} ref={ref} />
             <input type="button" value="+" onClick={onZoomIn } style={{ width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1 }} />
             <input type="button" value="-" onClick={onZoomOut} style={{ width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1 + buttonSize }} />
+            <Slider defaultValue={ 0 } onChange={onGroup} style={{ width: width - margin.left - padding.left - margin.right - padding.right + 1, top: height - margin.bottom - 12, left: margin.left + padding.left + 1, position: "absolute", zIndex: 2, display: ( onGroup ? "inline" : "none" )}} />
         </div>;
 });
     
@@ -176,7 +178,7 @@ Graph.draw = ( ref, height, width, margin, padding, scrollSize, xScale, yScale, 
         .attr( "transform", "translate( 0, " + ( height - margin.bottom ) + " )" )
         .call( d3.axisBottom( xScale ).ticks( 3 ).tickFormat(( x ) => { return x.toFixed( 1 )}));
     svg.append( "text" )
-        .attr( "transform", "translate( " + ( width / 2 ) + " ," + ( height - padding.bottom ) + ")" )
+        .attr( "transform", "translate( " + ( width / 2 ) + " ," + ( height - 1.5 * scrollSize ) + ")" )
         .style( "text-anchor", "middle" )
         .text( xLabel );
         

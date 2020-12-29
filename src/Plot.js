@@ -45,9 +45,9 @@ const Plot = ( props ) => {
     });
     
     // Return the component.
-    return <Graph width={width} height={height}
-        onMouseDown={onMouseDown} onMouseUp={onMouseUp}
-        onZoomIn={onZoomIn} onZoomOut={onZoomOut} ref={ref} />
+    return <Graph width={width} height={height} margin={margin} padding={padding}
+        onZoomIn={onZoomIn} onZoomOut={onZoomOut} 
+        onMouseDown={onMouseDown} onMouseUp={onMouseUp} ref={ref} />
 };
     
 // Draws the points.

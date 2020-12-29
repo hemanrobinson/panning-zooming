@@ -1,5 +1,4 @@
 import React, { useEffect, useRef }  from 'react';
-//import { Slider } from '@material-ui/core';
 import * as d3 from 'd3';
 import Data from './Data';
 import Graph from './Graph';
@@ -18,7 +17,9 @@ const Histogram = ( props ) => {
         yMin0,
         yMax0,
         xScale = d3.scaleLinear().domain([ xMin0, xMax0 ]).range([ margin.left + padding.left, width - margin.right - padding.right ]),
-        yScale, histogram, bins,
+        yScale,
+        histogram,
+        bins,
         mouseState = { xDown: 0, yDown: 0, isX: false, isY: false, isMin: false, isMax: false };
     
     // Zoom in two dimensions.
@@ -39,22 +40,29 @@ const Histogram = ( props ) => {
             Histogram.draw( height, width, margin, padding, scrollSize, ref, xScale, yScale, histogram, bins, xMin0, xMax0, yMin0, yMax0, dataSet, 100 );
         }
     };
+    
+    // Calculate the bins.
+    let onGroup = ( event, value ) => {
 
-    // Create the histogram function.
-    histogram = d3.histogram()
-        .value( d => d[ 2 ])
-        .domain( xScale.domain())
-        .thresholds( xScale.ticks( 10 ));
+        // Get the histogram bins.
+        let nBins = Math.round( 8 + Math.exp( 5 * value / 100 ));
+        histogram = d3.histogram()
+            .value( d => d[ 2 ])
+            .domain( xScale.domain())
+            .thresholds( nBins );
+        bins = histogram( data );
 
-    // Get the bins.
-    bins = histogram( data );
-
-    // Get the Y scale.
-    yMin0 = 0;
-    yMax0 = d3.max( bins, d => d.length );
-    yScale = d3.scaleLinear()
-        .range([ height - margin.bottom - padding.bottom, margin.top + padding.top ])
-        .domain([ yMin0, yMax0 ]);
+        // Get the Y scale.
+        yMin0 = 0;
+        yMax0 = d3.max( bins, d => d.length );
+        yScale = d3.scaleLinear()
+            .range([ height - margin.bottom - padding.bottom, margin.top + padding.top ])
+            .domain([ yMin0, yMax0 ]);
+            
+        // Draw.  TODO:  Use state variable instead.
+        Histogram.draw( height, width, margin, padding, scrollSize, ref, xScale, yScale, histogram, bins, xMin0, xMax0, yMin0, yMax0, dataSet, 100 );
+    };
+    onGroup( undefined, 0 );
     
     // Set hook to draw on mounting, or on any other lifecycle update.
     useEffect(() => {
@@ -62,9 +70,9 @@ const Histogram = ( props ) => {
     });
     
     // Return the component.
-    return <Graph width={width} height={height}
-        onMouseDown={onMouseDown} onMouseUp={onMouseUp}
-        onZoomIn={onZoomIn} onZoomOut={onZoomOut} ref={ref} />
+    return <Graph width={width} height={height} margin={margin} padding={padding}
+        onZoomIn={onZoomIn} onZoomOut={onZoomOut}
+        onMouseDown={onMouseDown} onMouseUp={onMouseUp} onGroup={onGroup} ref={ref} />
 };
     
 // Draws the points.
@@ -82,7 +90,7 @@ Histogram.draw = ( height, width, margin, padding, scrollSize, ref, xScale, ySca
         .append( "rect" )
         .attr( "x", 1 )
         .attr( "transform", bin => ( "translate( " + xScale( bin.x0 ) + "," + yScale( bin.length ) + " )" ))
-        .attr( "width", bin => (( bin.x1 === bin.x0 ) ? 0 : ( xScale( bin.x1 ) - xScale( bin.x0 ) - 1 )))
+        .attr( "width", bin => Math.max( 0, (( bin.x1 === bin.x0 ) ? 0 : ( xScale( bin.x1 ) - xScale( bin.x0 ) - 1 ))))
         .attr( "height", bin => Math.max( 0, ( height - margin.bottom - padding.bottom - yScale( bin.length ))))
         .style( "fill", "#99bbdd" );
     

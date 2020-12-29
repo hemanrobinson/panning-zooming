@@ -19,23 +19,26 @@ const App = () => {
                 </p>
             </div>
             <div className="Graph">
-                <Plot dataSet={ "Iris" } />
+                <Plot dataSet={ "Cytometry" } />
             </div>
             <div className="Description">
                 <p>
-                Aggregate graphs display grouped data, rather than individual points.  So for aggregate graphs, exploring data requires zooming both the scales and the groups.  To maximize the user's power, scales and groups must be independently adjustable.
+                For large data sets, displays of individual points are impractical.  Instead, we use aggregate graphs, which display grouped data.  For aggregate graphs, exploring data requires zooming both the scales and the groups.  To maximize the user's power, scales and groups must be independently adjustable.
                 </p>
                 <p>
-                For example, in a histogram, users can explore their data by zooming both the scales and the bin widths.
+                For example, in a histogram, users can explore their data by zooming both the scales and the bins.
                 </p>
             </div>
             <div className="Graph">
-                <Histogram dataSet={ "Iris" } />
+                <Histogram dataSet={ "Cytometry" } />
             </div>
             <div className="Description">
                 <h2>Notes</h2>
                 <p>
-                Display primary controls on hover or click.
+                Three user interfaces were tested.
+                </p>
+                <p>
+                Display primary controls on hover or click, so as not to distract from data display.
                 </p>
                 <p>
                 Display secondary controls in a dialog.
