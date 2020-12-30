@@ -48,7 +48,7 @@ const Histogram = ( props ) => {
         let nBins = Math.round( 8 + Math.exp( 5 * value / 100 ));
         histogram = d3.histogram()
             .value( d => d[ 2 ])
-            .domain( xScale.domain())
+            .domain([ xMin0, xMax0 ])
             .thresholds( nBins );
         bins = histogram( data );
 
