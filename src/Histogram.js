@@ -23,6 +23,10 @@ const Histogram = ( props ) => {
         histogram,
         bins,
         mouseState = { xDown: 0, yDown: 0, isX: false, isY: false, isMin: false, isMax: false };
+        
+    // Get the X scale.
+    const [ xDomain, setXDomain ] = useState([ xMin0, xMax0 ]);
+    xScale = d3.scaleLinear().domain( xDomain ).range([ margin.left + padding.left, width - margin.right - padding.right ]);
     
     // Assign the group value.
     const [ group, setGroup ] = useState( 0 );
@@ -30,17 +34,12 @@ const Histogram = ( props ) => {
         setXDomain( xScale.domain());
         setGroup( value );
     };
-        
-    // Get the X scale.
-    const [ xDomain, setXDomain ] = useState([ xMin0, xMax0 ]);
-    xScale = d3.scaleLinear().domain( xDomain ).range([ margin.left + padding.left, width - margin.right - padding.right ]);
 
     // Calculate the histogram bins.
-    let nBins = Math.round( 8 + Math.exp( 5 * group ));
     histogram = d3.histogram()
         .value( d => d[ 2 ])
         .domain([ xMin0, xMax0 ])
-        .thresholds( nBins );
+        .thresholds( Math.round( 8 + Math.exp( 5 * group )));
     bins = histogram( data );
 
     // Get the Y scale.
@@ -53,7 +52,7 @@ const Histogram = ( props ) => {
     // Zoom in two dimensions.
     let onZoom2D = ( isIn ) => {
         Graph.onZoom2D( isIn, xScale, yScale, xMin0, xMax0, yMin0, yMax0 );
-        Histogram.draw( ref, height, width, margin, padding, xScale, yScale, histogram, bins, xMin0, xMax0, yMin0, yMax0, xLabel, yLabel );
+        Histogram.draw( ref, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, xLabel, yLabel, bins );
     };
     
     // Zoom in one dimension.
@@ -64,13 +63,13 @@ const Histogram = ( props ) => {
         let isXOrY = ( mouseState.isX || mouseState.isY );
         Graph.onMouseUp( event, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, mouseState );
         if( isXOrY ) {
-            Histogram.draw( ref, height, width, margin, padding, xScale, yScale, histogram, bins, xMin0, xMax0, yMin0, yMax0, xLabel, yLabel );
+            Histogram.draw( ref, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, xLabel, yLabel, bins );
         }
     };
     
     // Set hook to draw on mounting, or on any other lifecycle update.
     useEffect(() => {
-        Histogram.draw( ref, height, width, margin, padding, xScale, yScale, histogram, bins, xMin0, xMax0, yMin0, yMax0, xLabel, yLabel );
+        Histogram.draw( ref, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, xLabel, yLabel, bins );
     });
     
     // Return the component.
@@ -79,7 +78,7 @@ const Histogram = ( props ) => {
 };
     
 // Draws the points.
-Histogram.draw = ( ref, height, width, margin, padding, xScale, yScale, histogram, bins, xMin0, xMax0, yMin0, yMax0, xLabel, yLabel ) => {
+Histogram.draw = ( ref, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, xLabel, yLabel, bins ) => {
     
     // Initialization.
     const svg = d3.select( ref.current );

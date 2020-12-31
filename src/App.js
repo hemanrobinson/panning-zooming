@@ -34,7 +34,7 @@ const App = () => {
             </div>
             <div className="Description">
                 <p>
-                A heatmap allows zooming the bins in both dimensions.
+                A heatmap affords zooming the bins in two dimensions.
                 </p>
             </div>
             <div className="Description">

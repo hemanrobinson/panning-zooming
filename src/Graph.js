@@ -4,6 +4,9 @@ import { Slider } from '@material-ui/core';
 import './Graph.css';
 
 // Graph in an SVG element.
+//
+// React functional components don't support inheritance.
+// This is the recommended pattern; see https://reactjs.org/docs/composition-vs-inheritance.html#specialization.
 const Graph = React.forwardRef(( props, ref ) => {
     
     // Initialization.
@@ -51,40 +54,42 @@ Graph.onZoom2D = ( isIn, xScale, yScale, xMin0, xMax0, yMin0, yMax0 ) => {
 Graph.onMouseDown = ( event, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, mouseState ) => {
     const scrollSize = Graph.scrollSize,
         endCapSize = 0.8 * scrollSize;
-    let x0 = event.nativeEvent.offsetX, y0 = event.nativeEvent.offsetY;
+    let xDown = event.nativeEvent.offsetX,
+        yDown = event.nativeEvent.offsetY;
     mouseState.isX = false;
     mouseState.isY = false;
     mouseState.isMin = false;
     mouseState.isMax = false;
-    if(( margin.left + padding.left <= x0 ) && ( x0 <= width - margin.right - padding.right ) && ( height - scrollSize <= y0 ) && ( y0 <= height )) {
+    if(( margin.left + padding.left <= xDown ) && ( xDown <= width - margin.right - padding.right ) && ( height - scrollSize <= yDown ) && ( yDown <= height )) {
         let w = width - margin.right - padding.right - margin.left - padding.left + 1,
-            xMin = margin.left + padding.left + w * ( xScale.domain()[ 0 ] - xMin0 ) / ( xMax0 - xMin0 ),
-            xMax = margin.left + padding.left + w * ( xScale.domain()[ 1 ] - xMin0 ) / ( xMax0 - xMin0 );
-        mouseState.xDown = x0;
-        mouseState.yDown = y0;
+            x0 = margin.left + padding.left + w * ( xScale.domain()[ 0 ] - xMin0 ) / ( xMax0 - xMin0 ),
+            x1 = margin.left + padding.left + w * ( xScale.domain()[ 1 ] - xMin0 ) / ( xMax0 - xMin0 );
+        mouseState.xDown = xDown;
+        mouseState.yDown = yDown;
         mouseState.isX = true;
-        if( x0 < xMin + endCapSize ) {
+        if(( x0 <= xDown ) && ( xDown <= x0 + endCapSize )) {
             mouseState.isMin = true;
-        } else if( x0 > xMax - endCapSize ) {
+        } else if(( x1 - endCapSize <= xDown ) && ( xDown <= x1 )) {
             mouseState.isMax = true;
         }
-    } else if(( 0 <= x0 ) && ( x0 <= scrollSize ) && ( margin.top + padding.top <= y0 ) && ( y0 <= height - margin.bottom - padding.bottom )) {
+    } else if(( 0 <= xDown ) && ( xDown <= scrollSize ) && ( margin.top + padding.top <= yDown ) && ( yDown <= height - margin.bottom - padding.bottom )) {
         let h = height - margin.bottom - padding.bottom - margin.top - padding.top + 1,
-            yMin = margin.top + padding.top + h * ( 1 - ( yScale.domain()[ 0 ] - yMin0 ) / ( yMax0 - yMin0 )),
-            yMax = margin.top + padding.top + h * ( 1 - ( yScale.domain()[ 1 ] - yMin0 ) / ( yMax0 - yMin0 ));
-        mouseState.xDown = x0;
-        mouseState.yDown = y0;
+            y0 = margin.top + padding.top + h * ( 1 - ( yScale.domain()[ 0 ] - yMin0 ) / ( yMax0 - yMin0 )),
+            y1 = margin.top + padding.top + h * ( 1 - ( yScale.domain()[ 1 ] - yMin0 ) / ( yMax0 - yMin0 ));
+        mouseState.xDown = xDown;
+        mouseState.yDown = yDown;
         mouseState.isY = true;
-        if( y0 < yMax + endCapSize ) {
+        if(( y1 <= yDown ) && ( yDown <= y1 + endCapSize )) {
             mouseState.isMax = true;
-        } else if( y0 > yMin - endCapSize ) {
+        } else if(( y0 - endCapSize <= yDown ) && ( yDown <= y0 )) {
             mouseState.isMin = true;
         }
     }
 };
 Graph.onMouseUp = ( event, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, mouseState ) => {
     const d = 8;
-    let xUp = event.nativeEvent.offsetX, yUp = event.nativeEvent.offsetY;
+    let xUp = event.nativeEvent.offsetX,
+        yUp = event.nativeEvent.offsetY;
     if( mouseState.isX ) {
         const f = ( xMax0 - xMin0 ) / d;
         let w = width - margin.right - padding.right - margin.left - padding.left + 1,
@@ -104,6 +109,15 @@ Graph.onMouseUp = ( event, height, width, margin, padding, xScale, yScale, xMin0
             }
             xScale.domain([ xMin, xMax + dif ]);
         } else {
+            if( dif === 0 ) {
+                let x0 = margin.left + padding.left + w * ( xMin - xMin0 ) / ( xMax0 - xMin0 ),
+                    x1 = margin.left + padding.left + w * ( xMax - xMin0 ) / ( xMax0 - xMin0 );
+                if( xUp < x0 ) {
+                    dif = ( xMax0 - xMin0 ) * ( xUp - x0 ) / w - ( xMax - xMin ) / 2;
+                } else if( x1 < xUp ) {
+                    dif = ( xMax0 - xMin0 ) * ( xUp - x1 ) / w + ( xMax - xMin ) / 2;
+                }
+            }
             dif = Math.max( dif, xMin0 - xMin );
             dif = Math.min( dif, xMax0 - xMax );
             xScale.domain([ xMin + dif, xMax + dif ]);
@@ -113,7 +127,7 @@ Graph.onMouseUp = ( event, height, width, margin, padding, xScale, yScale, xMin0
         let h = height - margin.bottom - padding.bottom - margin.top - padding.top + 1,
             dif = ( yMax0 - yMin0 ) * ( mouseState.yDown - yUp ) / h,
             yMin = yScale.domain()[ 0 ],
-            yMax = yScale.domain()[ 1 ];;
+            yMax = yScale.domain()[ 1 ];
         if( mouseState.isMin ) {
             dif = Math.max( dif, yMin0 - yMin );
             if( dif > yMax - yMin - f ) {
@@ -127,6 +141,15 @@ Graph.onMouseUp = ( event, height, width, margin, padding, xScale, yScale, xMin0
             }
             yScale.domain([ yMin, yMax + dif ]);
         } else {
+            if( dif === 0 ) {
+                let y0 = margin.top + padding.top + h * ( 1 - ( yMin - yMin0 ) / ( yMax0 - yMin0 )),
+                    y1 = margin.top + padding.top + h * ( 1 - ( yMax - yMin0 ) / ( yMax0 - yMin0 ));
+                if( yUp < y0 ) {
+                    dif = ( yMax0 - yMin0 ) * ( y0 - yUp ) / h - ( yMax - yMin ) / 2;
+                } else if( y1 < yUp ) {
+                    dif = ( yMax0 - yMin0 ) * ( y1 - yUp ) / h + ( yMax - yMin ) / 2;
+                }
+            }
             dif = Math.max( dif, yMin0 - yMin );
             dif = Math.min( dif, yMax0 - yMax );
             yScale.domain([ yMin + dif, yMax + dif ]);
@@ -149,7 +172,7 @@ Graph.draw = ( ref, height, width, margin, padding, xScale, yScale, xMin0, xMax0
     // Initialization.
     const svg = d3.select( ref.current ),
         scrollSize = Graph.scrollSize,
-        halfScrollSize = scrollSize / 2;
+        halfSize = scrollSize / 2;
         
     // Clear the margins.
     svg.append( "rect" )
@@ -210,24 +233,24 @@ Graph.draw = ( ref, height, width, margin, padding, xScale, yScale, xMin0, xMax0
         .attr( "height", scrollSize )
         .style( "fill", "#eeeeee" );
     svg.append( "line" )
-        .attr( "x1", xMin + halfScrollSize )
-        .attr( "y1", height - halfScrollSize )
-        .attr( "x2", xMax - halfScrollSize )
-        .attr( "y2", height - halfScrollSize )
+        .attr( "x1", xMin + halfSize )
+        .attr( "y1", height - halfSize )
+        .attr( "x2", xMax - halfSize )
+        .attr( "y2", height - halfSize )
         .style( "stroke-width", scrollSize )
         .style( "stroke", "#cccccc" )
         .style( "stroke-linecap", "round" );
     svg.append( "line" )
-        .attr( "x1", xMin + halfScrollSize + 1 )
+        .attr( "x1", xMin + halfSize + 1 )
         .attr( "y1", height - scrollSize )
-        .attr( "x2", xMin + halfScrollSize + 1 )
+        .attr( "x2", xMin + halfSize + 1 )
         .attr( "y2", height )
         .style( "stroke-width", 1 )
         .style( "stroke", "#ffffff" );
     svg.append( "line" )
-        .attr( "x1", xMax - halfScrollSize - 1 )
+        .attr( "x1", xMax - halfSize - 1 )
         .attr( "y1", height - scrollSize )
-        .attr( "x2", xMax - halfScrollSize - 1 )
+        .attr( "x2", xMax - halfSize - 1 )
         .attr( "y2", height )
         .style( "stroke-width", 1 )
         .style( "stroke", "#ffffff" );
@@ -244,25 +267,25 @@ Graph.draw = ( ref, height, width, margin, padding, xScale, yScale, xMin0, xMax0
         .attr( "height", h )
         .style( "fill", "#eeeeee" );
     svg.append( "line" )
-        .attr( "x1", halfScrollSize )
-        .attr( "y1", yMax + halfScrollSize )
-        .attr( "x2", halfScrollSize )
-        .attr( "y2", yMin - halfScrollSize )
+        .attr( "x1", halfSize )
+        .attr( "y1", yMax + halfSize )
+        .attr( "x2", halfSize )
+        .attr( "y2", yMin - halfSize )
         .style( "stroke-width", scrollSize )
         .style( "stroke", "#cccccc" )
         .style( "stroke-linecap", "round" );
     svg.append( "line" )
         .attr( "x1", 0 )
-        .attr( "y1", yMax + halfScrollSize + 1 )
+        .attr( "y1", yMax + halfSize + 1 )
         .attr( "x2", scrollSize )
-        .attr( "y2", yMax + halfScrollSize + 1 )
+        .attr( "y2", yMax + halfSize + 1 )
         .style( "stroke-width", 1 )
         .style( "stroke", "#ffffff" );
     svg.append( "line" )
         .attr( "x1", 0 )
-        .attr( "y1", yMin - halfScrollSize - 1 )
+        .attr( "y1", yMin - halfSize - 1 )
         .attr( "x2", scrollSize )
-        .attr( "y2", yMin - halfScrollSize - 1 )
+        .attr( "y2", yMin - halfSize - 1 )
         .style( "stroke-width", 1 )
         .style( "stroke", "#ffffff" );
 };
