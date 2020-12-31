@@ -33,6 +33,11 @@ const App = () => {
                 <Histogram dataSet={ "Cytometry" } />
             </div>
             <div className="Description">
+                <p>
+                A heatmap allows zooming the bins in both dimensions.
+                </p>
+            </div>
+            <div className="Description">
                 <h2>Notes</h2>
                 <p>
                 Three user interfaces were tested.

@@ -34,7 +34,7 @@ const Histogram = ( props ) => {
     xScale = d3.scaleLinear().domain( xDomain ).range([ margin.left + padding.left, width - margin.right - padding.right ]);
 
     // Calculate the histogram bins.
-    let nBins = Math.round( 8 + Math.exp( 5 * group / 100 ));
+    let nBins = Math.round( 8 + Math.exp( 5 * group ));
     histogram = d3.histogram()
         .value( d => d[ 2 ])
         .domain([ xMin0, xMax0 ])

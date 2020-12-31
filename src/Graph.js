@@ -15,7 +15,7 @@ const Graph = React.forwardRef(( props, ref ) => {
             <svg width={width} height={height} onMouseDown={onMouseDown} onMouseMove={onMouseUp} onMouseUp={onMouseUp} ref={ref} />
             <input type="button" value="+" onClick={onZoomIn } style={{ width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1 }} />
             <input type="button" value="-" onClick={onZoomOut} style={{ width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1 + buttonSize }} />
-            <Slider defaultValue={ 0 } onChange={onGroup} style={{ width: width - margin.left - padding.left - margin.right - padding.right + 1, top: height - margin.bottom - 12, left: margin.left + padding.left + 1, position: "absolute", zIndex: 2, display: ( onGroup ? "inline" : "none" )}} />
+            <Slider min={0} max={1} step={0.01} defaultValue={0} onChange={onGroup} style={{ width: width - margin.left - padding.left - margin.right - padding.right + 1, top: height - margin.bottom - 12, left: margin.left + padding.left + 1, position: "absolute", zIndex: 2, display: ( onGroup ? "inline" : "none" )}} />
         </div>;
 });
     
