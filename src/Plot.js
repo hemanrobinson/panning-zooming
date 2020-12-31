@@ -1,4 +1,4 @@
-import React, { useEffect, useRef }  from 'react';
+import React, { useEffect, useRef, useState }  from 'react';
 import * as d3 from 'd3';
 import Data from './Data';
 import Graph from './Graph';
@@ -16,14 +16,21 @@ const Plot = ( props ) => {
         xMax0 = d3.max( data, d => d[ 2 ]),
         yMin0 = d3.min( data, d => d[ 1 ]),
         yMax0 = d3.max( data, d => d[ 1 ]),
-        xScale = d3.scaleLinear().domain([ xMin0, xMax0 ]).range([ margin.left + padding.left, width - margin.right - padding.right ]),
-        yScale = d3.scaleLinear().domain([ yMin0, yMax0 ]).range([ height - margin.bottom - padding.bottom, margin.top + padding.top ]),
+        xScale,
+        yScale,
         mouseState = { xDown: 0, yDown: 0, isX: false, isY: false, isMin: false, isMax: false };
+        
+    // Get the scales.
+    const [ xDomain, setXDomain ] = useState([ xMin0, xMax0 ]);
+    const [ yDomain, setYDomain ] = useState([ yMin0, yMax0 ]);
+    xScale = d3.scaleLinear().domain( xDomain ).range([ margin.left + padding.left, width - margin.right - padding.right ]);
+    yScale = d3.scaleLinear().domain( yDomain ).range([ height - margin.bottom - padding.bottom, margin.top + padding.top ]);
     
     // Zoom in two dimensions.
     let onZoom2D = ( isIn ) => {
         Graph.onZoom2D( xScale, yScale, xMin0, xMax0, yMin0, yMax0, isIn );
-        Plot.draw( ref, height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, dataSet, 100 );
+        setXDomain( xScale.domain());
+        setYDomain( yScale.domain());
     },
     onZoomIn  = () => { onZoom2D( true  ); },
     onZoomOut = () => { onZoom2D( false ); };
@@ -33,9 +40,19 @@ const Plot = ( props ) => {
         Graph.onMouseDown( height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event, mouseState );
     },
     onMouseUp = ( event ) => {
+        let isX = mouseState.isX;
+        let isY = mouseState.isY;
         Graph.onMouseUp( height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event, mouseState );
-        if( mouseState.isX || mouseState.isY ) {
-            Plot.draw( ref, height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, dataSet, 100 );
+        
+        // If either scale changed, redraw or change the state.
+        // Mouseup events can change the state, but mousemove events appear too fast for the React framework.
+        if( isX || isY ) {
+            if( event.type === "mousemove" ) {
+                Plot.draw( ref, height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, dataSet, 100 );
+            } else {
+                setXDomain( xScale.domain());
+                setYDomain( yScale.domain());
+            }
         }
     };
     

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef }  from 'react';
+import React, { useEffect, useRef, useState }  from 'react';
 import * as d3 from 'd3';
 import Data from './Data';
 import Graph from './Graph';
@@ -16,12 +16,38 @@ const Histogram = ( props ) => {
         xMax0 = d3.max( data, d => d[ 2 ]),
         yMin0,
         yMax0,
-        xScale = d3.scaleLinear().domain([ xMin0, xMax0 ]).range([ margin.left + padding.left, width - margin.right - padding.right ]),
+        xScale,
         yScale,
         histogram,
         bins,
         mouseState = { xDown: 0, yDown: 0, isX: false, isY: false, isMin: false, isMax: false };
     
+    // Assign the group value.
+    const [ group, setGroup ] = useState( 0 );
+    let onGroup = ( event, value ) => {
+        setXDomain( xScale.domain());
+        setGroup( value );
+    };
+        
+    // Get the X scale.
+    const [ xDomain, setXDomain ] = useState([ xMin0, xMax0 ]);
+    xScale = d3.scaleLinear().domain( xDomain ).range([ margin.left + padding.left, width - margin.right - padding.right ]);
+
+    // Calculate the histogram bins.
+    let nBins = Math.round( 8 + Math.exp( 5 * group / 100 ));
+    histogram = d3.histogram()
+        .value( d => d[ 2 ])
+        .domain([ xMin0, xMax0 ])
+        .thresholds( nBins );
+    bins = histogram( data );
+
+    // Get the Y scale.
+    yMin0 = 0;
+    yMax0 = d3.max( bins, d => d.length );
+    yScale = d3.scaleLinear()
+        .range([ height - margin.bottom - padding.bottom, margin.top + padding.top ])
+        .domain([ yMin0, yMax0 ]);
+        
     // Zoom in two dimensions.
     let onZoom2D = ( isIn ) => {
         Graph.onZoom2D( xScale, yScale, xMin0, xMax0, yMin0, yMax0, isIn );
@@ -35,34 +61,13 @@ const Histogram = ( props ) => {
         Graph.onMouseDown( height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event, mouseState );
     },
     onMouseUp = ( event ) => {
+        let isX = mouseState.isX;
+        let isY = mouseState.isY;
         Graph.onMouseUp( height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event, mouseState );
-        if( mouseState.isX || mouseState.isY ) {
+        if( isX || isY ) {
             Histogram.draw( height, width, margin, padding, scrollSize, ref, xScale, yScale, histogram, bins, xMin0, xMax0, yMin0, yMax0, dataSet, 100 );
         }
     };
-    
-    // Calculate the bins.
-    let onGroup = ( event, value ) => {
-
-        // Get the histogram bins.
-        let nBins = Math.round( 8 + Math.exp( 5 * value / 100 ));
-        histogram = d3.histogram()
-            .value( d => d[ 2 ])
-            .domain([ xMin0, xMax0 ])
-            .thresholds( nBins );
-        bins = histogram( data );
-
-        // Get the Y scale.
-        yMin0 = 0;
-        yMax0 = d3.max( bins, d => d.length );
-        yScale = d3.scaleLinear()
-            .range([ height - margin.bottom - padding.bottom, margin.top + padding.top ])
-            .domain([ yMin0, yMax0 ]);
-            
-        // Draw.  TODO:  Use state variable instead.
-        Histogram.draw( height, width, margin, padding, scrollSize, ref, xScale, yScale, histogram, bins, xMin0, xMax0, yMin0, yMax0, dataSet, 100 );
-    };
-    onGroup( undefined, 0 );
     
     // Set hook to draw on mounting, or on any other lifecycle update.
     useEffect(() => {
