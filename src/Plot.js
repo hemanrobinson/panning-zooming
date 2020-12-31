@@ -8,16 +8,19 @@ import './Plot.css';
 const Plot = ( props ) => {
 
     // Initialization.
-    const width = 400, height = 400, padding = { top: 20, right: 20, bottom: 20, left: 20 }, margin = { top: 0, right: 0, bottom: 50, left: 50 }, scrollSize = 15;
+    const width = 400, height = 400, padding = { top: 20, right: 20, bottom: 20, left: 20 }, margin = { top: 0, right: 0, bottom: 50, left: 50 };
     let ref = useRef(),
         { dataSet } = props,
         data = Data.getValues( dataSet ),
+        xLabel = Data.getColumnNames( dataSet )[ 2 ],
+        yLabel = Data.getColumnNames( dataSet )[ 1 ],
         xMin0 = d3.min( data, d => d[ 2 ]),
         xMax0 = d3.max( data, d => d[ 2 ]),
         yMin0 = d3.min( data, d => d[ 1 ]),
         yMax0 = d3.max( data, d => d[ 1 ]),
         xScale,
         yScale,
+        symbolScale,
         mouseState = { xDown: 0, yDown: 0, isX: false, isY: false, isMin: false, isMax: false };
         
     // Get the scales.
@@ -25,30 +28,28 @@ const Plot = ( props ) => {
     const [ yDomain, setYDomain ] = useState([ yMin0, yMax0 ]);
     xScale = d3.scaleLinear().domain( xDomain ).range([ margin.left + padding.left, width - margin.right - padding.right ]);
     yScale = d3.scaleLinear().domain( yDomain ).range([ height - margin.bottom - padding.bottom, margin.top + padding.top ]);
+    symbolScale = d3.scaleOrdinal( data.map( datum => datum[ 0 ]), d3.symbols.map( s => d3.symbol().type( s ).size( 100 )()));
     
     // Zoom in two dimensions.
     let onZoom2D = ( isIn ) => {
-        Graph.onZoom2D( xScale, yScale, xMin0, xMax0, yMin0, yMax0, isIn );
+        Graph.onZoom2D( isIn, xScale, yScale, xMin0, xMax0, yMin0, yMax0 );
         setXDomain( xScale.domain());
         setYDomain( yScale.domain());
-    },
-    onZoomIn  = () => { onZoom2D( true  ); },
-    onZoomOut = () => { onZoom2D( false ); };
+    };
     
     // Zoom in one dimension.
     let onMouseDown = ( event ) => {
-        Graph.onMouseDown( height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event, mouseState );
+        Graph.onMouseDown( event, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, mouseState );
     },
     onMouseUp = ( event ) => {
-        let isX = mouseState.isX;
-        let isY = mouseState.isY;
-        Graph.onMouseUp( height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event, mouseState );
+        let isXOrY = ( mouseState.isX || mouseState.isY );
+        Graph.onMouseUp( event, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, mouseState );
         
         // If either scale changed, redraw or change the state.
-        // Mouseup events can change the state, but mousemove events appear too fast for the React framework.
-        if( isX || isY ) {
+        // Mouseup events can change the state, but mousemove events seem too fast for the React framework.
+        if( isXOrY ) {
             if( event.type === "mousemove" ) {
-                Plot.draw( ref, height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, dataSet, 100 );
+                Plot.draw( ref, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, xLabel, yLabel, dataSet, symbolScale );
             } else {
                 setXDomain( xScale.domain());
                 setYDomain( yScale.domain());
@@ -58,26 +59,23 @@ const Plot = ( props ) => {
     
     // Set hook to draw on mounting, or on any other lifecycle update.
     useEffect(() => {
-        Plot.draw( ref, height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, dataSet, 100 );
+        Plot.draw( ref, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, xLabel, yLabel, dataSet, symbolScale );
     });
     
     // Return the component.
     return <Graph width={width} height={height} margin={margin} padding={padding}
-        onZoomIn={onZoomIn} onZoomOut={onZoomOut} 
-        onMouseDown={onMouseDown} onMouseUp={onMouseUp} ref={ref} />
+        onZoom={onZoom2D} onMouseDown={onMouseDown} onMouseUp={onMouseUp} ref={ref} />
 };
     
 // Draws the points.
-Plot.draw = ( ref, height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, dataSet, size ) => {
+Plot.draw = ( ref, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, xLabel, yLabel, dataSet, symbolScale ) => {
     
     // Initialization.
     const svg = d3.select( ref.current );
-    let data = Data.getValues( dataSet ),
-        columnNames = Data.getColumnNames( dataSet ),
-        symbolScale = d3.scaleOrdinal( data.map( datum => datum[ 0 ]), d3.symbols.map( s => d3.symbol().type( s ).size( size )()));
     svg.selectAll( "*" ).remove();
     
     // Draw the points.
+    let data = Data.getValues( dataSet );
     data.forEach(( datum ) => {
         svg.append( "path" )
         .attr( "d", symbolScale( datum[ 0 ]))
@@ -87,7 +85,7 @@ Plot.draw = ( ref, height, width, margin, padding, scrollSize, xScale, yScale, x
     });
     
     // Draw the axes and scroll bars.
-    Graph.draw( ref, height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, columnNames[ 2 ], columnNames[ 1 ], size );
+    Graph.draw( ref, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, xLabel, yLabel );
 };
 
 export default Plot;

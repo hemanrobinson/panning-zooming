@@ -8,19 +8,22 @@ const Graph = React.forwardRef(( props, ref ) => {
     
     // Initialization.
     const buttonSize = 30;
-    let { width, height, margin, padding, onMouseDown, onMouseUp, onZoomIn, onZoomOut, onGroup } = props;
+    let { width, height, margin, padding, onMouseDown, onMouseUp, onZoom, onGroup } = props;
     
     // Return the component.
     return <div style={{width: width, height: height}} className="parent">
             <svg width={width} height={height} onMouseDown={onMouseDown} onMouseMove={onMouseUp} onMouseUp={onMouseUp} ref={ref} />
-            <input type="button" value="+" onClick={onZoomIn } style={{ width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1 }} />
-            <input type="button" value="-" onClick={onZoomOut} style={{ width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1 + buttonSize }} />
+            <input type="button" value="+" onClick={()=>onZoom(true )} style={{ width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1 }} />
+            <input type="button" value="-" onClick={()=>onZoom(false)} style={{ width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1 + buttonSize }} />
             <Slider min={0} max={1} step={0.01} defaultValue={0} onChange={onGroup} style={{ width: width - margin.left - padding.left - margin.right - padding.right + 1, top: height - margin.bottom - 12, left: margin.left + padding.left + 1, position: "absolute", zIndex: 2, display: ( onGroup ? "inline" : "none" )}} />
         </div>;
 });
+
+// Width of scroll bar.
+Graph.scrollSize = 15;
     
 // Zooms in two dimensions.
-Graph.onZoom2D = ( xScale, yScale, xMin0, xMax0, yMin0, yMax0, isIn ) => {
+Graph.onZoom2D = ( isIn, xScale, yScale, xMin0, xMax0, yMin0, yMax0 ) => {
     const d = 8,
         f = ( d - 1 ) / ( 2 * d );
     let xMin = xScale.domain()[ 0 ],
@@ -45,8 +48,9 @@ Graph.onZoom2D = ( xScale, yScale, xMin0, xMax0, yMin0, yMax0, isIn ) => {
 };
     
 // Zooms in one dimension.
-Graph.onMouseDown = ( height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event, mouseState ) => {
-    const endCapSize = 0.8 * scrollSize;
+Graph.onMouseDown = ( event, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, mouseState ) => {
+    const scrollSize = Graph.scrollSize,
+        endCapSize = 0.8 * scrollSize;
     let x0 = event.nativeEvent.offsetX, y0 = event.nativeEvent.offsetY;
     mouseState.isX = false;
     mouseState.isY = false;
@@ -78,7 +82,7 @@ Graph.onMouseDown = ( height, width, margin, padding, scrollSize, xScale, yScale
         }
     }
 };
-Graph.onMouseUp = ( height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event, mouseState ) => {
+Graph.onMouseUp = ( event, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, mouseState ) => {
     const d = 8;
     let xUp = event.nativeEvent.offsetX, yUp = event.nativeEvent.offsetY;
     if( mouseState.isX ) {
@@ -140,10 +144,11 @@ Graph.onMouseUp = ( height, width, margin, padding, scrollSize, xScale, yScale, 
 };
     
 // Draws the graph.
-Graph.draw = ( ref, height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, xLabel, yLabel, size ) => {
+Graph.draw = ( ref, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, xLabel, yLabel ) => {
     
     // Initialization.
     const svg = d3.select( ref.current ),
+        scrollSize = Graph.scrollSize,
         halfScrollSize = scrollSize / 2;
         
     // Clear the margins.

@@ -8,10 +8,12 @@ import './Histogram.css';
 const Histogram = ( props ) => {
     
     // Initialization.
-    const width = 400, height = 400, padding = { top: 20, right: 20, bottom: 0, left: 20 }, margin = { top: 0, right: 0, bottom: 50, left: 50 }, scrollSize = 15;
+    const width = 400, height = 400, padding = { top: 20, right: 20, bottom: 0, left: 20 }, margin = { top: 0, right: 0, bottom: 50, left: 50 };
     let ref = useRef(),
         { dataSet } = props,
         data = Data.getValues( dataSet ),
+        xLabel = Data.getColumnNames( dataSet )[ 2 ],
+        yLabel = "Frequency",
         xMin0 = d3.min( data, d => d[ 2 ]),
         xMax0 = d3.max( data, d => d[ 2 ]),
         yMin0,
@@ -50,42 +52,37 @@ const Histogram = ( props ) => {
         
     // Zoom in two dimensions.
     let onZoom2D = ( isIn ) => {
-        Graph.onZoom2D( xScale, yScale, xMin0, xMax0, yMin0, yMax0, isIn );
-        Histogram.draw( height, width, margin, padding, scrollSize, ref, xScale, yScale, histogram, bins, xMin0, xMax0, yMin0, yMax0, dataSet, 100 );
-    },
-    onZoomIn  = () => { onZoom2D( true  ); },
-    onZoomOut = () => { onZoom2D( false ); };
+        Graph.onZoom2D( isIn, xScale, yScale, xMin0, xMax0, yMin0, yMax0 );
+        Histogram.draw( ref, height, width, margin, padding, xScale, yScale, histogram, bins, xMin0, xMax0, yMin0, yMax0, xLabel, yLabel );
+    };
     
     // Zoom in one dimension.
     let onMouseDown = ( event ) => {
-        Graph.onMouseDown( height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event, mouseState );
+        Graph.onMouseDown( event, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, mouseState );
     },
     onMouseUp = ( event ) => {
-        let isX = mouseState.isX;
-        let isY = mouseState.isY;
-        Graph.onMouseUp( height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, event, mouseState );
-        if( isX || isY ) {
-            Histogram.draw( height, width, margin, padding, scrollSize, ref, xScale, yScale, histogram, bins, xMin0, xMax0, yMin0, yMax0, dataSet, 100 );
+        let isXOrY = ( mouseState.isX || mouseState.isY );
+        Graph.onMouseUp( event, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, mouseState );
+        if( isXOrY ) {
+            Histogram.draw( ref, height, width, margin, padding, xScale, yScale, histogram, bins, xMin0, xMax0, yMin0, yMax0, xLabel, yLabel );
         }
     };
     
     // Set hook to draw on mounting, or on any other lifecycle update.
     useEffect(() => {
-        Histogram.draw( height, width, margin, padding, scrollSize, ref, xScale, yScale, histogram, bins, xMin0, xMax0, yMin0, yMax0, dataSet, 100 );
+        Histogram.draw( ref, height, width, margin, padding, xScale, yScale, histogram, bins, xMin0, xMax0, yMin0, yMax0, xLabel, yLabel );
     });
     
     // Return the component.
     return <Graph width={width} height={height} margin={margin} padding={padding}
-        onZoomIn={onZoomIn} onZoomOut={onZoomOut}
-        onMouseDown={onMouseDown} onMouseUp={onMouseUp} onGroup={onGroup} ref={ref} />
+        onZoom={onZoom2D} onMouseDown={onMouseDown} onMouseUp={onMouseUp} onGroup={onGroup} ref={ref} />
 };
     
 // Draws the points.
-Histogram.draw = ( height, width, margin, padding, scrollSize, ref, xScale, yScale, histogram, bins, xMin0, xMax0, yMin0, yMax0, dataSet, size ) => {
+Histogram.draw = ( ref, height, width, margin, padding, xScale, yScale, histogram, bins, xMin0, xMax0, yMin0, yMax0, xLabel, yLabel ) => {
     
     // Initialization.
     const svg = d3.select( ref.current );
-    let columnNames = Data.getColumnNames( dataSet );
     svg.selectAll( "*" ).remove();
 
     // Draw the bars.
@@ -100,7 +97,7 @@ Histogram.draw = ( height, width, margin, padding, scrollSize, ref, xScale, ySca
         .style( "fill", "#99bbdd" );
     
     // Draw the axes and scroll bars.
-    Graph.draw( ref, height, width, margin, padding, scrollSize, xScale, yScale, xMin0, xMax0, yMin0, yMax0, columnNames[ 2 ], "Frequency", size );
+    Graph.draw( ref, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, xLabel, yLabel );
 };
 
 export default Histogram;
