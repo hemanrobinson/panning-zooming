@@ -8,38 +8,41 @@ import './Histogram.css';
 const Histogram = ( props ) => {
     
     // Initialization.
-    const width = 400, height = 400, padding = { top: 20, right: 20, bottom: 0, left: 20 }, margin = { top: 0, right: 0, bottom: 50, left: 50 };
+    const width = 400,
+        height = 400,
+        padding = { top: 20, right: 20, bottom: 0, left: 20 },
+        margin = { top: 0, right: 0, bottom: 50, left: 50 };
     let ref = useRef(),
         { dataSet } = props,
-        data = Data.getValues( dataSet ),
         xLabel = Data.getColumnNames( dataSet )[ 2 ],
         yLabel = "Frequency",
+        data = Data.getValues( dataSet ),
         xMin0 = d3.min( data, d => d[ 2 ]),
         xMax0 = d3.max( data, d => d[ 2 ]),
         yMin0,
         yMax0,
         xScale,
         yScale,
+        downLocation = { x: 0, y: 0, isX: false, isY: false, isMin: false, isMax: false },
         histogram,
-        bins,
-        mouseState = { xDown: 0, yDown: 0, isX: false, isY: false, isMin: false, isMax: false };
+        bins;
         
     // Get the X scale.
     const [ xDomain, setXDomain ] = useState([ xMin0, xMax0 ]);
     xScale = d3.scaleLinear().domain( xDomain ).range([ margin.left + padding.left, width - margin.right - padding.right ]);
     
-    // Assign the group value.
-    const [ group, setGroup ] = useState( 0 );
-    let onGroup = ( event, value ) => {
+    // Assign the X scroll value.
+    const [ xScroll, setXScroll ] = useState( 0 );
+    let onXScroll = ( event, value ) => {
         setXDomain( xScale.domain());
-        setGroup( value );
+        setXScroll( value );
     };
 
     // Calculate the histogram bins.
     histogram = d3.histogram()
         .value( d => d[ 2 ])
         .domain([ xMin0, xMax0 ])
-        .thresholds( Math.round( 8 + Math.exp( 5 * group )));
+        .thresholds( Math.round( 8 + Math.exp( 5 * xScroll )));
     bins = histogram( data );
 
     // Get the Y scale.
@@ -57,12 +60,11 @@ const Histogram = ( props ) => {
     
     // Zoom in one dimension.
     let onMouseDown = ( event ) => {
-        Graph.onMouseDown( event, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, mouseState );
+        Graph.onMouseDown( event, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, downLocation );
     },
     onMouseUp = ( event ) => {
-        let isXOrY = ( mouseState.isX || mouseState.isY );
-        Graph.onMouseUp( event, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, mouseState );
-        if( isXOrY ) {
+        if( downLocation.isX || downLocation.isY ) {
+            Graph.onMouseUp( event, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, downLocation );
             Histogram.draw( ref, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, xLabel, yLabel, bins );
         }
     };
@@ -74,7 +76,7 @@ const Histogram = ( props ) => {
     
     // Return the component.
     return <Graph width={width} height={height} margin={margin} padding={padding}
-        onZoom={onZoom2D} onMouseDown={onMouseDown} onMouseUp={onMouseUp} onGroup={onGroup} ref={ref} />
+        onZoom={onZoom2D} onMouseDown={onMouseDown} onMouseUp={onMouseUp} onXScroll={onXScroll} ref={ref} />
 };
     
 // Draws the points.

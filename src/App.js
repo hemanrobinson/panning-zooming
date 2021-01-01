@@ -23,10 +23,10 @@ const App = () => {
             </div>
             <div className="Description">
                 <p>
-                For large data sets, displays of individual points are impractical.  Instead, we use aggregate graphs, which display grouped data.  For aggregate graphs, exploring data requires zooming both the scales and the groups.  To maximize the user's power, scales and groups must be independently adjustable.
+                For large data sets, aggregate graphs group the data.  Exploring data requires zooming both the scales and the aggregates.  To maximize the user's flexibility, scales and aggregates must be independently adjustable.
                 </p>
                 <p>
-                For example, in a histogram, users can explore their data by zooming both the scales and the bins.
+                Continuous aggregates are typically bins, as in a histogram.  Users can explore their data by zooming both the scales and the bins.
                 </p>
             </div>
             <div className="Graph">
@@ -36,6 +36,25 @@ const App = () => {
                 <p>
                 A heatmap affords zooming the bins in two dimensions.
                 </p>
+            </div>
+            <div className="Graph">
+            </div>
+            <div className="Description">
+                <p>
+                Categorical data presents a different problem.  When there are only a few categories, there is no need to zoom.  When there are many, the equivalent of zooming can be done by combining smaller categories into an "Other" category.
+                </p>
+                <p>
+                Adjustable "Other" categories have been available in software for at least fifty years.  With a modern user interface, we can make the adjustment interactive and efficient for the user.  This is particularly useful in exploring categorical distributions with "long tails" as in the bar chart below.
+                </p>
+            </div>
+            <div className="Graph">
+            </div>
+            <div className="Description">
+                <p>
+                Again the idea extends readily to multiple dimensions...
+                </p>
+            </div>
+            <div className="Graph">
             </div>
             <div className="Description">
                 <h2>Notes</h2>

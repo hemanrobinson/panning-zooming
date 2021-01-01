@@ -8,12 +8,15 @@ import './Plot.css';
 const Plot = ( props ) => {
 
     // Initialization.
-    const width = 400, height = 400, padding = { top: 20, right: 20, bottom: 20, left: 20 }, margin = { top: 0, right: 0, bottom: 50, left: 50 };
+    const width = 400,
+        height = 400,
+        padding = { top: 20, right: 20, bottom: 20, left: 20 },
+        margin = { top: 0, right: 0, bottom: 50, left: 50 };
     let ref = useRef(),
         { dataSet } = props,
-        data = Data.getValues( dataSet ),
         xLabel = Data.getColumnNames( dataSet )[ 2 ],
         yLabel = Data.getColumnNames( dataSet )[ 1 ],
+        data = Data.getValues( dataSet ),
         xMin0 = d3.min( data, d => d[ 2 ]),
         xMax0 = d3.max( data, d => d[ 2 ]),
         yMin0 = d3.min( data, d => d[ 1 ]),
@@ -21,7 +24,7 @@ const Plot = ( props ) => {
         xScale,
         yScale,
         symbolScale,
-        mouseState = { xDown: 0, yDown: 0, isX: false, isY: false, isMin: false, isMax: false };
+        downLocation = { x: 0, y: 0, isX: false, isY: false, isMin: false, isMax: false };
         
     // Get the scales.
     const [ xDomain, setXDomain ] = useState([ xMin0, xMax0 ]);
@@ -39,18 +42,19 @@ const Plot = ( props ) => {
     
     // Zoom in one dimension.
     let onMouseDown = ( event ) => {
-        Graph.onMouseDown( event, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, mouseState );
+        Graph.onMouseDown( event, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, downLocation );
     },
     onMouseUp = ( event ) => {
-        let isXOrY = ( mouseState.isX || mouseState.isY );
-        Graph.onMouseUp( event, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, mouseState );
-        
-        // If either scale changed, redraw or change the state.
-        // Mouseup events can change the state, but mousemove events seem too fast for the React framework.
-        if( isXOrY ) {
+        if( downLocation.isX || downLocation.isY ) {
+            Graph.onMouseUp( event, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, downLocation );
+            
+            // For mousemove events, just redraw, as they seem to come in too quickly for the React framework...
             if( event.type === "mousemove" ) {
                 Plot.draw( ref, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, xLabel, yLabel, dataSet, symbolScale );
-            } else {
+            }
+            
+            // ...for mouseup events, set the state to cause a redraw.
+            else {
                 setXDomain( xScale.domain());
                 setYDomain( yScale.domain());
             }
