@@ -23,10 +23,10 @@ const App = () => {
             </div>
             <div className="Description">
                 <p>
-                For large data sets, aggregate graphs group the data.  Exploring data requires zooming both the scales and the aggregates.  To maximize the user's flexibility, scales and aggregates must be independently adjustable.
+                Large data sets must be grouped, so exploring data requires zooming both the scales and the groups.  To maximize the user's flexibility, scales and groups must be independently adjustable.
                 </p>
                 <p>
-                Continuous aggregates are typically bins, as in a histogram.  Users can explore their data by zooming both the scales and the bins.
+                Continuous data are typically grouped into bins, as in a histogram.  Users can explore their data by zooming both the scales and the bins.
                 </p>
             </div>
             <div className="Graph">
@@ -34,24 +34,17 @@ const App = () => {
             </div>
             <div className="Description">
                 <p>
-                A heatmap affords zooming the bins in two dimensions.
+                Categorical data presents a different problem.  When there are only a few categories, there is no need to zoom.  When there are many, the equivalent of zooming can be done by combining smaller categories into an "Other" group.
+                </p>
+                <p>
+                Adjustable "Other" groups have been available in software for at least fifty years.  With a modern user interface, we can make the adjustment interactive and efficient for the user.  This is particularly useful in exploring categorical distributions with "long tails" as in the bar chart below.
                 </p>
             </div>
             <div className="Graph">
             </div>
             <div className="Description">
                 <p>
-                Categorical data presents a different problem.  When there are only a few categories, there is no need to zoom.  When there are many, the equivalent of zooming can be done by combining smaller categories into an "Other" category.
-                </p>
-                <p>
-                Adjustable "Other" categories have been available in software for at least fifty years.  With a modern user interface, we can make the adjustment interactive and efficient for the user.  This is particularly useful in exploring categorical distributions with "long tails" as in the bar chart below.
-                </p>
-            </div>
-            <div className="Graph">
-            </div>
-            <div className="Description">
-                <p>
-                Again the idea extends readily to multiple dimensions...
+                This user interface extends readily to multiple dimensions.
                 </p>
             </div>
             <div className="Graph">
