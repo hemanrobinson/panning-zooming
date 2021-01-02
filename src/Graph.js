@@ -11,7 +11,7 @@ const Graph = React.forwardRef(( props, ref ) => {
     
     // Initialization.
     const buttonSize = 30, sliderOffset = 12;
-    let { width, height, margin, padding, onMouseDown, onMouseUp, onZoom, onXScroll, onYScroll } = props;
+    let { width, height, margin, padding, onMouseDown, onMouseUp, onZoom, onXGroup, onYGroup } = props;
     let top    = margin.top    + padding.top,
         right  = margin.right  + padding.right,
         bottom = margin.bottom + padding.bottom,
@@ -22,8 +22,8 @@ const Graph = React.forwardRef(( props, ref ) => {
             <svg width={width} height={height} onMouseDown={onMouseDown} onMouseMove={onMouseUp} onMouseUp={onMouseUp} ref={ref} />
             <input type="button" value="+" onClick={()=>onZoom(true )} style={{ width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1 }} />
             <input type="button" value="-" onClick={()=>onZoom(false)} style={{ width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1 + buttonSize }} />
-            <Slider min={0} max={1} step={0.01} defaultValue={0} onChange={onXScroll} style={{ width: width - left - right + 1, top: height - margin.bottom - sliderOffset, left: left + 1, position: "absolute", display: ( onXScroll ? "inline" : "none" )}} />
-            <Slider min={0} max={1} step={0.01} defaultValue={0} onChange={onYScroll} style={{ height: height - top - bottom + 1, top: top + 1, left: margin.left - sliderOffset - 1, position: "absolute", display: ( onYScroll ? "inline" : "none" )}} orientation="vertical"/>
+            <Slider min={0} max={1} step={0.01} defaultValue={0} onChange={onXGroup} style={{ width: width - left - right + 1, top: height - margin.bottom - sliderOffset, left: left + 1, position: "absolute", display: ( onXGroup ? "inline" : "none" )}} />
+            <Slider min={0} max={1} step={0.01} defaultValue={0} onChange={onYGroup} style={{ height: height - top - bottom + 1, top: top + 1, left: margin.left - sliderOffset - 1, position: "absolute", display: ( onYGroup ? "inline" : "none" )}} orientation="vertical"/>
        </div>;
 });
 
@@ -273,7 +273,7 @@ Graph.draw = ( ref, height, width, margin, padding, xScale, yScale, xMin0, xMax0
     svg.append( "g" )
         .attr( "class", "axis" )
         .attr( "transform", "translate( 0, " + ( height - margin.bottom ) + " )" )
-        .call( d3.axisBottom( xScale ).ticks( 3 ).tickFormat(( x ) => { return x.toFixed( 1 )}));
+        .call( d3.axisBottom( xScale ).ticks( 3 ));
     svg.append( "text" )
         .attr( "transform", "translate( " + ( width / 2 ) + " ," + ( height - 1.5 * scrollSize ) + ")" )
         .style( "text-anchor", "middle" )
@@ -283,7 +283,7 @@ Graph.draw = ( ref, height, width, margin, padding, xScale, yScale, xMin0, xMax0
     svg.append( "g" )
         .attr( "class", "axis" )
         .attr( "transform", "translate( " + margin.left + ", 0 )" )
-        .call( d3.axisLeft( yScale ).ticks( 3 ).tickFormat(( x ) => { return x.toFixed( 1 )}));
+        .call( d3.axisLeft( yScale ).ticks( 3 ));
     svg.append( "text" )
         .attr( "x", margin.left )
         .attr( "y", margin.top + padding.top * 0.7 )

@@ -1,6 +1,7 @@
 import React from 'react';
 import Plot from './Plot';
 import Histogram from './Histogram';
+import BarChart from './BarChart';
 import './App.css';
 
 // Application:  Side-by-side scatter plots.
@@ -41,6 +42,7 @@ const App = () => {
                 </p>
             </div>
             <div className="Graph">
+                <BarChart dataSet={ "Food" } />
             </div>
             <div className="Description">
                 <p>

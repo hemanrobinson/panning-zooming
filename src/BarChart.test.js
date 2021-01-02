@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import { render, unmountComponentAtNode } from "react-dom";
 import { act } from "react-dom/test-utils";
 
-import Histogram from './Histogram';
+import BarChart from './BarChart';
 
 let container = null;
 
