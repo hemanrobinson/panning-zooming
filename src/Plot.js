@@ -22,7 +22,7 @@ const Plot = ( props ) => {
         xScale,
         yScale,
         symbolScale,
-        downLocation = { x: 0, y: 0, isX: false, isY: false, isMin: false, isMax: false };
+        downLocation = { x: 0, y: 0, xDomain: [], yDomain: [], isX: false, isY: false, isMin: false, isMax: false };
         
     // Get the scales.
     const [ xDomain, setXDomain ] = useState( xDomain0 );

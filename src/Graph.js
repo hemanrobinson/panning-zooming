@@ -157,6 +157,8 @@ Graph.onMouseDown = ( event, height, width, margin, padding, xScale, yScale, xDo
     // Reset the mousedown coordinates.
     downLocation.x = xDown;
     downLocation.y = yDown;
+    downLocation.xDomain = [];
+    downLocation.yDomain = [];
     downLocation.isX = false;
     downLocation.isY = false;
     downLocation.isMin = false;
@@ -165,8 +167,9 @@ Graph.onMouseDown = ( event, height, width, margin, padding, xScale, yScale, xDo
     // Handle event on X scrollbar...
     if(( left <= xDown ) && ( xDown <= width - right ) && ( height - scrollSize <= yDown ) && ( yDown <= height )) {
         let w = width - right - left + 1,
-            x0 = left + w * ( xMin - xMin0 + xD ) / ( xMax0 - xMin0 + xD ),
+            x0 = left + w * ( xMin - xMin0      ) / ( xMax0 - xMin0 + xD ),
             x1 = left + w * ( xMax - xMin0 + xD ) / ( xMax0 - xMin0 + xD );
+        downLocation.xDomain = xScale.domain();
         downLocation.isX = true;
         if(( x0 <= xDown ) && ( xDown <= x0 + endCapSize )) {
             downLocation.isMin = true;
@@ -180,6 +183,7 @@ Graph.onMouseDown = ( event, height, width, margin, padding, xScale, yScale, xDo
         let h = height - bottom - top + 1,
             y0 = top + h * ( 1 - ( yMin - yMin0 ) / ( yMax0 - yMin0 )),
             y1 = top + h * ( 1 - ( yMax - yMin0 ) / ( yMax0 - yMin0 ));
+        downLocation.yDomain = yScale.domain();
         downLocation.isY = true;
         if(( y1 <= yDown ) && ( yDown <= y1 + endCapSize )) {
             downLocation.isMax = true;
@@ -214,10 +218,10 @@ Graph.onMouseUp = ( event, height, width, margin, padding, xScale, yScale, xDoma
         xMax0 = xDomain0[ 1 ];
     }
         
-    // Get the current domains.
-    let yMin = yScale.domain()[ 0 ],
-        yMax = yScale.domain()[ 1 ],
-        xDomain = xScale.domain(),
+    // Get the down location domains.
+    let yMin = downLocation.yDomain[ 0 ],
+        yMax = downLocation.yDomain[ 1 ],
+        xDomain = downLocation.xDomain,
         xMin,
         xMax,
         xD;
@@ -226,8 +230,8 @@ Graph.onMouseUp = ( event, height, width, margin, padding, xScale, yScale, xDoma
         xMax = xDomain0.indexOf( xDomain[ xDomain.length - 1 ]);
         xD = 1;
     } else {
-        xMin = xScale.domain()[ 0 ];
-        xMax = xScale.domain()[ 1 ];
+        xMin = xDomain[ 0 ];
+        xMax = xDomain[ 1 ];
         xD = 0;
     }
     
@@ -236,38 +240,31 @@ Graph.onMouseUp = ( event, height, width, margin, padding, xScale, yScale, xDoma
         const f = ( xMax0 - xMin0 + xD ) / d;
         let w = width - right - left + 1,
             dif = ( xMax0 - xMin0 + xD ) * ( xUp - downLocation.x ) / w;
-            
-            console.log( "$$$$$ " + dif );
-            
+        if( xScale.bandwidth ) {
+            dif = Math.round( dif );
+        }
+        
         // Handle drag on minimum handle...
         if( downLocation.isMin ) {
             dif = Math.max( dif, xMin0 - xMin );
-            if( dif > xMax - xMin - f ) {
-                dif = 0;
-            }
-            if( xScale.bandwidth ) {
-                xScale.domain( xDomain0.slice( xMin + dif, xMax + xD ));
-            } else {
-                xScale.domain([ xMin + dif, xMax ]);
+            if( dif <= xMax - xMin + xD - f ) {
+                if( xScale.bandwidth ) {
+                    xScale.domain( xDomain0.slice( xMin + dif, xMax + xD ));
+                } else {
+                    xScale.domain([ xMin + dif, xMax ]);
+                }
             }
         }
         
         // ...or handle drag on maximum handle...
         else if( downLocation.isMax ) {
             dif = Math.min( dif, xMax0 - xMax );
-            if( dif < f - xMax + xMin ) {
-                dif = 0;
-            }
-            
-            console.log( "      " + dif );
-            
-            if( xScale.bandwidth ) {
-                xScale.domain( xDomain0.slice( xMin, xMax + dif + xD ));
-            
-            console.log( "      " + xScale.domain() );
-            
-            } else {
-                xScale.domain([ xMin, xMax + dif ]);
+            if( dif >= f - ( xMax - xMin + xD )) {
+                if( xScale.bandwidth ) {
+                    xScale.domain( xDomain0.slice( xMin, xMax + dif + xD ));
+                } else {
+                    xScale.domain([ xMin, xMax + dif ]);
+                }
             }
         }
         
@@ -342,16 +339,11 @@ Graph.onMouseUp = ( event, height, width, margin, padding, xScale, yScale, xDoma
     }
         
     // Reset the mousedown coordinates.
-    if( downLocation.isX || downLocation.isY ) {
-        if( event.type === "mouseup" ) {
-            downLocation.isX = false;
-            downLocation.isY = false;
-            downLocation.isMin = false;
-            downLocation.isMax = false;
-        } else {
-            downLocation.x = xUp;
-            downLocation.y = yUp;
-        }
+    if(( downLocation.isX || downLocation.isY ) && ( event.type === "mouseup" )) {
+        downLocation.isX = false;
+        downLocation.isY = false;
+        downLocation.isMin = false;
+        downLocation.isMax = false;
     }
 };
     

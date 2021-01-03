@@ -21,7 +21,7 @@ const Histogram = ( props ) => {
         yDomain0,
         xScale,
         yScale,
-        downLocation = { x: 0, y: 0, isX: false, isY: false, isMin: false, isMax: false },
+        downLocation = { x: 0, y: 0, xDomain: [], yDomain: [], isX: false, isY: false, isMin: false, isMax: false },
         histogram,
         bins;
         
