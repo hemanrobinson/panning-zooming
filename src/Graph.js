@@ -31,41 +31,85 @@ const Graph = React.forwardRef(( props, ref ) => {
 Graph.scrollSize = 15;
     
 // Zooms in two dimensions.
-Graph.onZoom2D = ( isIn, xScale, yScale, xMin0, xMax0, yMin0, yMax0 ) => {
+Graph.onZoom2D = ( isIn, xScale, yScale, xDomain0, yDomain0 ) => {
 
     // Initialization.
     const d = 8,
         f = ( d - 1 ) / ( 2 * d );
-    let xMin = xScale.domain()[ 0 ],
-        xMax = xScale.domain()[ 1 ],
-        xRange = xMax - xMin,
-        yMin = yScale.domain()[ 0 ],
+        
+    // Get the initial domains.
+    let yMin0 = yDomain0[ 0 ],
+        yMax0 = yDomain0[ 1 ],
+        xMin0,
+        xMax0;
+    if( xScale.bandwidth ) {
+        xMin0 = 0;
+        xMax0 = xDomain0.length - 1;
+    } else {
+        xMin0 = xDomain0[ 0 ];
+        xMax0 = xDomain0[ 1 ];
+    }
+        
+    // Get the current domains.
+    let yMin = yScale.domain()[ 0 ],
         yMax = yScale.domain()[ 1 ],
-        yRange = yMax - yMin;
+        xDomain = xScale.domain(),
+        xMin,
+        xMax,
+        xD;
+    if( xScale.bandwidth ) {
+        xMin = xDomain0.indexOf( xDomain[ 0 ]);
+        xMax = xDomain0.indexOf( xDomain[ xDomain.length - 1 ]);
+        xD = 1;
+    } else {
+        xMin = xScale.domain()[ 0 ];
+        xMax = xScale.domain()[ 1 ];
+        xD = 0;
+    }
         
     // Calculate scales for zoom in...
     if( isIn ) {
-        xMin = Math.min( xMin0 + ( xMax0 - xMin0 ) * f, xMin + xRange / d );
-        xMax = Math.max( xMax0 - ( xMax0 - xMin0 ) * f, xMax - xRange / d );
-        yMin = Math.min( yMin0 + ( yMax0 - yMin0 ) * f, yMin + yRange / d );
-        yMax = Math.max( yMax0 - ( yMax0 - yMin0 ) * f, yMax - yRange / d );
+        xMin = Math.min( xMin0 + ( xMax0 - xMin0 + xD ) * f, xMin + ( xMax - xMin + xD ) / d );
+        xMax = Math.max( xMax0 - ( xMax0 - xMin0 + xD ) * f, xMax - ( xMax - xMin + xD ) / d );
+        yMin = Math.min( yMin0 + ( yMax0 - yMin0 ) * f, yMin + ( yMax - yMin ) / d );
+        yMax = Math.max( yMax0 - ( yMax0 - yMin0 ) * f, yMax - ( yMax - yMin ) / d );
+        if( xScale.bandwidth ) {
+            xMin = Math.ceil( xMin );
+            xMax = Math.floor( xMax );
+            if( xMin > xMax ) {
+                xMin = xDomain0.indexOf( xDomain[ 0 ]);
+                xMax = xMin;
+            }
+        }
     }
     
     // ...or for zoom out.
     else {
-        xMin = Math.max( xMin0, xMin - xRange / ( d - 2 ));
-        xMax = Math.min( xMax0, xMax + xRange / ( d - 2 ));
-        yMin = Math.max( yMin0, yMin - yRange / ( d - 2 ));
-        yMax = Math.min( yMax0, yMax + yRange / ( d - 2 ));
+        xMin = Math.max( xMin0, xMin - ( xMax - xMin + xD ) / ( d - 2 ));
+        xMax = Math.min( xMax0, xMax + ( xMax - xMin + xD ) / ( d - 2 ));
+        yMin = Math.max( yMin0, yMin - ( yMax - yMin ) / ( d - 2 ));
+        yMax = Math.min( yMax0, yMax + ( yMax - yMin ) / ( d - 2 ));
+        if( xScale.bandwidth ) {
+            xMin = Math.floor( xMin );
+            xMax = Math.ceil( xMax );
+            if( xMax < xMin ) {
+                xMax = xDomain0.indexOf( xDomain[ xDomain.length - 1 ]);
+                xMin = xMax;
+            }
+        }
     }
     
     // Assign the new scales.
-    xScale.domain([ xMin, xMax ]);
     yScale.domain([ yMin, yMax ]);
+    if( xScale.bandwidth ) {
+        xScale.domain( xDomain0.slice( xMin, xMax + 1 ));
+    } else {
+        xScale.domain([ xMin, xMax ]);
+    }
 };
     
 // Zooms in one dimension: mousedown event.
-Graph.onMouseDown = ( event, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, downLocation ) => {
+Graph.onMouseDown = ( event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, downLocation ) => {
 
     // Initialization.
     const scrollSize = Graph.scrollSize,
@@ -80,6 +124,36 @@ Graph.onMouseDown = ( event, height, width, margin, padding, xScale, yScale, xMi
     // Prevent text selection.
     event.preventDefault();
         
+    // Get the initial domains.
+    let yMin0 = yDomain0[ 0 ],
+        yMax0 = yDomain0[ 1 ],
+        xMin0,
+        xMax0;
+    if( xScale.bandwidth ) {
+        xMin0 = 0;
+        xMax0 = xDomain0.length - 1;
+    } else {
+        xMin0 = xDomain0[ 0 ];
+        xMax0 = xDomain0[ 1 ];
+    }
+        
+    // Get the current domains.
+    let yMin = yScale.domain()[ 0 ],
+        yMax = yScale.domain()[ 1 ],
+        xDomain = xScale.domain(),
+        xMin,
+        xMax,
+        xD;
+    if( xScale.bandwidth ) {
+        xMin = xDomain0.indexOf( xDomain[ 0 ]);
+        xMax = xDomain0.indexOf( xDomain[ xDomain.length - 1 ]);
+        xD = 1;
+    } else {
+        xMin = xScale.domain()[ 0 ];
+        xMax = xScale.domain()[ 1 ];
+        xD = 0;
+    }
+        
     // Reset the mousedown coordinates.
     downLocation.x = xDown;
     downLocation.y = yDown;
@@ -91,8 +165,8 @@ Graph.onMouseDown = ( event, height, width, margin, padding, xScale, yScale, xMi
     // Handle event on X scrollbar...
     if(( left <= xDown ) && ( xDown <= width - right ) && ( height - scrollSize <= yDown ) && ( yDown <= height )) {
         let w = width - right - left + 1,
-            x0 = left + w * ( xScale.domain()[ 0 ] - xMin0 ) / ( xMax0 - xMin0 ),
-            x1 = left + w * ( xScale.domain()[ 1 ] - xMin0 ) / ( xMax0 - xMin0 );
+            x0 = left + w * ( xMin - xMin0 + xD ) / ( xMax0 - xMin0 + xD ),
+            x1 = left + w * ( xMax - xMin0 + xD ) / ( xMax0 - xMin0 + xD );
         downLocation.isX = true;
         if(( x0 <= xDown ) && ( xDown <= x0 + endCapSize )) {
             downLocation.isMin = true;
@@ -104,8 +178,8 @@ Graph.onMouseDown = ( event, height, width, margin, padding, xScale, yScale, xMi
     // ...or handle event on Y scrollbar.
     else if(( 0 <= xDown ) && ( xDown <= scrollSize ) && ( top <= yDown ) && ( yDown <= height - bottom )) {
         let h = height - bottom - top + 1,
-            y0 = top + h * ( 1 - ( yScale.domain()[ 0 ] - yMin0 ) / ( yMax0 - yMin0 )),
-            y1 = top + h * ( 1 - ( yScale.domain()[ 1 ] - yMin0 ) / ( yMax0 - yMin0 ));
+            y0 = top + h * ( 1 - ( yMin - yMin0 ) / ( yMax0 - yMin0 )),
+            y1 = top + h * ( 1 - ( yMax - yMin0 ) / ( yMax0 - yMin0 ));
         downLocation.isY = true;
         if(( y1 <= yDown ) && ( yDown <= y1 + endCapSize )) {
             downLocation.isMax = true;
@@ -116,7 +190,7 @@ Graph.onMouseDown = ( event, height, width, margin, padding, xScale, yScale, xMi
 };
     
 // Zooms in one dimension: mousemove and mouseup events.
-Graph.onMouseUp = ( event, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, downLocation ) => {
+Graph.onMouseUp = ( event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, downLocation ) => {
 
     // Initialization.
     const d = 8;
@@ -126,14 +200,44 @@ Graph.onMouseUp = ( event, height, width, margin, padding, xScale, yScale, xMin0
         left   = margin.left   + padding.left,
         xUp = event.nativeEvent.offsetX,
         yUp = event.nativeEvent.offsetY;
+        
+    // Get the initial domains.
+    let yMin0 = yDomain0[ 0 ],
+        yMax0 = yDomain0[ 1 ],
+        xMin0,
+        xMax0;
+    if( xScale.bandwidth ) {
+        xMin0 = 0;
+        xMax0 = xDomain0.length - 1;
+    } else {
+        xMin0 = xDomain0[ 0 ];
+        xMax0 = xDomain0[ 1 ];
+    }
+        
+    // Get the current domains.
+    let yMin = yScale.domain()[ 0 ],
+        yMax = yScale.domain()[ 1 ],
+        xDomain = xScale.domain(),
+        xMin,
+        xMax,
+        xD;
+    if( xScale.bandwidth ) {
+        xMin = xDomain0.indexOf( xDomain[ 0 ]);
+        xMax = xDomain0.indexOf( xDomain[ xDomain.length - 1 ]);
+        xD = 1;
+    } else {
+        xMin = xScale.domain()[ 0 ];
+        xMax = xScale.domain()[ 1 ];
+        xD = 0;
+    }
     
     // Handle event on X scrollbar...
     if( downLocation.isX ) {
-        const f = ( xMax0 - xMin0 ) / d;
+        const f = ( xMax0 - xMin0 + xD ) / d;
         let w = width - right - left + 1,
-            dif = ( xMax0 - xMin0 ) * ( xUp - downLocation.x ) / w,
-            xMin = xScale.domain()[ 0 ],
-            xMax = xScale.domain()[ 1 ];
+            dif = ( xMax0 - xMin0 + xD ) * ( xUp - downLocation.x ) / w;
+            
+            console.log( "$$$$$ " + dif );
             
         // Handle drag on minimum handle...
         if( downLocation.isMin ) {
@@ -141,7 +245,11 @@ Graph.onMouseUp = ( event, height, width, margin, padding, xScale, yScale, xMin0
             if( dif > xMax - xMin - f ) {
                 dif = 0;
             }
-            xScale.domain([ xMin + dif, xMax ]);
+            if( xScale.bandwidth ) {
+                xScale.domain( xDomain0.slice( xMin + dif, xMax + xD ));
+            } else {
+                xScale.domain([ xMin + dif, xMax ]);
+            }
         }
         
         // ...or handle drag on maximum handle...
@@ -150,7 +258,17 @@ Graph.onMouseUp = ( event, height, width, margin, padding, xScale, yScale, xMin0
             if( dif < f - xMax + xMin ) {
                 dif = 0;
             }
-            xScale.domain([ xMin, xMax + dif ]);
+            
+            console.log( "      " + dif );
+            
+            if( xScale.bandwidth ) {
+                xScale.domain( xDomain0.slice( xMin, xMax + dif + xD ));
+            
+            console.log( "      " + xScale.domain() );
+            
+            } else {
+                xScale.domain([ xMin, xMax + dif ]);
+            }
         }
         
         // ...or handle drag on thumb or click on track.
@@ -158,19 +276,23 @@ Graph.onMouseUp = ( event, height, width, margin, padding, xScale, yScale, xMin0
         
             // Adjust for click on track.
             if( dif === 0 ) {
-                let x0 = left + w * ( xMin - xMin0 ) / ( xMax0 - xMin0 ),
-                    x1 = left + w * ( xMax - xMin0 ) / ( xMax0 - xMin0 );
+                let x0 = left + w * ( xMin - xMin0      ) / ( xMax0 - xMin0 + xD ),
+                    x1 = left + w * ( xMax - xMin0 + xD ) / ( xMax0 - xMin0 + xD );
                 if( xUp < x0 ) {
-                    dif = ( xMax0 - xMin0 ) * ( xUp - x0 ) / w - ( xMax - xMin ) / 2;
+                    dif = ( xMax0 - xMin0 + xD ) * ( xUp - x0 ) / w - ( xMax - xMin + xD ) / 2;
                 } else if( x1 < xUp ) {
-                    dif = ( xMax0 - xMin0 ) * ( xUp - x1 ) / w + ( xMax - xMin ) / 2;
+                    dif = ( xMax0 - xMin0 + xD ) * ( xUp - x1 ) / w + ( xMax - xMin + xD ) / 2;
                 }
             }
             
             // Handle drag or click.
             dif = Math.max( dif, xMin0 - xMin );
             dif = Math.min( dif, xMax0 - xMax );
-            xScale.domain([ xMin + dif, xMax + dif ]);
+            if( xScale.bandwidth ) {
+                xScale.domain( xDomain0.slice( xMin + dif, xMax + dif + xD ));
+            } else {
+                xScale.domain([ xMin + dif, xMax + dif ]);
+            }
         }
     }
     
@@ -178,9 +300,7 @@ Graph.onMouseUp = ( event, height, width, margin, padding, xScale, yScale, xMin0
     else if( downLocation.isY ) {
         const f = ( yMax0 - yMin0 ) / d;
         let h = height - bottom - top + 1,
-            dif = ( yMax0 - yMin0 ) * ( downLocation.y - yUp ) / h,
-            yMin = yScale.domain()[ 0 ],
-            yMax = yScale.domain()[ 1 ];
+            dif = ( yMax0 - yMin0 ) * ( downLocation.y - yUp ) / h;
             
         // Handle drag on minimum handle...
         if( downLocation.isMin ) {
@@ -236,12 +356,42 @@ Graph.onMouseUp = ( event, height, width, margin, padding, xScale, yScale, xMin0
 };
     
 // Draws the graph.
-Graph.draw = ( ref, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, xLabel, yLabel ) => {
+Graph.draw = ( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel ) => {
     
     // Initialization.
     const svg = d3.select( ref.current ),
         scrollSize = Graph.scrollSize,
         halfSize = scrollSize / 2;
+        
+    // Get the initial domains.
+    let yMin0 = yDomain0[ 0 ],
+        yMax0 = yDomain0[ 1 ],
+        xMin0,
+        xMax0;
+    if( xScale.bandwidth ) {
+        xMin0 = 0;
+        xMax0 = xDomain0.length - 1;
+    } else {
+        xMin0 = xDomain0[ 0 ];
+        xMax0 = xDomain0[ 1 ];
+    }
+        
+    // Get the current domains.
+    let yMin = yScale.domain()[ 0 ],
+        yMax = yScale.domain()[ 1 ],
+        xDomain = xScale.domain(),
+        xMin,
+        xMax,
+        xD;
+    if( xScale.bandwidth ) {
+        xMin = xDomain0.indexOf( xDomain[ 0 ]);
+        xMax = xDomain0.indexOf( xDomain[ xDomain.length - 1 ]);
+        xD = 1;
+    } else {
+        xMin = xScale.domain()[ 0 ];
+        xMax = xScale.domain()[ 1 ];
+        xD = 0;
+    }
         
     // Clear the margins.
     svg.append( "rect" )
@@ -293,8 +443,8 @@ Graph.draw = ( ref, height, width, margin, padding, xScale, yScale, xMin0, xMax0
     // Draw the X scrollbar.
     let x = margin.left + padding.left,
         w = width - margin.right - padding.right - x + 1,
-        xMin = x + w * ( xScale.domain()[ 0 ] - xMin0 ) / ( xMax0 - xMin0 ),
-        xMax = x + w * ( xScale.domain()[ 1 ] - xMin0 ) / ( xMax0 - xMin0 );
+        x1 = x + w * ( xMin - xMin0      ) / ( xMax0 - xMin0 + xD ),
+        x2 = x + w * ( xMax - xMin0 + xD ) / ( xMax0 - xMin0 + xD );
     svg.append( "rect" )
         .attr( "x", x )
         .attr( "y", height - scrollSize )
@@ -302,24 +452,24 @@ Graph.draw = ( ref, height, width, margin, padding, xScale, yScale, xMin0, xMax0
         .attr( "height", scrollSize )
         .style( "fill", "#eeeeee" );
     svg.append( "line" )
-        .attr( "x1", xMin + halfSize )
+        .attr( "x1", x1 + halfSize )
         .attr( "y1", height - halfSize )
-        .attr( "x2", xMax - halfSize )
+        .attr( "x2", x2 - halfSize )
         .attr( "y2", height - halfSize )
         .style( "stroke-width", scrollSize )
         .style( "stroke", "#cccccc" )
         .style( "stroke-linecap", "round" );
     svg.append( "line" )
-        .attr( "x1", xMin + halfSize + 1 )
+        .attr( "x1", x1 + halfSize + 1 )
         .attr( "y1", height - scrollSize )
-        .attr( "x2", xMin + halfSize + 1 )
+        .attr( "x2", x1 + halfSize + 1 )
         .attr( "y2", height )
         .style( "stroke-width", 1 )
         .style( "stroke", "#ffffff" );
     svg.append( "line" )
-        .attr( "x1", xMax - halfSize - 1 )
+        .attr( "x1", x2 - halfSize - 1 )
         .attr( "y1", height - scrollSize )
-        .attr( "x2", xMax - halfSize - 1 )
+        .attr( "x2", x2 - halfSize - 1 )
         .attr( "y2", height )
         .style( "stroke-width", 1 )
         .style( "stroke", "#ffffff" );
@@ -327,8 +477,8 @@ Graph.draw = ( ref, height, width, margin, padding, xScale, yScale, xMin0, xMax0
     // Draw the Y scrollbar.
     let y = margin.top + padding.top,
         h = height - margin.bottom - padding.bottom - y + 1,
-        yMin = y + h * ( 1 - ( yScale.domain()[ 0 ] - yMin0 ) / ( yMax0 - yMin0 )),
-        yMax = y + h * ( 1 - ( yScale.domain()[ 1 ] - yMin0 ) / ( yMax0 - yMin0 ));
+        y1 = y + h * ( 1 - ( yMin - yMin0 ) / ( yMax0 - yMin0 )),
+        y2 = y + h * ( 1 - ( yMax - yMin0 ) / ( yMax0 - yMin0 ));
     svg.append( "rect" )
         .attr( "x", 0 )
         .attr( "y", y )
@@ -337,24 +487,24 @@ Graph.draw = ( ref, height, width, margin, padding, xScale, yScale, xMin0, xMax0
         .style( "fill", "#eeeeee" );
     svg.append( "line" )
         .attr( "x1", halfSize )
-        .attr( "y1", yMax + halfSize )
+        .attr( "y1", y2 + halfSize )
         .attr( "x2", halfSize )
-        .attr( "y2", yMin - halfSize )
+        .attr( "y2", y1 - halfSize )
         .style( "stroke-width", scrollSize )
         .style( "stroke", "#cccccc" )
         .style( "stroke-linecap", "round" );
     svg.append( "line" )
         .attr( "x1", 0 )
-        .attr( "y1", yMax + halfSize + 1 )
+        .attr( "y1", y2 + halfSize + 1 )
         .attr( "x2", scrollSize )
-        .attr( "y2", yMax + halfSize + 1 )
+        .attr( "y2", y2 + halfSize + 1 )
         .style( "stroke-width", 1 )
         .style( "stroke", "#ffffff" );
     svg.append( "line" )
         .attr( "x1", 0 )
-        .attr( "y1", yMin - halfSize - 1 )
+        .attr( "y1", y1 - halfSize - 1 )
         .attr( "x2", scrollSize )
-        .attr( "y2", yMin - halfSize - 1 )
+        .attr( "y2", y1 - halfSize - 1 )
         .style( "stroke-width", 1 )
         .style( "stroke", "#ffffff" );
 };

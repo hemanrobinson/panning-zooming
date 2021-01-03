@@ -17,10 +17,8 @@ const Histogram = ( props ) => {
         xLabel = Data.getColumnNames( dataSet )[ 2 ],
         yLabel = "Frequency",
         data = Data.getValues( dataSet ),
-        xMin0 = d3.min( data, d => d[ 2 ]),
-        xMax0 = d3.max( data, d => d[ 2 ]),
-        yMin0,
-        yMax0,
+        xDomain0 = [ d3.min( data, d => d[ 2 ]), d3.max( data, d => d[ 2 ])],
+        yDomain0,
         xScale,
         yScale,
         downLocation = { x: 0, y: 0, isX: false, isY: false, isMin: false, isMax: false },
@@ -28,7 +26,7 @@ const Histogram = ( props ) => {
         bins;
         
     // Get the X scale.
-    const [ xDomain, setXDomain ] = useState([ xMin0, xMax0 ]);
+    const [ xDomain, setXDomain ] = useState( xDomain0 );
     xScale = d3.scaleLinear().domain( xDomain ).range([ margin.left + padding.left, width - margin.right - padding.right ]);
     
     // Assign the X group factor.
@@ -41,37 +39,36 @@ const Histogram = ( props ) => {
     // Calculate the histogram bins.
     histogram = d3.histogram()
         .value( d => d[ 2 ])
-        .domain([ xMin0, xMax0 ])
+        .domain( xDomain0 )
         .thresholds( Math.round( 8 + Math.exp( 5 * xGroup )));
     bins = histogram( data );
 
     // Get the Y scale.
-    yMin0 = 0;
-    yMax0 = d3.max( bins, d => d.length );
+    yDomain0 = [ 0, d3.max( bins, d => d.length )];
     yScale = d3.scaleLinear()
         .range([ height - margin.bottom - padding.bottom, margin.top + padding.top ])
-        .domain([ yMin0, yMax0 ]);
+        .domain( yDomain0 );
         
     // Zoom in two dimensions.
     let onZoom2D = ( isIn ) => {
-        Graph.onZoom2D( isIn, xScale, yScale, xMin0, xMax0, yMin0, yMax0 );
-        Histogram.draw( ref, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, xLabel, yLabel, bins );
+        Graph.onZoom2D( isIn, xScale, yScale, xDomain0, yDomain0 );
+        Histogram.draw( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins );
     };
     
     // Zoom in one dimension.
     let onMouseDown = ( event ) => {
-        Graph.onMouseDown( event, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, downLocation );
+        Graph.onMouseDown( event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, downLocation );
     },
     onMouseUp = ( event ) => {
         if( downLocation.isX || downLocation.isY ) {
-            Graph.onMouseUp( event, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, downLocation );
-            Histogram.draw( ref, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, xLabel, yLabel, bins );
+            Graph.onMouseUp( event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, downLocation );
+            Histogram.draw( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins );
         }
     };
     
     // Set hook to draw on mounting, or on any other lifecycle update.
     useEffect(() => {
-        Histogram.draw( ref, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, xLabel, yLabel, bins );
+        Histogram.draw( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins );
     });
     
     // Return the component.
@@ -80,7 +77,7 @@ const Histogram = ( props ) => {
 };
     
 // Draws the histogram.
-Histogram.draw = ( ref, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, xLabel, yLabel, bins ) => {
+Histogram.draw = ( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins ) => {
     
     // Initialization.
     const svg = d3.select( ref.current );
@@ -98,7 +95,7 @@ Histogram.draw = ( ref, height, width, margin, padding, xScale, yScale, xMin0, x
         .style( "fill", "#99bbdd" );
     
     // Draw the axes and scroll bars.
-    Graph.draw( ref, height, width, margin, padding, xScale, yScale, xMin0, xMax0, yMin0, yMax0, xLabel, yLabel );
+    Graph.draw( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
 };
 
 export default Histogram;
