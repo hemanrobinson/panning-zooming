@@ -38,7 +38,7 @@ const App = () => {
                 Categorical data presents a different problem.  When there are only a few categories, there is no need to zoom.  When there are many, the equivalent of zooming can be done by combining smaller categories into an "Other" group.
                 </p>
                 <p>
-                Adjustable "Other" groups have been available in software for at least fifty years.  With a modern user interface, we can make the adjustment interactive and efficient for the user.  This is particularly useful in exploring categorical distributions with "long tails" as in the bar chart below.
+                Adjustable "Other" groups have been available in software for at least fifty years.  With a modern user interface, we can make the adjustment interactive and efficient for the user.  This is particularly useful when exploring "long-tailed" distributions as in the bar chart below.
                 </p>
             </div>
             <div className="Graph">
