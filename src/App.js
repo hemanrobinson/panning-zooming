@@ -1,7 +1,8 @@
 import React from 'react';
-import Plot from './Plot';
+import ScatterPlot from './ScatterPlot';
 import Histogram from './Histogram';
 import BarChart from './BarChart';
+import Heatmap from './Heatmap';
 import './App.css';
 
 // Application:  Side-by-side scatter plots.
@@ -20,7 +21,7 @@ const App = () => {
                 </p>
             </div>
             <div className="Graph">
-                <Plot dataSet={ "Cytometry" } />
+                <ScatterPlot dataSet={ "Cytometry" } />
             </div>
             <div className="Description">
                 <h2>Zooming Aggregate Graphs</h2>
@@ -50,10 +51,11 @@ const App = () => {
             </div>
             <div className="Description">
                 <p>
-                This user interface extends readily to multiple dimensions.
+                This user interface extends readily to multiple dimensions.  To minimize distraction, controls can be displayed only when needed, upon a mouse hover or click event.  The heatmap below demonstrates both features.
                 </p>
             </div>
             <div className="Graph">
+                <Heatmap dataSet={ "Food" } />
             </div>
             <div className="Description">
                 <h2>Why This User Interface</h2>

@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState }  from 'react';
 import * as d3 from 'd3';
 import Data from './Data';
 import Graph from './Graph';
-import './Plot.css';
+import './ScatterPlot.css';
 
 // Scatter plot in an SVG element.
-const Plot = ( props ) => {
+const ScatterPlot = ( props ) => {
 
     // Initialization.
     const width = 400,
@@ -48,7 +48,7 @@ const Plot = ( props ) => {
             
             // For mousemove events, just redraw, as they seem to come in too quickly for the React framework...
             if( event.type === "mousemove" ) {
-                Plot.draw( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
+                ScatterPlot.draw( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
             }
             
             // ...for mouseup events, set the state to cause a redraw.
@@ -61,7 +61,7 @@ const Plot = ( props ) => {
     
     // Set hook to draw on mounting, or on any other lifecycle update.
     useEffect(() => {
-        Plot.draw( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
+        ScatterPlot.draw( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
     });
     
     // Return the component.
@@ -70,7 +70,7 @@ const Plot = ( props ) => {
 };
     
 // Draws the points.
-Plot.draw = ( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale ) => {
+ScatterPlot.draw = ( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale ) => {
     
     // Initialization.
     const svg = d3.select( ref.current );
@@ -90,4 +90,4 @@ Plot.draw = ( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDo
     Graph.draw( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
 };
 
-export default Plot;
+export default ScatterPlot;
