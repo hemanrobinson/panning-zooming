@@ -33,7 +33,18 @@ const BarChart = ( props ) => {
     // Calculate the bars.
     bars = Array.from( d3.rollup( data, v => v.length, d => d[ 0 ]));
     bars.sort(( a, b ) => ( b[ 1 ] - a[ 1 ]));
-        
+    
+    // Combine bars.
+    let n = Math.round( xGroup * bars.length );
+    if( 0 < n ) {
+        let total = 0;
+        for( let i = 0; ( i < n ); i++ ) {
+            total += bars[ bars.length - i - 1 ][ 1 ];
+        }
+        bars.splice( bars.length - n, n );
+        bars.push([ "Other", total ]);
+    }
+    
     // Get the X scale.
     xDomain0 = bars.map( x => x[ 0 ]);
     const [ xDomain, setXDomain ] = useState( xDomain0 );
@@ -90,7 +101,7 @@ BarChart.draw = ( ref, height, width, margin, padding, xScale, yScale, xDomain0,
         .attr( "x", ( d ) => xScale( d[ 0 ]))
         .attr( "y", ( d ) => yScale( d[ 1 ]))
         .attr( "width", xScale.bandwidth())
-        .attr( "height", ( d ) => (( xScale.domain().indexOf( d[ 0 ]) >= 0 ) ? height - yScale( d[ 1 ]) : 0 ))
+        .attr( "height", ( d ) => (( xScale.domain().indexOf( d[ 0 ]) >= 0 ) ? Math.max( 0, height - yScale( d[ 1 ])) : 0 ))
         .style( "fill", "#99bbdd" );
         
     // Draw the axes and scroll bars.
