@@ -31,7 +31,7 @@ const BarChart = ( props ) => {
     };
 
     // Calculate the bars.
-    data = data.slice( 0, 7 );
+    data = data.slice( 0, 8 );
     bars = Array.from( d3.rollup( data, v => v.length, d => d[ 0 ]));
     bars.sort(( a, b ) => ( b[ 1 ] - a[ 1 ]));
         

@@ -29,6 +29,38 @@ const Graph = React.forwardRef(( props, ref ) => {
 
 // Width of scroll bar.
 Graph.scrollSize = 15;
+
+// Returns initial and current domains.
+Graph.getDomains = ( xDomain0, yDomain0, xDomain, yDomain, isXOrdinal, isYOrdinal ) => {
+    let domains = {};
+    if( isXOrdinal ) {
+        domains.xMin0 = 0;
+        domains.xMax0 = xDomain0.length - 1;
+        domains.xMin = xDomain0.indexOf( xDomain[ 0 ]);
+        domains.xMax = xDomain0.indexOf( xDomain[ xDomain.length - 1 ]);
+        domains.xD = 1;
+    } else {
+        domains.xMin0 = xDomain0[ 0 ];
+        domains.xMax0 = xDomain0[ 1 ];
+        domains.xMin = xDomain[ 0 ];
+        domains.xMax = xDomain[ 1 ];
+        domains.xD = 0;
+    }
+    if( isYOrdinal ) {
+        domains.yMin0 = 0;
+        domains.yMax0 = yDomain0.length - 1;
+        domains.yMin = yDomain0.indexOf( yDomain[ 0 ]);
+        domains.yMax = yDomain0.indexOf( yDomain[ yDomain.length - 1 ]);
+        domains.yD = 1;
+    } else {
+        domains.yMin0 = yDomain0[ 0 ];
+        domains.yMax0 = yDomain0[ 1 ];
+        domains.yMin = yDomain[ 0 ];
+        domains.yMax = yDomain[ 1 ];
+        domains.yD = 0;
+    }
+    return domains;
+}
     
 // Zooms in two dimensions.
 Graph.onZoom2D = ( isIn, xScale, yScale, xDomain0, yDomain0 ) => {
@@ -36,43 +68,16 @@ Graph.onZoom2D = ( isIn, xScale, yScale, xDomain0, yDomain0 ) => {
     // Initialization.
     const d = 8,
         f = ( d - 1 ) / ( 2 * d );
-        
-    // Get the initial domains.
-    let yMin0 = yDomain0[ 0 ],
-        yMax0 = yDomain0[ 1 ],
-        xMin0,
-        xMax0;
-    if( xScale.bandwidth ) {
-        xMin0 = 0;
-        xMax0 = xDomain0.length - 1;
-    } else {
-        xMin0 = xDomain0[ 0 ];
-        xMax0 = xDomain0[ 1 ];
-    }
-        
-    // Get the current domains.
-    let yMin = yScale.domain()[ 0 ],
-        yMax = yScale.domain()[ 1 ],
-        xDomain = xScale.domain(),
-        xMin,
-        xMax,
-        xD;
-    if( xScale.bandwidth ) {
-        xMin = xDomain0.indexOf( xDomain[ 0 ]);
-        xMax = xDomain0.indexOf( xDomain[ xDomain.length - 1 ]);
-        xD = 1;
-    } else {
-        xMin = xScale.domain()[ 0 ];
-        xMax = xScale.domain()[ 1 ];
-        xD = 0;
-    }
+    let xDomain = xScale.domain(),
+        yDomain = yScale.domain(),
+        { xMin0, xMax0, yMin0, yMax0, xMin, xMax, yMin, yMax, xD, yD } = Graph.getDomains( xDomain0, yDomain0, xDomain, yDomain, !!xScale.bandwidth, !!yScale.bandwidth );
         
     // Calculate scales for zoom in...
     if( isIn ) {
         xMin = Math.min( xMin0 + ( xMax0 - xMin0 + xD ) * f, xMin + ( xMax - xMin + xD ) / d );
         xMax = Math.max( xMax0 - ( xMax0 - xMin0 + xD ) * f, xMax - ( xMax - xMin + xD ) / d );
-        yMin = Math.min( yMin0 + ( yMax0 - yMin0 ) * f, yMin + ( yMax - yMin ) / d );
-        yMax = Math.max( yMax0 - ( yMax0 - yMin0 ) * f, yMax - ( yMax - yMin ) / d );
+        yMin = Math.min( yMin0 + ( yMax0 - yMin0 + yD ) * f, yMin + ( yMax - yMin + yD ) / d );
+        yMax = Math.max( yMax0 - ( yMax0 - yMin0 + yD ) * f, yMax - ( yMax - yMin + yD ) / d );
         if( xScale.bandwidth ) {
             xMin = Math.ceil( xMin );
             xMax = Math.floor( xMax );
@@ -81,14 +86,22 @@ Graph.onZoom2D = ( isIn, xScale, yScale, xDomain0, yDomain0 ) => {
                 xMax = xMin;
             }
         }
+        if( yScale.bandwidth ) {
+            yMin = Math.ceil( yMin );
+            yMax = Math.floor( yMax );
+            if( yMin > yMax ) {
+                yMin = yDomain0.indexOf( yDomain[ 0 ]);
+                yMax = yMin;
+            }
+        }
     }
     
     // ...or for zoom out.
     else {
         xMin = Math.max( xMin0, xMin - ( xMax - xMin + xD ) / ( d - 2 ));
         xMax = Math.min( xMax0, xMax + ( xMax - xMin + xD ) / ( d - 2 ));
-        yMin = Math.max( yMin0, yMin - ( yMax - yMin ) / ( d - 2 ));
-        yMax = Math.min( yMax0, yMax + ( yMax - yMin ) / ( d - 2 ));
+        yMin = Math.max( yMin0, yMin - ( yMax - yMin + yD ) / ( d - 2 ));
+        yMax = Math.min( yMax0, yMax + ( yMax - yMin + yD ) / ( d - 2 ));
         if( xScale.bandwidth ) {
             xMin = Math.floor( xMin );
             xMax = Math.ceil( xMax );
@@ -97,14 +110,26 @@ Graph.onZoom2D = ( isIn, xScale, yScale, xDomain0, yDomain0 ) => {
                 xMin = xMax;
             }
         }
+        if( yScale.bandwidth ) {
+            yMin = Math.floor( yMin );
+            yMax = Math.ceil( yMax );
+            if( yMax < yMin ) {
+                yMax = yDomain0.indexOf( yDomain[ yDomain.length - 1 ]);
+                yMin = yMax;
+            }
+        }
     }
     
     // Assign the new scales.
-    yScale.domain([ yMin, yMax ]);
     if( xScale.bandwidth ) {
         xScale.domain( xDomain0.slice( xMin, xMax + 1 ));
     } else {
         xScale.domain([ xMin, xMax ]);
+    }
+    if( yScale.bandwidth ) {
+        yScale.domain( yDomain0.slice( yMin, yMax + 1 ));
+    } else {
+        yScale.domain([ yMin, yMax ]);
     }
 };
     
@@ -119,40 +144,13 @@ Graph.onMouseDown = ( event, height, width, margin, padding, xScale, yScale, xDo
         bottom = margin.bottom + padding.bottom,
         left   = margin.left   + padding.left,
         xDown = event.nativeEvent.offsetX,
-        yDown = event.nativeEvent.offsetY;
+        yDown = event.nativeEvent.offsetY,
+        xDomain = xScale.domain(),
+        yDomain = yScale.domain(),
+        { xMin0, xMax0, yMin0, yMax0, xMin, xMax, yMin, yMax, xD, yD } = Graph.getDomains( xDomain0, yDomain0, xDomain, yDomain, !!xScale.bandwidth, !!yScale.bandwidth );
         
     // Prevent text selection.
     event.preventDefault();
-        
-    // Get the initial domains.
-    let yMin0 = yDomain0[ 0 ],
-        yMax0 = yDomain0[ 1 ],
-        xMin0,
-        xMax0;
-    if( xScale.bandwidth ) {
-        xMin0 = 0;
-        xMax0 = xDomain0.length - 1;
-    } else {
-        xMin0 = xDomain0[ 0 ];
-        xMax0 = xDomain0[ 1 ];
-    }
-        
-    // Get the current domains.
-    let yMin = yScale.domain()[ 0 ],
-        yMax = yScale.domain()[ 1 ],
-        xDomain = xScale.domain(),
-        xMin,
-        xMax,
-        xD;
-    if( xScale.bandwidth ) {
-        xMin = xDomain0.indexOf( xDomain[ 0 ]);
-        xMax = xDomain0.indexOf( xDomain[ xDomain.length - 1 ]);
-        xD = 1;
-    } else {
-        xMin = xScale.domain()[ 0 ];
-        xMax = xScale.domain()[ 1 ];
-        xD = 0;
-    }
         
     // Reset the mousedown coordinates.
     downLocation.x = xDown;
@@ -181,8 +179,8 @@ Graph.onMouseDown = ( event, height, width, margin, padding, xScale, yScale, xDo
     // ...or handle event on Y scrollbar.
     else if(( 0 <= xDown ) && ( xDown <= scrollSize ) && ( top <= yDown ) && ( yDown <= height - bottom )) {
         let h = height - bottom - top + 1,
-            y0 = top + h * ( 1 - ( yMin - yMin0 ) / ( yMax0 - yMin0 )),
-            y1 = top + h * ( 1 - ( yMax - yMin0 ) / ( yMax0 - yMin0 ));
+            y0 = top + h * ( 1 - ( yMin - yMin0      ) / ( yMax0 - yMin0 + yD )),
+            y1 = top + h * ( 1 - ( yMax - yMin0 + yD ) / ( yMax0 - yMin0 + yD ));
         downLocation.yDomain = yScale.domain();
         downLocation.isY = true;
         if(( y1 <= yDown ) && ( yDown <= y1 + endCapSize )) {
@@ -203,40 +201,15 @@ Graph.onMouseUp = ( event, height, width, margin, padding, xScale, yScale, xDoma
         bottom = margin.bottom + padding.bottom,
         left   = margin.left   + padding.left,
         xUp = event.nativeEvent.offsetX,
-        yUp = event.nativeEvent.offsetY;
-        
-    // Get the initial domains.
-    let yMin0 = yDomain0[ 0 ],
-        yMax0 = yDomain0[ 1 ],
-        xMin0,
-        xMax0;
-    if( xScale.bandwidth ) {
-        xMin0 = 0;
-        xMax0 = xDomain0.length - 1;
-    } else {
-        xMin0 = xDomain0[ 0 ];
-        xMax0 = xDomain0[ 1 ];
-    }
-        
-    // Get the down location domains.
-    let yMin = downLocation.yDomain[ 0 ],
-        yMax = downLocation.yDomain[ 1 ],
+        yUp = event.nativeEvent.offsetY,
         xDomain = downLocation.xDomain,
-        xMin,
-        xMax,
-        xD;
-    if( xScale.bandwidth ) {
-        xMin = xDomain0.indexOf( xDomain[ 0 ]);
-        xMax = xDomain0.indexOf( xDomain[ xDomain.length - 1 ]);
-        xD = 1;
-    } else {
-        xMin = xDomain[ 0 ];
-        xMax = xDomain[ 1 ];
-        xD = 0;
-    }
+        yDomain = downLocation.yDomain,
+        { xMin0, xMax0, yMin0, yMax0, xMin, xMax, yMin, yMax, xD, yD } = Graph.getDomains( xDomain0, yDomain0, xDomain, yDomain, !!xScale.bandwidth, !!yScale.bandwidth );
     
     // Handle event on X scrollbar...
     if( downLocation.isX ) {
+    
+        // Calculate the difference.
         const f = ( xMax0 - xMin0 + xD ) / d;
         let w = width - right - left + 1,
             dif = ( xMax0 - xMin0 + xD ) * ( xUp - downLocation.x ) / w;
@@ -295,26 +268,37 @@ Graph.onMouseUp = ( event, height, width, margin, padding, xScale, yScale, xDoma
     
     // ...or handle event on Y scrollbar.
     else if( downLocation.isY ) {
-        const f = ( yMax0 - yMin0 ) / d;
+    
+        // Calculate the difference.
+        const f = ( yMax0 - yMin0 + yD ) / d;
         let h = height - bottom - top + 1,
-            dif = ( yMax0 - yMin0 ) * ( downLocation.y - yUp ) / h;
+            dif = ( yMax0 - yMin0 + yD ) * ( downLocation.y - yUp ) / h;
+        if( yScale.bandwidth ) {
+            dif = Math.round( dif );
+        }
             
         // Handle drag on minimum handle...
         if( downLocation.isMin ) {
             dif = Math.max( dif, yMin0 - yMin );
-            if( dif > yMax - yMin - f ) {
-                dif = 0;
+            if( dif <= yMax - yMin + yD - f ) {
+                if( yScale.bandwidth ) {
+                    yScale.domain( yDomain0.slice( yMin + dif, yMax + yD ));
+                } else {
+                    yScale.domain([ yMin + dif, yMax ]);
+                }
             }
-            yScale.domain([ yMin + dif, yMax ]);
         }
         
         // ...or handle drag on maximum handle...
         else if( downLocation.isMax ) {
             dif = Math.min( dif, yMax0 - yMax );
-            if( dif < f - yMax + yMin ) {
-                dif = 0;
+            if( dif >= f - ( yMax - yMin + yD )) {
+                if( yScale.bandwidth ) {
+                    yScale.domain( yDomain0.slice( yMin, yMax + dif + yD ));
+                } else {
+                    yScale.domain([ yMin, yMax + dif ]);
+                }
             }
-            yScale.domain([ yMin, yMax + dif ]);
         }
         
         // ...or handle drag on thumb or click on track.
@@ -322,19 +306,23 @@ Graph.onMouseUp = ( event, height, width, margin, padding, xScale, yScale, xDoma
         
             // Adjust for click on track.
             if( dif === 0 ) {
-                let y0 = top + h * ( 1 - ( yMin - yMin0 ) / ( yMax0 - yMin0 )),
-                    y1 = top + h * ( 1 - ( yMax - yMin0 ) / ( yMax0 - yMin0 ));
+                let y0 = top + h * ( 1 - ( yMin - yMin0      ) / ( yMax0 - yMin0 + yD )),
+                    y1 = top + h * ( 1 - ( yMax - yMin0 + yD ) / ( yMax0 - yMin0 + yD ));
                 if( yUp < y0 ) {
-                    dif = ( yMax0 - yMin0 ) * ( y0 - yUp ) / h - ( yMax - yMin ) / 2;
+                    dif = ( yMax0 - yMin0 + yD ) * ( y0 - yUp ) / h - ( yMax - yMin + yD ) / 2;
                 } else if( y1 < yUp ) {
-                    dif = ( yMax0 - yMin0 ) * ( y1 - yUp ) / h + ( yMax - yMin ) / 2;
+                    dif = ( yMax0 - yMin0 + yD ) * ( y1 - yUp ) / h + ( yMax - yMin + yD ) / 2;
                 }
             }
             
             // Handle drag or click.
             dif = Math.max( dif, yMin0 - yMin );
             dif = Math.min( dif, yMax0 - yMax );
-            yScale.domain([ yMin + dif, yMax + dif ]);
+            if( yScale.bandwidth ) {
+                yScale.domain( yDomain0.slice( yMin + dif, yMax + dif + yD ));
+            } else {
+                yScale.domain([ yMin + dif, yMax + dif ]);
+            }
         }
     }
         
@@ -354,36 +342,9 @@ Graph.draw = ( ref, height, width, margin, padding, xScale, yScale, xDomain0, yD
     const svg = d3.select( ref.current ),
         scrollSize = Graph.scrollSize,
         halfSize = scrollSize / 2;
-        
-    // Get the initial domains.
-    let yMin0 = yDomain0[ 0 ],
-        yMax0 = yDomain0[ 1 ],
-        xMin0,
-        xMax0;
-    if( xScale.bandwidth ) {
-        xMin0 = 0;
-        xMax0 = xDomain0.length - 1;
-    } else {
-        xMin0 = xDomain0[ 0 ];
-        xMax0 = xDomain0[ 1 ];
-    }
-        
-    // Get the current domains.
-    let yMin = yScale.domain()[ 0 ],
-        yMax = yScale.domain()[ 1 ],
-        xDomain = xScale.domain(),
-        xMin,
-        xMax,
-        xD;
-    if( xScale.bandwidth ) {
-        xMin = xDomain0.indexOf( xDomain[ 0 ]);
-        xMax = xDomain0.indexOf( xDomain[ xDomain.length - 1 ]);
-        xD = 1;
-    } else {
-        xMin = xScale.domain()[ 0 ];
-        xMax = xScale.domain()[ 1 ];
-        xD = 0;
-    }
+    let xDomain = xScale.domain(),
+        yDomain = yScale.domain(),
+        { xMin0, xMax0, yMin0, yMax0, xMin, xMax, yMin, yMax, xD, yD } = Graph.getDomains( xDomain0, yDomain0, xDomain, yDomain, !!xScale.bandwidth, !!yScale.bandwidth );
         
     // Clear the margins.
     svg.append( "rect" )
@@ -469,8 +430,8 @@ Graph.draw = ( ref, height, width, margin, padding, xScale, yScale, xDomain0, yD
     // Draw the Y scrollbar.
     let y = margin.top + padding.top,
         h = height - margin.bottom - padding.bottom - y + 1,
-        y1 = y + h * ( 1 - ( yMin - yMin0 ) / ( yMax0 - yMin0 )),
-        y2 = y + h * ( 1 - ( yMax - yMin0 ) / ( yMax0 - yMin0 ));
+        y1 = y + h * ( 1 - ( yMin - yMin0      ) / ( yMax0 - yMin0 + yD )),
+        y2 = y + h * ( 1 - ( yMax - yMin0 + yD ) / ( yMax0 - yMin0 + yD ));
     svg.append( "rect" )
         .attr( "x", 0 )
         .attr( "y", y )
