@@ -23,10 +23,15 @@ const BarChart = ( props ) => {
         yScale,
         downLocation = { x: 0, y: 0, xDomain: [], yDomain: [], isX: false, isY: false, isMin: false, isMax: false },
         bars;
+        
+    // Get the X scale.
+    const [ xDomain, setXDomain ] = useState([]);
+    xScale = d3.scaleBand().domain( xDomain ).range([ margin.left + padding.left, width - margin.right - padding.right ]).padding( 0.2 );
     
     // Assign the X group factor.
     const [ xGroup, setXGroup ] = useState( 0 );
     let onXGroup = ( event, value ) => {
+        setXDomain( xScale.domain());
         setXGroup( value );
     };
 
@@ -34,7 +39,7 @@ const BarChart = ( props ) => {
     bars = Array.from( d3.rollup( data, v => v.length, d => d[ 0 ]));
     bars.sort(( a, b ) => ( b[ 1 ] - a[ 1 ]));
     
-    // Combine bars.
+    // Combine bars if requested.
     let n = Math.round( xGroup * bars.length );
     if( 0 < n ) {
         let total = 0;
@@ -45,13 +50,9 @@ const BarChart = ( props ) => {
         bars.push([ "Other", total ]);
     }
     
-    // Get the X scale.
+    // Set the X domain.
     xDomain0 = bars.map( x => x[ 0 ]);
-    const [ xDomain, setXDomain ] = useState( xDomain0 );
-    xScale = d3.scaleBand()
-        .domain( xDomain )
-        .range([ margin.left + padding.left, width - margin.right - padding.right ])
-        .padding( 0.2 );
+    xScale.domain( xDomain0 );
 
     // Get the Y scale.
     yDomain0 = [ 0, d3.max( bars, d => d[ 1 ])];
