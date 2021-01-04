@@ -8,10 +8,10 @@ import './BarChart.css';
 const BarChart = ( props ) => {
     
     // Initialization.
-    const width = 400,
+    const width = 600,
         height = 400,
         padding = { top: 20, right: 20, bottom: 0, left: 20 },
-        margin = { top: 0, right: 0, bottom: 50, left: 50 };
+        margin = { top: 0, right: 0, bottom: 80, left: 50 };
     let ref = useRef(),
         { dataSet } = props,
         xLabel = Data.getColumnNames( dataSet )[ 0 ],
@@ -31,7 +31,6 @@ const BarChart = ( props ) => {
     };
 
     // Calculate the bars.
-    data = data.slice( 0, 8 );
     bars = Array.from( d3.rollup( data, v => v.length, d => d[ 0 ]));
     bars.sort(( a, b ) => ( b[ 1 ] - a[ 1 ]));
         

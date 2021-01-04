@@ -24,7 +24,7 @@ const App = () => {
             </div>
             <div className="Description">
                 <p>
-                Large data sets must be grouped, so exploring data requires zooming both the scales and the groups.  To maximize the user's flexibility, scales and groups must be independently adjustable.
+                For large data sets, we can't display individual points, but must aggregate the data into bins, bars, tiles, or other groupings.  So for aggregate graphs, exploring data requires zooming both the scales and the aggregates.  To maximize the user's flexibility, scales and aggregates must be independently zoomable.
                 </p>
                 <p>
                 Continuous data are typically grouped into bins, as in a histogram.  Users can explore their data by zooming both the scales and the bins.

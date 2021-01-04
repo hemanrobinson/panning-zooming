@@ -374,7 +374,7 @@ Graph.draw = ( ref, height, width, margin, padding, xScale, yScale, xDomain0, yD
     
     // Draw the X axis.
     svg.append( "g" )
-        .attr( "class", "axis" )
+        .attr( "class", ( margin.bottom > 50 ) ? "axisRotated" : "axis" )
         .attr( "transform", "translate( 0, " + ( height - margin.bottom ) + " )" )
         .call( d3.axisBottom( xScale ).ticks( 3 ));
     svg.append( "text" )
