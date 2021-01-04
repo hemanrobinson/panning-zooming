@@ -23,11 +23,15 @@ const App = () => {
                 <Plot dataSet={ "Cytometry" } />
             </div>
             <div className="Description">
+                <h2>Zooming Aggregate Graphs</h2>
                 <p>
-                For large data sets, we can't display individual points, but must aggregate the data into bins, bars, tiles, or other groupings.  So for aggregate graphs, exploring data requires zooming both the scales and the aggregates.  To maximize the user's flexibility, scales and aggregates must be independently zoomable.
+                For large data sets, we can't display individual points, but must aggregate the data into bins, bars, tiles, or other groupings.
                 </p>
                 <p>
-                Continuous data are typically grouped into bins, as in a histogram.  Users can explore their data by zooming both the scales and the bins.
+                Therefore, exploring aggregate graphs requires zooming both the scales and the aggregates.  To maximize the user's flexibility, scales and aggregates must be independently zoomable.
+                </p>
+                <p>
+                A slider control on the axis affords zooming of aggregates.  For continuous data, as in a histogram, users can explore their data by independently zooming scales and bins.
                 </p>
             </div>
             <div className="Graph">
@@ -52,7 +56,7 @@ const App = () => {
             <div className="Graph">
             </div>
             <div className="Description">
-                <h2>Notes</h2>
+                <h2>Why This User Interface</h2>
                 <p>
                 Three user interfaces were tested.
                 </p>
