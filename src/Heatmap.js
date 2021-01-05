@@ -26,6 +26,9 @@ const Heatmap = ( props ) => {
         bins,
         tiles;
         
+    // Assign state for display of zoom controls.
+    const [ isZoomable, setIsZoomable ] = useState( false );
+        
     // Get the X scale.
     const [ xDomain, setXDomain ] = useState( xDomain0 );
     xScale = d3.scaleLinear().domain( xDomain ).range([ margin.left + padding.left, width - margin.right - padding.right ]);
@@ -76,7 +79,7 @@ const Heatmap = ( props ) => {
     // Zoom in two dimensions.
     let onZoom2D = ( isIn ) => {
         Graph.onZoom2D( isIn, xScale, yScale, xDomain0, yDomain0 );
-        Heatmap.draw( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins, tiles );
+        Heatmap.draw( ref, height, width, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins, tiles );
     };
     
     // Zoom in one dimension.
@@ -86,22 +89,23 @@ const Heatmap = ( props ) => {
     onMouseUp = ( event ) => {
         if( downLocation.isX || downLocation.isY ) {
             Graph.onMouseUp( event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, downLocation );
-            Heatmap.draw( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins, tiles );
+            Heatmap.draw( ref, height, width, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins, tiles );
         }
     };
     
     // Set hook to draw on mounting, or on any other lifecycle update.
     useEffect(() => {
-        Heatmap.draw( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins, tiles );
+        Heatmap.draw( ref, height, width, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins, tiles );
     });
     
     // Return the component.
     return <Graph width={width} height={height} margin={margin} padding={padding}
+        isZoomable={isZoomable.toString()} onMouseOver={() => { setIsZoomable( true )}} onMouseOut={() => { setIsZoomable( false )}}
         onZoom={onZoom2D} onMouseDown={onMouseDown} onMouseUp={onMouseUp} onXGroup={onXGroup} onYGroup={onYGroup} ref={ref} />
 };
     
 // Draws the Bar Chart.
-Heatmap.draw = ( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins, tiles ) => {
+Heatmap.draw = ( ref, height, width, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins, tiles ) => {
     
     // Initialization.
     const svg = d3.select( ref.current );
@@ -123,7 +127,7 @@ Heatmap.draw = ( ref, height, width, margin, padding, xScale, yScale, xDomain0, 
         .style( "fill", ( d ) => colorScale( d ));
         
     // Draw the axes and scroll bars.
-    Graph.draw( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+    Graph.draw( ref, height, width, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
 };
 
 export default Heatmap;

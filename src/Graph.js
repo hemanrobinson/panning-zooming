@@ -11,19 +11,28 @@ const Graph = React.forwardRef(( props, ref ) => {
     
     // Initialization.
     const buttonSize = 30, sliderOffset = 12;
-    let { width, height, margin, padding, onMouseDown, onMouseUp, onZoom, onXGroup, onYGroup } = props;
-    let top    = margin.top    + padding.top,
+    let { width, height, margin, padding, isZoomable, onMouseOver, onMouseOut, onMouseDown, onMouseUp, onZoom, onXGroup, onYGroup } = props,
+        top    = margin.top    + padding.top,
         right  = margin.right  + padding.right,
         bottom = margin.bottom + padding.bottom,
         left   = margin.left   + padding.left;
+    isZoomable = ( isZoomable === "false" ) ? false : true;
     
     // Return the component.
     return <div style={{width: width, height: height}} className="parent">
-            <svg width={width} height={height} onMouseDown={onMouseDown} onMouseMove={onMouseUp} onMouseUp={onMouseUp} ref={ref} />
-            <input type="button" value="+" onClick={()=>onZoom(true )} style={{ width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1 }} />
-            <input type="button" value="-" onClick={()=>onZoom(false)} style={{ width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1 + buttonSize }} />
-            <Slider min={0} max={1} step={0.01} defaultValue={0} onChange={onXGroup} style={{ width: width - left - right + 1, top: height - margin.bottom - sliderOffset, left: left + 1, position: "absolute", display: ( onXGroup ? "inline" : "none" )}} />
-            <Slider min={0} max={1} step={0.01} defaultValue={0} onChange={onYGroup} style={{ height: height - top - bottom + 1, top: top + 1, left: margin.left - sliderOffset - 1, position: "absolute", display: ( onYGroup ? "inline" : "none" )}} orientation="vertical"/>
+            <svg width={width} height={height} isZoomable={isZoomable} onMouseOver={onMouseOver} onMouseOut={onMouseOut} onMouseDown={onMouseDown} onMouseMove={onMouseUp} onMouseUp={onMouseUp} ref={ref} />
+            <input type="button" value="+" onClick={()=>onZoom(true )}
+                style={{ width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1,
+                display: ( isZoomable ? "inline" : "none" )}} />
+            <input type="button" value="-" onClick={()=>onZoom(false)}
+                style={{ width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1 + buttonSize,
+                display: ( isZoomable ? "inline" : "none" )}} />
+            <Slider min={0} max={1} step={0.01} defaultValue={0} onChange={onXGroup}
+                style={{ width: width - left - right + 1, top: height - margin.bottom - sliderOffset, left: left + 1, position: "absolute",
+                display: (( isZoomable && onXGroup ) ? "inline" : "none" )}} />
+            <Slider min={0} max={1} step={0.01} defaultValue={0} onChange={onYGroup}  orientation="vertical"
+                style={{ height: height - top - bottom + 1, top: top + 1, left: margin.left - sliderOffset - 1, position: "absolute",
+                display: (( isZoomable && onYGroup ) ? "inline" : "none" )}} />
        </div>;
 });
 
@@ -336,7 +345,7 @@ Graph.onMouseUp = ( event, height, width, margin, padding, xScale, yScale, xDoma
 };
     
 // Draws the graph.
-Graph.draw = ( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel ) => {
+Graph.draw = ( ref, height, width, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel ) => {
     
     // Initialization.
     const svg = d3.select( ref.current ),
@@ -393,73 +402,77 @@ Graph.draw = ( ref, height, width, margin, padding, xScale, yScale, xDomain0, yD
         .style( "text-anchor", "middle" )
         .text( yLabel );
     
-    // Draw the X scrollbar.
-    let x = margin.left + padding.left,
-        w = width - margin.right - padding.right - x + 1,
-        x1 = x + w * ( xMin - xMin0      ) / ( xMax0 - xMin0 + xD ),
-        x2 = x + w * ( xMax - xMin0 + xD ) / ( xMax0 - xMin0 + xD );
-    svg.append( "rect" )
-        .attr( "x", x )
-        .attr( "y", height - scrollSize )
-        .attr( "width", w )
-        .attr( "height", scrollSize )
-        .style( "fill", "#eeeeee" );
-    svg.append( "line" )
-        .attr( "x1", x1 + halfSize )
-        .attr( "y1", height - halfSize )
-        .attr( "x2", x2 - halfSize )
-        .attr( "y2", height - halfSize )
-        .style( "stroke-width", scrollSize )
-        .style( "stroke", "#cccccc" )
-        .style( "stroke-linecap", "round" );
-    svg.append( "line" )
-        .attr( "x1", x1 + halfSize + 1 )
-        .attr( "y1", height - scrollSize )
-        .attr( "x2", x1 + halfSize + 1 )
-        .attr( "y2", height )
-        .style( "stroke-width", 1 )
-        .style( "stroke", "#ffffff" );
-    svg.append( "line" )
-        .attr( "x1", x2 - halfSize - 1 )
-        .attr( "y1", height - scrollSize )
-        .attr( "x2", x2 - halfSize - 1 )
-        .attr( "y2", height )
-        .style( "stroke-width", 1 )
-        .style( "stroke", "#ffffff" );
+    // If zoomable, draw the scrollbars.
+    if( isZoomable ) {
+    
+        // Draw the X scrollbar.
+        let x = margin.left + padding.left,
+            w = width - margin.right - padding.right - x + 1,
+            x1 = x + w * ( xMin - xMin0      ) / ( xMax0 - xMin0 + xD ),
+            x2 = x + w * ( xMax - xMin0 + xD ) / ( xMax0 - xMin0 + xD );
+        svg.append( "rect" )
+            .attr( "x", x )
+            .attr( "y", height - scrollSize )
+            .attr( "width", w )
+            .attr( "height", scrollSize )
+            .style( "fill", "#eeeeee" );
+        svg.append( "line" )
+            .attr( "x1", x1 + halfSize )
+            .attr( "y1", height - halfSize )
+            .attr( "x2", x2 - halfSize )
+            .attr( "y2", height - halfSize )
+            .style( "stroke-width", scrollSize )
+            .style( "stroke", "#cccccc" )
+            .style( "stroke-linecap", "round" );
+        svg.append( "line" )
+            .attr( "x1", x1 + halfSize + 1 )
+            .attr( "y1", height - scrollSize )
+            .attr( "x2", x1 + halfSize + 1 )
+            .attr( "y2", height )
+            .style( "stroke-width", 1 )
+            .style( "stroke", "#ffffff" );
+        svg.append( "line" )
+            .attr( "x1", x2 - halfSize - 1 )
+            .attr( "y1", height - scrollSize )
+            .attr( "x2", x2 - halfSize - 1 )
+            .attr( "y2", height )
+            .style( "stroke-width", 1 )
+            .style( "stroke", "#ffffff" );
         
-    // Draw the Y scrollbar.
-    let y = margin.top + padding.top,
-        h = height - margin.bottom - padding.bottom - y + 1,
-        y1 = y + h * ( 1 - ( yMin - yMin0      ) / ( yMax0 - yMin0 + yD )),
-        y2 = y + h * ( 1 - ( yMax - yMin0 + yD ) / ( yMax0 - yMin0 + yD ));
-    svg.append( "rect" )
-        .attr( "x", 0 )
-        .attr( "y", y )
-        .attr( "width", scrollSize )
-        .attr( "height", h )
-        .style( "fill", "#eeeeee" );
-    svg.append( "line" )
-        .attr( "x1", halfSize )
-        .attr( "y1", y2 + halfSize )
-        .attr( "x2", halfSize )
-        .attr( "y2", y1 - halfSize )
-        .style( "stroke-width", scrollSize )
-        .style( "stroke", "#cccccc" )
-        .style( "stroke-linecap", "round" );
-    svg.append( "line" )
-        .attr( "x1", 0 )
-        .attr( "y1", y2 + halfSize + 1 )
-        .attr( "x2", scrollSize )
-        .attr( "y2", y2 + halfSize + 1 )
-        .style( "stroke-width", 1 )
-        .style( "stroke", "#ffffff" );
-    svg.append( "line" )
-        .attr( "x1", 0 )
-        .attr( "y1", y1 - halfSize - 1 )
-        .attr( "x2", scrollSize )
-        .attr( "y2", y1 - halfSize - 1 )
-        .style( "stroke-width", 1 )
-        .style( "stroke", "#ffffff" );
+        // Draw the Y scrollbar.
+        let y = margin.top + padding.top,
+            h = height - margin.bottom - padding.bottom - y + 1,
+            y1 = y + h * ( 1 - ( yMin - yMin0      ) / ( yMax0 - yMin0 + yD )),
+            y2 = y + h * ( 1 - ( yMax - yMin0 + yD ) / ( yMax0 - yMin0 + yD ));
+        svg.append( "rect" )
+            .attr( "x", 0 )
+            .attr( "y", y )
+            .attr( "width", scrollSize )
+            .attr( "height", h )
+            .style( "fill", "#eeeeee" );
+        svg.append( "line" )
+            .attr( "x1", halfSize )
+            .attr( "y1", y2 + halfSize )
+            .attr( "x2", halfSize )
+            .attr( "y2", y1 - halfSize )
+            .style( "stroke-width", scrollSize )
+            .style( "stroke", "#cccccc" )
+            .style( "stroke-linecap", "round" );
+        svg.append( "line" )
+            .attr( "x1", 0 )
+            .attr( "y1", y2 + halfSize + 1 )
+            .attr( "x2", scrollSize )
+            .attr( "y2", y2 + halfSize + 1 )
+            .style( "stroke-width", 1 )
+            .style( "stroke", "#ffffff" );
+        svg.append( "line" )
+            .attr( "x1", 0 )
+            .attr( "y1", y1 - halfSize - 1 )
+            .attr( "x2", scrollSize )
+            .attr( "y2", y1 - halfSize - 1 )
+            .style( "stroke-width", 1 )
+            .style( "stroke", "#ffffff" );
+    }
 };
 
 export default Graph;

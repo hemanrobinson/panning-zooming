@@ -51,7 +51,7 @@ const App = () => {
             </div>
             <div className="Description">
                 <p>
-                This user interface extends readily to multiple dimensions.  To minimize distraction from the data display, controls can be displayed only when needed, upon a mouse hover or click event.  The heatmap below demonstrates both features.
+                This user interface extends readily to multiple dimensions.  To minimize distraction from the data display, controls can be displayed only when needed, upon a hover or tap event.  The heatmap below demonstrates both features.
                 </p>
             </div>
             <div className="Graph">
