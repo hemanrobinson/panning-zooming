@@ -8,9 +8,9 @@ import './Heatmap.css';
 const Heatmap = ( props ) => {
     
     // Initialization.
-    const width = 600,
-        height = 400,
-        padding = { top: 20, right: 20, bottom: 0, left: 0 },
+    const width = 400,
+        height = 600,
+        padding = { top: 20, right: 20, bottom: 10, left: 10 },
         margin = { top: 0, right: 0, bottom: 50, left: 80 };
     let ref = useRef(),
         { dataSet } = props,
@@ -64,13 +64,11 @@ const Heatmap = ( props ) => {
     bins.forEach(( bin ) => {
         let t = [];
         for( let i = 0; ( i < yDomain0.length ); i++ ) {
-            t[ i ] = { y: yDomain[ i ], count: 0 };
+            t[ i ] = 0;
         }
         bin.forEach(( b ) => {
             let k = yDomain0.indexOf( b[ 0 ]);
-            t[ k ].count++;
-            t[ k ].x0 = bin.x0;
-            t[ k ].x1 = bin.x1;
+            t[ k ]++;
         })
         tiles = tiles.concat( t );
     });
@@ -110,20 +108,19 @@ Heatmap.draw = ( ref, height, width, margin, padding, xScale, yScale, xDomain0, 
     svg.selectAll( "*" ).remove();
     
     // Get the color scale.
-    let colorScale = d3.scaleLinear().domain([ 0, d3.max( tiles, t => t.count )]).range([ "#99bbdd", "#ff0000" ]);
+    let colorScale = d3.scaleLinear().domain([ 0, d3.max( tiles, t => t )]).range([ "#99bbdd", "#ff0000" ]);
 
     // Draw the tiles.
-    let w = xScale( tiles[ 0 ].x1 ) - xScale( tiles[ 0 ].x0 ) - 1,
-        h = yScale.bandwidth() - 1;
+    const nY = yDomain0.length;
     svg.selectAll( "rect" )
         .data( tiles )
         .enter()
         .append( "rect" )
-        .attr( "x", ( d ) => xScale( d.x0 ))
-        .attr( "y", ( d ) => yScale( d.y ) + 1 )
-        .attr( "width", w )
-        .attr( "height", h )
-        .style( "fill", ( d ) => colorScale( d.count ));
+        .attr( "x", ( d, i ) => xScale( bins[( i / nY ) >> 0 ].x0 ))
+        .attr( "y", ( d, i ) => yScale( yDomain0[ i % nY ]) + 1 )
+        .attr( "width", ( d, i ) => xScale( bins[( i / nY ) >> 0 ].x1 ) - xScale( bins[( i / nY ) >> 0 ].x0 ) - 1 )
+        .attr( "height", ( d ) => ( d > 0 ) ? yScale.bandwidth() - 1 : 0 )
+        .style( "fill", ( d ) => colorScale( d ));
         
     // Draw the axes and scroll bars.
     Graph.draw( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
