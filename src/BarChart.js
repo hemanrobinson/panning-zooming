@@ -21,7 +21,6 @@ const BarChart = ( props ) => {
         yDomain0,
         xScale,
         yScale,
-        downLocation = { x: 0, y: 0, xDomain: [], yDomain: [], isX: false, isY: false, isMin: false, isMax: false },
         bars;
         
     // Get the X scale.
@@ -68,11 +67,11 @@ const BarChart = ( props ) => {
     
     // Zoom in one dimension.
     let onMouseDown = ( event ) => {
-        Graph.onMouseDown( event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, downLocation );
+        Graph.onMouseDown( event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0 );
     },
     onMouseUp = ( event ) => {
-        if( downLocation.isX || downLocation.isY ) {
-            Graph.onMouseUp( event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, downLocation );
+        if( Graph.downLocation.isX || Graph.downLocation.isY ) {
+            Graph.onMouseUp( event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0 );
             BarChart.draw( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bars );
         }
     };

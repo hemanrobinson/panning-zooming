@@ -39,6 +39,9 @@ const Graph = React.forwardRef(( props, ref ) => {
 // Width of scroll bar.
 Graph.scrollSize = 15;
 
+// Down location.
+Graph.downLocation = { x: 0, y: 0, xDomain: [], yDomain: [], isX: false, isY: false, isMin: false, isMax: false };
+
 // Returns initial and current domains.
 Graph.getDomains = ( xDomain0, yDomain0, xDomain, yDomain, isXOrdinal, isYOrdinal ) => {
     let domains = {};
@@ -143,7 +146,7 @@ Graph.onZoom2D = ( isIn, xScale, yScale, xDomain0, yDomain0 ) => {
 };
     
 // Zooms in one dimension: mousedown event.
-Graph.onMouseDown = ( event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, downLocation ) => {
+Graph.onMouseDown = ( event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0 ) => {
 
     // Initialization.
     const scrollSize = Graph.scrollSize,
@@ -162,26 +165,26 @@ Graph.onMouseDown = ( event, height, width, margin, padding, xScale, yScale, xDo
     event.preventDefault();
         
     // Reset the mousedown coordinates.
-    downLocation.x = xDown;
-    downLocation.y = yDown;
-    downLocation.xDomain = [];
-    downLocation.yDomain = [];
-    downLocation.isX = false;
-    downLocation.isY = false;
-    downLocation.isMin = false;
-    downLocation.isMax = false;
+    Graph.downLocation.x = xDown;
+    Graph.downLocation.y = yDown;
+    Graph.downLocation.xDomain = [];
+    Graph.downLocation.yDomain = [];
+    Graph.downLocation.isX = false;
+    Graph.downLocation.isY = false;
+    Graph.downLocation.isMin = false;
+    Graph.downLocation.isMax = false;
     
     // Handle event on X scrollbar...
     if(( left <= xDown ) && ( xDown <= width - right ) && ( height - scrollSize <= yDown ) && ( yDown <= height )) {
         let w = width - right - left + 1,
             x0 = left + w * ( xMin - xMin0      ) / ( xMax0 - xMin0 + xD ),
             x1 = left + w * ( xMax - xMin0 + xD ) / ( xMax0 - xMin0 + xD );
-        downLocation.xDomain = xScale.domain();
-        downLocation.isX = true;
+        Graph.downLocation.xDomain = xScale.domain();
+        Graph.downLocation.isX = true;
         if(( x0 <= xDown ) && ( xDown <= x0 + endCapSize )) {
-            downLocation.isMin = true;
+            Graph.downLocation.isMin = true;
         } else if(( x1 - endCapSize <= xDown ) && ( xDown <= x1 )) {
-            downLocation.isMax = true;
+            Graph.downLocation.isMax = true;
         }
     }
     
@@ -190,18 +193,18 @@ Graph.onMouseDown = ( event, height, width, margin, padding, xScale, yScale, xDo
         let h = height - bottom - top + 1,
             y0 = top + h * ( 1 - ( yMin - yMin0      ) / ( yMax0 - yMin0 + yD )),
             y1 = top + h * ( 1 - ( yMax - yMin0 + yD ) / ( yMax0 - yMin0 + yD ));
-        downLocation.yDomain = yScale.domain();
-        downLocation.isY = true;
+        Graph.downLocation.yDomain = yScale.domain();
+        Graph.downLocation.isY = true;
         if(( y1 <= yDown ) && ( yDown <= y1 + endCapSize )) {
-            downLocation.isMax = true;
+            Graph.downLocation.isMax = true;
         } else if(( y0 - endCapSize <= yDown ) && ( yDown <= y0 )) {
-            downLocation.isMin = true;
+            Graph.downLocation.isMin = true;
         }
     }
 };
     
 // Zooms in one dimension: mousemove and mouseup events.
-Graph.onMouseUp = ( event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, downLocation ) => {
+Graph.onMouseUp = ( event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0 ) => {
 
     // Initialization.
     const d = 8;
@@ -211,23 +214,23 @@ Graph.onMouseUp = ( event, height, width, margin, padding, xScale, yScale, xDoma
         left   = margin.left   + padding.left,
         xUp = event.nativeEvent.offsetX,
         yUp = event.nativeEvent.offsetY,
-        xDomain = downLocation.xDomain,
-        yDomain = downLocation.yDomain,
+        xDomain = Graph.downLocation.xDomain,
+        yDomain = Graph.downLocation.yDomain,
         { xMin0, xMax0, yMin0, yMax0, xMin, xMax, yMin, yMax, xD, yD } = Graph.getDomains( xDomain0, yDomain0, xDomain, yDomain, !!xScale.bandwidth, !!yScale.bandwidth );
     
     // Handle event on X scrollbar...
-    if( downLocation.isX ) {
+    if( Graph.downLocation.isX ) {
     
         // Calculate the difference.
         const f = ( xMax0 - xMin0 + xD ) / d;
         let w = width - right - left + 1,
-            dif = ( xMax0 - xMin0 + xD ) * ( xUp - downLocation.x ) / w;
+            dif = ( xMax0 - xMin0 + xD ) * ( xUp - Graph.downLocation.x ) / w;
         if( xScale.bandwidth ) {
             dif = Math.round( dif );
         }
         
         // Handle drag on minimum handle...
-        if( downLocation.isMin ) {
+        if( Graph.downLocation.isMin ) {
             dif = Math.max( dif, xMin0 - xMin );
             if( dif <= xMax - xMin + xD - f ) {
                 if( xScale.bandwidth ) {
@@ -239,7 +242,7 @@ Graph.onMouseUp = ( event, height, width, margin, padding, xScale, yScale, xDoma
         }
         
         // ...or handle drag on maximum handle...
-        else if( downLocation.isMax ) {
+        else if( Graph.downLocation.isMax ) {
             dif = Math.min( dif, xMax0 - xMax );
             if( dif >= f - ( xMax - xMin + xD )) {
                 if( xScale.bandwidth ) {
@@ -276,18 +279,18 @@ Graph.onMouseUp = ( event, height, width, margin, padding, xScale, yScale, xDoma
     }
     
     // ...or handle event on Y scrollbar.
-    else if( downLocation.isY ) {
+    else if( Graph.downLocation.isY ) {
     
         // Calculate the difference.
         const f = ( yMax0 - yMin0 + yD ) / d;
         let h = height - bottom - top + 1,
-            dif = ( yMax0 - yMin0 + yD ) * ( downLocation.y - yUp ) / h;
+            dif = ( yMax0 - yMin0 + yD ) * ( Graph.downLocation.y - yUp ) / h;
         if( yScale.bandwidth ) {
             dif = Math.round( dif );
         }
             
         // Handle drag on minimum handle...
-        if( downLocation.isMin ) {
+        if( Graph.downLocation.isMin ) {
             dif = Math.max( dif, yMin0 - yMin );
             if( dif <= yMax - yMin + yD - f ) {
                 if( yScale.bandwidth ) {
@@ -299,7 +302,7 @@ Graph.onMouseUp = ( event, height, width, margin, padding, xScale, yScale, xDoma
         }
         
         // ...or handle drag on maximum handle...
-        else if( downLocation.isMax ) {
+        else if( Graph.downLocation.isMax ) {
             dif = Math.min( dif, yMax0 - yMax );
             if( dif >= f - ( yMax - yMin + yD )) {
                 if( yScale.bandwidth ) {
@@ -336,11 +339,11 @@ Graph.onMouseUp = ( event, height, width, margin, padding, xScale, yScale, xDoma
     }
         
     // Reset the mousedown coordinates.
-    if(( downLocation.isX || downLocation.isY ) && ( event.type === "mouseup" )) {
-        downLocation.isX = false;
-        downLocation.isY = false;
-        downLocation.isMin = false;
-        downLocation.isMax = false;
+    if(( Graph.downLocation.isX || Graph.downLocation.isY ) && ( event.type === "mouseup" )) {
+        Graph.downLocation.isX = false;
+        Graph.downLocation.isY = false;
+        Graph.downLocation.isMin = false;
+        Graph.downLocation.isMax = false;
     }
 };
     

@@ -21,8 +21,7 @@ const ScatterPlot = ( props ) => {
         yDomain0 = [ d3.min( data, d => d[ 1 ]), d3.max( data, d => d[ 1 ])],
         xScale,
         yScale,
-        symbolScale,
-        downLocation = { x: 0, y: 0, xDomain: [], yDomain: [], isX: false, isY: false, isMin: false, isMax: false };
+        symbolScale;
         
     // Get the scales.
     const [ xDomain, setXDomain ] = useState( xDomain0 );
@@ -40,11 +39,11 @@ const ScatterPlot = ( props ) => {
     
     // Zoom in one dimension.
     let onMouseDown = ( event ) => {
-        Graph.onMouseDown( event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, downLocation );
+        Graph.onMouseDown( event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0 );
     },
     onMouseUp = ( event ) => {
-        if( downLocation.isX || downLocation.isY ) {
-            Graph.onMouseUp( event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, downLocation );
+        if( Graph.downLocation.isX || Graph.downLocation.isY ) {
+            Graph.onMouseUp( event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0 );
             
             // For mousemove events, just redraw, as they seem to come in too quickly for the React framework...
             if( event.type === "mousemove" ) {
