@@ -20,7 +20,7 @@ const Graph = React.forwardRef(( props, ref ) => {
     
     // Return the component.
     return <div style={{width: width, height: height}} className="parent">
-            <svg width={width} height={height} isZoomable={isZoomable} onMouseOver={onMouseOver} onMouseOut={onMouseOut} onMouseDown={onMouseDown} onMouseMove={onMouseUp} onMouseUp={onMouseUp} ref={ref} />
+            <svg width={width} height={height} onMouseOver={onMouseOver} onMouseOut={onMouseOut} onMouseDown={onMouseDown} onMouseMove={onMouseUp} onMouseUp={onMouseUp} ref={ref} />
             <input type="button" value="+" onClick={()=>onZoom(true )}
                 style={{ width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1,
                 display: ( isZoomable ? "inline" : "none" )}} />

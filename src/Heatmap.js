@@ -28,14 +28,20 @@ const Heatmap = ( props ) => {
         
     // Assign state for display of zoom controls.
     const [ isZoomable, setIsZoomable ] = useState( false );
+    let onIsZoomable = ( isZoomable ) => {
+        setIsZoomable( isZoomable );
+        setXDomain( xScale.domain());
+        setYDomain( yScale.domain());
+    };
         
     // Get the X scale.
     const [ xDomain, setXDomain ] = useState( xDomain0 );
     xScale = d3.scaleLinear().domain( xDomain ).range([ margin.left + padding.left, width - margin.right - padding.right ]);
-        
-    // Get the unique values.
-    let values = data.map( datum => datum[ 0 ]);
-    yDomain0 = values.filter(( item, index ) => ( values.indexOf( item ) === index ));
+    
+    // Get the unique Y values.
+    let values = Array.from( d3.rollup( data, v => v.length, d => d[ 0 ]));
+    values.sort(( a, b ) => ( b[ 1 ] - a[ 1 ]));
+    yDomain0 = values.map( x => x[ 0 ]);
         
     // Get the Y scale.
     const [ yDomain, setYDomain ] = useState( yDomain0 );
@@ -55,14 +61,14 @@ const Heatmap = ( props ) => {
         setYGroup( value );
     };
 
-    // Calculate the bins.
+    // Calculate the X bins.
     histogram = d3.histogram()
         .value( d => d[ 1 ])
         .domain( xDomain0 )
         .thresholds( Math.round( 8 + Math.exp( 5 * xGroup )));
     bins = histogram( data );
     
-    // Count the number of values in each bin.
+    // Count the number of values in each tile.
     tiles = [];
     bins.forEach(( bin ) => {
         let t = [];
@@ -75,6 +81,22 @@ const Heatmap = ( props ) => {
         })
         tiles = tiles.concat( t );
     });
+    
+    // Combine tiles if requested.
+    let n = Math.round( yGroup * yDomain0.length );
+    if( 0 < n ) {
+        for( let j = bins.length - 1; ( j >= 0 ); j-- ) {
+            let total = 0;
+            for( let i = 0; ( i < n ); i++ ) {
+                total += tiles[ j * yDomain0.length - i - 1 ];
+            }
+            tiles.splice( j * yDomain0.length - n, n, total );
+        }
+        yDomain0.splice( yDomain0.length - n, n, "Other" );
+    }
+    
+    // Assign the Y domain.
+    yScale.domain( yDomain0 );
         
     // Zoom in two dimensions.
     let onZoom2D = ( isIn ) => {
@@ -100,7 +122,7 @@ const Heatmap = ( props ) => {
     
     // Return the component.
     return <Graph width={width} height={height} margin={margin} padding={padding}
-        isZoomable={isZoomable.toString()} onMouseOver={() => { setIsZoomable( true )}} onMouseOut={() => { setIsZoomable( false )}}
+        isZoomable={isZoomable.toString()} onMouseOver={() => { onIsZoomable( true )}} onMouseOut={() => { onIsZoomable( false )}}
         onZoom={onZoom2D} onMouseDown={onMouseDown} onMouseUp={onMouseUp} onXGroup={onXGroup} onYGroup={onYGroup} ref={ref} />
 };
     
