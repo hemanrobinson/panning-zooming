@@ -17,7 +17,7 @@ const App = () => {
                 Shneiderman taught us all to <a href="http://www.cs.umd.edu/~ben/papers/Shneiderman1996eyes.pdf">"Overview first, zoom and filter, then details-on-demand"</a>.
                 </p>
                 <p>
-                Overview, filtering, and details-on-demand can be supported by many types of graphs.  For graphs that display individual points, zooming is straightforward also, as it only requires a simple rescaling.  On the Web, a familiar user interface displays plus (+) and minus (-) buttons.  Scroll bars provide both user feedback and one-dimensional zooming.
+                Overview, filtering, and details-on-demand can be supported straightforwardly in most graphs.  For graphs that display individual points, zooming is also straightforward, because it only requires a simple rescaling.  On the Web, a familiar user interface displays plus (+) and minus (-) buttons.  Scroll bars provide both user feedback and one-dimensional zooming.
                 </p>
             </div>
             <div className="Graph">
@@ -57,19 +57,19 @@ const App = () => {
             <div className="Description">
                 <h2>Why This User Interface</h2>
                 <p>
-                There are three places one can put controls for zooming:  on the data display, on the axis, or somewhere outside the graph.
+                There are three positions where one can place controls for zooming:  on the data, on the axis, or outside the graph.
                 </p>
                 <p>
-                We hypothesized that the third position would be easiest to learn, because the control is more visible and can be labeled, e.g. a slider labeled "Zoom Factor (0-1):", or a numeric entry field labeled "Bin Width:".  However, this position requires additional screen real estate, which may be expensive; or placement in a secondary dialog, which is less efficient for the user.  Shneiderman's Mantra suggests that all four operations (overview, zoom, filter, details on demand) should be easy and efficient for the user to explore their data.
+                We expected that the third position would be easiest to learn, because the control is more visible and can be labeled, e.g. a slider labeled "Zoom Factor (0-1):", or a numeric entry field labeled "Bin Width:".  However, this position requires additional screen real estate, which may not be available; or placement in a secondary dialog, which is less efficient for the user.  Shneiderman's Mantra suggests that all four operations (overview, zoom, filter, details on demand) should be easy and efficient for the user to explore their data.
                 </p>
                 <p>
-                Shneiderman also said that direct manipulation is superior to indirect manipulation.  This argues for the first position.  This user interface is implemented in JMP(r) software, using a hand cursor to manipulate histogram bars.  We hypothesized that this position would be most difficult to learn, because manipulating a data display directly is not a familiar action, and a hand cursor displays only a few pixels.
+                Shneiderman also stated that direct manipulation is superior to indirect manipulation.  This argues for the first position.  This user interface is implemented in JMP(r) software, using a hand cursor to manipulate histogram bars.  We expected that this position would be most difficult to learn, particularly on the Web, because manipulating a data display directly is not a familiar action, and a hand cursor displays only a few pixels.
                 </p>
                 <p>
-                These three user interfaces were tested.
+                TODO:  These three positions were tested, with results as expected.
                 </p>
                 <p>
-                Display secondary controls in a dialog.
+                The graphs above are implemented in React and d3, and the source code is available to anyone who wants it.
                 </p>
             </div>
         </div>
