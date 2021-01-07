@@ -19,21 +19,21 @@ const Graph = React.forwardRef(( props, ref ) => {
     isZoomable = ( isZoomable === "false" ) ? false : true;
     
     // Return the component.
-    return <div style={{width: width, height: height}} className="parent">
-            <svg width={width} height={height} onMouseOver={onMouseOver} onMouseOut={onMouseOut} onMouseDown={onMouseDown} onMouseMove={onMouseUp} onMouseUp={onMouseUp} ref={ref} />
-            <input type="button" value="+" onClick={()=>onZoom(true )}
-                style={{ width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1,
-                display: ( isZoomable ? "inline" : "none" )}} />
-            <input type="button" value="-" onClick={()=>onZoom(false)}
-                style={{ width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1 + buttonSize,
-                display: ( isZoomable ? "inline" : "none" )}} />
-            <Slider min={0} max={1} step={0.01} defaultValue={0} onChange={onXGroup}
-                style={{ width: width - left - right + 1, top: height - margin.bottom - sliderOffset, left: left + 1, position: "absolute",
-                display: (( isZoomable && onXGroup ) ? "inline" : "none" )}} />
-            <Slider min={0} max={1} step={0.01} defaultValue={0} onChange={onYGroup}  orientation="vertical"
-                style={{ height: height - top - bottom + 1, top: top + 1, left: margin.left - sliderOffset - 1, position: "absolute",
-                display: (( isZoomable && onYGroup ) ? "inline" : "none" )}} />
-       </div>;
+    return <div style={{width: width, height: height}} className="parent" ref={ref}>
+        <svg width={width} height={height} onMouseOver={onMouseOver} onMouseOut={onMouseOut} onMouseDown={onMouseDown} onMouseMove={onMouseUp} onMouseUp={onMouseUp} />
+        <input type="button" value="+" onClick={()=>onZoom(true )}
+            style={{ width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1,
+            display: ( isZoomable ? "inline" : "none" )}} />
+        <input type="button" value="-" onClick={()=>onZoom(false)}
+            style={{ width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1 + buttonSize,
+            display: ( isZoomable ? "inline" : "none" )}} />
+        <Slider min={0} max={1} step={0.01} defaultValue={0} onChange={onXGroup}
+            style={{ width: width - left - right + 1, top: height - margin.bottom - sliderOffset, left: left + 1, position: "absolute",
+            display: (( isZoomable && onXGroup ) ? "inline" : "none" )}} />
+        <Slider min={0} max={1} step={0.01} defaultValue={0} onChange={onYGroup}  orientation="vertical"
+            style={{ height: height - top - bottom + 1, top: top + 1, left: margin.left - sliderOffset - 1, position: "absolute",
+            display: (( isZoomable && onYGroup ) ? "inline" : "none" )}} />
+    </div>;
 });
 
 // Width of scroll bar.
@@ -204,7 +204,7 @@ Graph.onMouseDown = ( event, height, width, margin, padding, xScale, yScale, xDo
 };
     
 // Zooms in one dimension: mousemove and mouseup events.
-Graph.onMouseUp = ( event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0 ) => {
+Graph.onMouseUp = ( ref, event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0 ) => {
 
     // Initialization.
     const d = 8;
@@ -351,7 +351,7 @@ Graph.onMouseUp = ( event, height, width, margin, padding, xScale, yScale, xDoma
 Graph.draw = ( ref, height, width, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel ) => {
     
     // Initialization.
-    const svg = d3.select( ref.current ),
+    const svg = d3.select( ref.current.childNodes[ 0 ]),
         scrollSize = Graph.scrollSize,
         halfSize = scrollSize / 2;
     let xDomain = xScale.domain(),
@@ -475,6 +475,14 @@ Graph.draw = ( ref, height, width, margin, padding, isZoomable, xScale, yScale, 
             .attr( "y2", y1 - halfSize - 1 )
             .style( "stroke-width", 1 )
             .style( "stroke", "#ffffff" );
+    }
+    
+    // Show or hide the controls.
+    let isVisible = ( ref.current.childNodes[ 1 ].style.display === "inline" );
+    if( isZoomable !== isVisible ) {
+        for( let i = 1; ( i < 5 ); i++ ) {
+            ref.current.childNodes[ i ].style.display = ( isZoomable ? "inline" : "none" );
+        }
     }
 };
 

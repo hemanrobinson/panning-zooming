@@ -43,7 +43,7 @@ const ScatterPlot = ( props ) => {
     },
     onMouseUp = ( event ) => {
         if( Graph.downLocation.isX || Graph.downLocation.isY ) {
-            Graph.onMouseUp( event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0 );
+            Graph.onMouseUp( ref, event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0 );
             
             // For mousemove events, just redraw, as they seem to come in too quickly for the React framework...
             if( event.type === "mousemove" ) {
@@ -72,7 +72,7 @@ const ScatterPlot = ( props ) => {
 ScatterPlot.draw = ( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale ) => {
     
     // Initialization.
-    const svg = d3.select( ref.current );
+    const svg = d3.select( ref.current.childNodes[ 0 ]);
     svg.selectAll( "*" ).remove();
     
     // Draw the points.

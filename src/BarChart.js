@@ -71,7 +71,7 @@ const BarChart = ( props ) => {
     },
     onMouseUp = ( event ) => {
         if( Graph.downLocation.isX || Graph.downLocation.isY ) {
-            Graph.onMouseUp( event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0 );
+            Graph.onMouseUp( ref, event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0 );
             BarChart.draw( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bars );
         }
     };
@@ -90,7 +90,7 @@ const BarChart = ( props ) => {
 BarChart.draw = ( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bars ) => {
     
     // Initialization.
-    const svg = d3.select( ref.current );
+    const svg = d3.select( ref.current.childNodes[ 0 ]);
     svg.selectAll( "*" ).remove();
 
     // Draw the bars.

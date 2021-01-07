@@ -25,14 +25,6 @@ const Heatmap = ( props ) => {
         bins,
         tiles;
         
-    // Assign state for display of zoom controls.
-    const [ isZoomable, setIsZoomable ] = useState( false );
-    let onIsZoomable = ( isZoomable ) => {
-        setIsZoomable( isZoomable );
-        setXDomain( xScale.domain());
-        setYDomain( yScale.domain());
-    };
-        
     // Get the X scale.
     const [ xDomain, setXDomain ] = useState( xDomain0 );
     xScale = d3.scaleLinear().domain( xDomain ).range([ margin.left + padding.left, width - margin.right - padding.right ]);
@@ -100,7 +92,7 @@ const Heatmap = ( props ) => {
     // Zoom in two dimensions.
     let onZoom2D = ( isIn ) => {
         Graph.onZoom2D( isIn, xScale, yScale, xDomain0, yDomain0 );
-        Heatmap.draw( ref, height, width, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins, tiles );
+        Heatmap.draw( ref, height, width, margin, padding, true, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins, tiles );
     };
     
     // Zoom in one dimension.
@@ -108,20 +100,31 @@ const Heatmap = ( props ) => {
         Graph.onMouseDown( event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0 );
     },
     onMouseUp = ( event ) => {
+    
+        // Initialization.
+        let xUp = event.nativeEvent.offsetX,
+            yUp = event.nativeEvent.offsetY,
+            isZoomable = (( 0 <= xUp ) && ( xUp < width ) && ( 0 <= yUp ) && ( yUp < height ));
+        
+        // Handle the mouse up event...
         if( Graph.downLocation.isX || Graph.downLocation.isY ) {
-            Graph.onMouseUp( event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0 );
+            Graph.onMouseUp( ref, event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0 );
             Heatmap.draw( ref, height, width, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins, tiles );
+        }
+    
+        // ...or show or hide the controls.
+        else {
+            Graph.draw( ref, height, width, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
         }
     };
     
     // Set hook to draw on mounting, or on any other lifecycle update.
     useEffect(() => {
-        Heatmap.draw( ref, height, width, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins, tiles );
+        Heatmap.draw( ref, height, width, margin, padding, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins, tiles );
     });
     
     // Return the component.
-    return <Graph width={width} height={height} margin={margin} padding={padding}
-        isZoomable={isZoomable.toString()} onMouseOver={() => { onIsZoomable( true )}} onMouseOut={() => { onIsZoomable( false )}}
+    return <Graph width={width} height={height} margin={margin} padding={padding} isZoomable="false"
         onZoom={onZoom2D} onMouseDown={onMouseDown} onMouseUp={onMouseUp} onXGroup={onXGroup} onYGroup={onYGroup} ref={ref} />
 };
     
@@ -129,7 +132,7 @@ const Heatmap = ( props ) => {
 Heatmap.draw = ( ref, height, width, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins, tiles ) => {
     
     // Initialization.
-    const svg = d3.select( ref.current );
+    const svg = d3.select( ref.current.childNodes[ 0 ]);
     svg.selectAll( "*" ).remove();
     
     // Get the color scale.

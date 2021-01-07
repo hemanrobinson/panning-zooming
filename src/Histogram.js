@@ -60,7 +60,7 @@ const Histogram = ( props ) => {
     },
     onMouseUp = ( event ) => {
         if( Graph.downLocation.isX || Graph.downLocation.isY ) {
-            Graph.onMouseUp( event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0 );
+            Graph.onMouseUp( ref, event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0 );
             Histogram.draw( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins );
         }
     };
@@ -79,7 +79,7 @@ const Histogram = ( props ) => {
 Histogram.draw = ( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins ) => {
     
     // Initialization.
-    const svg = d3.select( ref.current );
+    const svg = d3.select( ref.current.childNodes[ 0 ]);
     svg.selectAll( "*" ).remove();
 
     // Draw the bars.
