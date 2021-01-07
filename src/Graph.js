@@ -347,16 +347,12 @@ Graph.onMouseUp = ( ref, event, height, width, margin, padding, xScale, yScale, 
     }
 };
     
-// Draws the graph.
-Graph.draw = ( ref, height, width, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel ) => {
+// Draws the axes.
+Graph.drawAxes = ( ref, height, width, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel ) => {
     
     // Initialization.
     const svg = d3.select( ref.current.childNodes[ 0 ]),
-        scrollSize = Graph.scrollSize,
-        halfSize = scrollSize / 2;
-    let xDomain = xScale.domain(),
-        yDomain = yScale.domain(),
-        { xMin0, xMax0, yMin0, yMax0, xMin, xMax, yMin, yMax, xD, yD } = Graph.getDomains( xDomain0, yDomain0, xDomain, yDomain, !!xScale.bandwidth, !!yScale.bandwidth );
+        scrollSize = Graph.scrollSize;
         
     // Clear the margins.
     svg.append( "rect" )
@@ -404,14 +400,28 @@ Graph.draw = ( ref, height, width, margin, padding, isZoomable, xScale, yScale, 
         .attr( "y", margin.top + padding.top * 0.7 )
         .style( "text-anchor", "middle" )
         .text( yLabel );
+};
     
-    // If zoomable, draw the scrollbars.
+// Draws the controls.
+Graph.drawControls = ( ref, height, width, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel ) => {
+    
+    // Initialization.
+    const svg = d3.select( ref.current.childNodes[ 0 ]),
+        scrollSize = Graph.scrollSize,
+        halfSize = scrollSize / 2;
+    let xDomain = xScale.domain(),
+        yDomain = yScale.domain(),
+        { xMin0, xMax0, yMin0, yMax0, xMin, xMax, yMin, yMax, xD, yD } = Graph.getDomains( xDomain0, yDomain0, xDomain, yDomain, !!xScale.bandwidth, !!yScale.bandwidth ),
+        x = margin.left + padding.left,
+        w = width - margin.right - padding.right - x + 1,
+        y = margin.top + padding.top,
+        h = height - margin.bottom - padding.bottom - y + 1;
+    
+    // Draw the scrollbars...
     if( isZoomable ) {
     
         // Draw the X scrollbar.
-        let x = margin.left + padding.left,
-            w = width - margin.right - padding.right - x + 1,
-            x1 = x + w * ( xMin - xMin0      ) / ( xMax0 - xMin0 + xD ),
+        let x1 = x + w * ( xMin - xMin0      ) / ( xMax0 - xMin0 + xD ),
             x2 = x + w * ( xMax - xMin0 + xD ) / ( xMax0 - xMin0 + xD );
         svg.append( "rect" )
             .attr( "x", x )
@@ -443,9 +453,7 @@ Graph.draw = ( ref, height, width, margin, padding, isZoomable, xScale, yScale, 
             .style( "stroke", "#ffffff" );
         
         // Draw the Y scrollbar.
-        let y = margin.top + padding.top,
-            h = height - margin.bottom - padding.bottom - y + 1,
-            y1 = y + h * ( 1 - ( yMin - yMin0      ) / ( yMax0 - yMin0 + yD )),
+        let y1 = y + h * ( 1 - ( yMin - yMin0      ) / ( yMax0 - yMin0 + yD )),
             y2 = y + h * ( 1 - ( yMax - yMin0 + yD ) / ( yMax0 - yMin0 + yD ));
         svg.append( "rect" )
             .attr( "x", 0 )
@@ -477,13 +485,31 @@ Graph.draw = ( ref, height, width, margin, padding, isZoomable, xScale, yScale, 
             .style( "stroke", "#ffffff" );
     }
     
-    // Show or hide the controls.
-    let isVisible = ( ref.current.childNodes[ 1 ].style.display === "inline" );
-    if( isZoomable !== isVisible ) {
-        for( let i = 1; ( i < 5 ); i++ ) {
-            ref.current.childNodes[ i ].style.display = ( isZoomable ? "inline" : "none" );
-        }
+    // ...or hide the scrollbars.
+    else {
+        svg.append( "rect" )
+            .attr( "x", x )
+            .attr( "y", height - scrollSize )
+            .attr( "width", w )
+            .attr( "height", scrollSize )
+            .style( "fill", "#ffffff" );
+        svg.append( "rect" )
+            .attr( "x", 0 )
+            .attr( "y", y )
+            .attr( "width", scrollSize )
+            .attr( "height", h )
+            .style( "fill", "#ffffff" );
     }
+
+    // Show or hide the buttons and sliders.
+    for( let i = 1; ( i < 5 ); i++ ) {
+        ref.current.childNodes[ i ].style.display = ( isZoomable ? "inline" : "none" );
+    }
+};
+    
+// Returns whether controls are displayed.
+Graph.isVisibleControls = ( ref ) => {
+    return ( ref.current.childNodes[ 1 ].style.display === "inline" );
 };
 
 export default Graph;

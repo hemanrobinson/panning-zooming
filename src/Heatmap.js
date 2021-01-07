@@ -114,14 +114,13 @@ const Heatmap = ( props ) => {
     
         // ...or show or hide the controls.
         else {
-            Graph.draw( ref, height, width, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+            Graph.drawControls( ref, height, width, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
         }
     };
     
     // Set hook to draw on mounting, or on any other lifecycle update.
     useEffect(() => {
-        let isVisible = ( ref.current.childNodes[ 1 ].style.display === "inline" );
-        Heatmap.draw( ref, height, width, margin, padding, isVisible, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins, tiles );
+        Heatmap.draw( ref, height, width, margin, padding, Graph.isVisibleControls( ref ), xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins, tiles );
     });
     
     // Return the component.
@@ -151,8 +150,9 @@ Heatmap.draw = ( ref, height, width, margin, padding, isZoomable, xScale, yScale
         .attr( "height", ( d ) => ( d > 0 ) ? yScale.bandwidth() - 1 : 0 )
         .style( "fill", ( d ) => colorScale( d ));
         
-    // Draw the axes and scroll bars.
-    Graph.draw( ref, height, width, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+    // Draw the axes and the controls.
+    Graph.drawAxes(     ref, height, width, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+    Graph.drawControls( ref, height, width, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
 };
 
 export default Heatmap;

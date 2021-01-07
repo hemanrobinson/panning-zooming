@@ -103,9 +103,10 @@ BarChart.draw = ( ref, height, width, margin, padding, xScale, yScale, xDomain0,
         .attr( "width", xScale.bandwidth())
         .attr( "height", ( d ) => (( xScale.domain().indexOf( d[ 0 ]) >= 0 ) ? Math.max( 0, height - yScale( d[ 1 ])) : 0 ))
         .style( "fill", "#99bbdd" );
-        
-    // Draw the axes and scroll bars.
-    Graph.draw( ref, height, width, margin, padding, true, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+    
+    // Draw the axes and the controls.
+    Graph.drawAxes(     ref, height, width, margin, padding, true, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+    Graph.drawControls( ref, height, width, margin, padding, true, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
 };
 
 export default BarChart;

@@ -85,8 +85,9 @@ ScatterPlot.draw = ( ref, height, width, margin, padding, xScale, yScale, xDomai
         .style( "stroke", "black" );
     });
     
-    // Draw the axes and scroll bars.
-    Graph.draw( ref, height, width, margin, padding, true, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+    // Draw the axes and the controls.
+    Graph.drawAxes(     ref, height, width, margin, padding, true, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+    Graph.drawControls( ref, height, width, margin, padding, true, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
 };
 
 export default ScatterPlot;
