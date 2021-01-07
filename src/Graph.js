@@ -11,7 +11,7 @@ const Graph = React.forwardRef(( props, ref ) => {
     
     // Initialization.
     const buttonSize = 30, sliderOffset = 12;
-    let { width, height, margin, padding, isZoomable, onMouseOver, onMouseOut, onMouseDown, onMouseUp, onZoom, onXGroup, onYGroup } = props,
+    let { width, height, margin, padding, isZoomable, onMouseOver, onMouseOut, onMouseDown, onMouseUp, onZoom, xGroup, yGroup, onXGroup, onYGroup } = props,
         top    = margin.top    + padding.top,
         right  = margin.right  + padding.right,
         bottom = margin.bottom + padding.bottom,
@@ -27,10 +27,10 @@ const Graph = React.forwardRef(( props, ref ) => {
         <input type="button" value="-" onClick={()=>onZoom(false)}
             style={{ width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1 + buttonSize,
             display: ( isZoomable ? "inline" : "none" )}} />
-        <Slider min={0} max={1} step={0.01} defaultValue={0} onChange={onXGroup}
+        <Slider min={0} max={1} step={0.01} defaultValue={xGroup} onChange={onXGroup}
             style={{ width: width - left - right + 1, top: height - margin.bottom - sliderOffset, left: left + 1, position: "absolute",
             display: (( isZoomable && onXGroup ) ? "inline" : "none" )}} />
-        <Slider min={0} max={1} step={0.01} defaultValue={0} onChange={onYGroup}  orientation="vertical"
+        <Slider min={0} max={1} step={0.01} defaultValue={yGroup} onChange={onYGroup}  orientation="vertical"
             style={{ height: height - top - bottom + 1, top: top + 1, left: margin.left - sliderOffset - 1, position: "absolute",
             display: (( isZoomable && onYGroup ) ? "inline" : "none" )}} />
     </div>;
@@ -502,8 +502,10 @@ Graph.drawControls = ( ref, height, width, margin, padding, isZoomable, xScale, 
     }
 
     // Show or hide the buttons and sliders.
-    for( let i = 1; ( i < 5 ); i++ ) {
-        ref.current.childNodes[ i ].style.display = ( isZoomable ? "inline" : "none" );
+    if( isZoomable !== Graph.isVisibleControls( ref )) {
+        for( let i = 1; ( i < 5 ); i++ ) {
+            ref.current.childNodes[ i ].style.display = ( isZoomable ? "inline" : "none" );
+        }
     }
 };
     

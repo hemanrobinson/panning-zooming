@@ -39,7 +39,7 @@ const Heatmap = ( props ) => {
     yScale = d3.scaleBand().domain( yDomain ).range([ height - margin.bottom - padding.bottom, margin.top + padding.top ]);
     
     // Assign the X group factor.
-    const [ xGroup, setXGroup ] = useState( 0 );
+    const [ xGroup, setXGroup ] = useState( 0.5 );
     let onXGroup = ( event, value ) => {
         setXDomain( xScale.domain());
         setXGroup( value );
@@ -56,7 +56,7 @@ const Heatmap = ( props ) => {
     histogram = d3.histogram()
         .value( d => d[ 1 ])
         .domain( xDomain0 )
-        .thresholds( Math.round( 8 + Math.exp( 5 * xGroup )));
+        .thresholds( Math.round( Math.exp( 4 * xGroup )));
     bins = histogram( data );
     
     // Count the number of values in each tile.
@@ -125,7 +125,7 @@ const Heatmap = ( props ) => {
     
     // Return the component.
     return <Graph width={width} height={height} margin={margin} padding={padding} isZoomable="false"
-        onZoom={onZoom2D} onMouseDown={onMouseDown} onMouseUp={onMouseUp} onXGroup={onXGroup} onYGroup={onYGroup} ref={ref} />
+        onZoom={onZoom2D} onMouseDown={onMouseDown} onMouseUp={onMouseUp} xGroup={0.5} yGroup={0} onXGroup={onXGroup} onYGroup={onYGroup} ref={ref} />
 };
     
 // Draws the Bar Chart.
