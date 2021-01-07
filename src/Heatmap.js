@@ -120,7 +120,8 @@ const Heatmap = ( props ) => {
     
     // Set hook to draw on mounting, or on any other lifecycle update.
     useEffect(() => {
-        Heatmap.draw( ref, height, width, margin, padding, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins, tiles );
+        let isVisible = ( ref.current.childNodes[ 1 ].style.display === "inline" );
+        Heatmap.draw( ref, height, width, margin, padding, isVisible, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins, tiles );
     });
     
     // Return the component.
