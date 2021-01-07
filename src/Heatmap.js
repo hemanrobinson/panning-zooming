@@ -86,8 +86,6 @@ const Heatmap = ( props ) => {
         yDomain0.splice( yDomain0.length - n, n, "Other" );
     }
     
-    console.log( yDomain0 );
-    
     // Assign the Y domain.
     yScale.domain( yDomain0 );
         
