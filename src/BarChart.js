@@ -27,11 +27,11 @@ const BarChart = ( props ) => {
     const [ xDomain, setXDomain ] = useState([]);
     xScale = d3.scaleBand().domain( xDomain ).range([ margin.left + padding.left, width - margin.right - padding.right ]).padding( 0.2 );
     
-    // Assign the X group factor.
-    const [ xGroup, setXGroup ] = useState( 0 );
-    let onXGroup = ( event, value ) => {
+    // Assign the X aggregate factor.
+    const [ xAggregate, setXAggregate ] = useState( 0 );
+    let onXAggregate = ( event, value ) => {
         setXDomain( xScale.domain());
-        setXGroup( value );
+        setXAggregate( value );
     };
 
     // Calculate the bars.
@@ -39,7 +39,7 @@ const BarChart = ( props ) => {
     bars.sort(( a, b ) => ( b[ 1 ] - a[ 1 ]));
     
     // Combine bars if requested.
-    let n = Math.round( xGroup * bars.length );
+    let n = Math.round( xAggregate * bars.length );
     if( 0 < n ) {
         let total = 0;
         for( let i = 0; ( i < n ); i++ ) {
@@ -83,7 +83,7 @@ const BarChart = ( props ) => {
     
     // Return the component.
     return <Graph width={width} height={height} margin={margin} padding={padding}
-        onZoom={onZoom2D} onMouseDown={onMouseDown} onMouseUp={onMouseUp} onXGroup={onXGroup} ref={ref} />
+        onZoom={onZoom2D} onMouseDown={onMouseDown} onMouseUp={onMouseUp} onXAggregate={onXAggregate} ref={ref} />
 };
     
 // Draws the Bar Chart.

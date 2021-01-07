@@ -11,7 +11,7 @@ const Graph = React.forwardRef(( props, ref ) => {
     
     // Initialization.
     const buttonSize = 30, sliderOffset = 12;
-    let { width, height, margin, padding, isZoomable, onMouseOver, onMouseOut, onMouseDown, onMouseUp, onZoom, xGroup, yGroup, onXGroup, onYGroup } = props,
+    let { width, height, margin, padding, isZoomable, onMouseOver, onMouseOut, onMouseDown, onMouseUp, onZoom, xAggregate, yAggregate, onXAggregate, onYAggregate } = props,
         top    = margin.top    + padding.top,
         right  = margin.right  + padding.right,
         bottom = margin.bottom + padding.bottom,
@@ -27,12 +27,12 @@ const Graph = React.forwardRef(( props, ref ) => {
         <input type="button" value="-" onClick={()=>onZoom(false)}
             style={{ width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1 + buttonSize,
             display: ( isZoomable ? "inline" : "none" )}} />
-        <Slider min={0} max={1} step={0.01} defaultValue={xGroup} onChange={onXGroup}
+        <Slider min={0} max={1} step={0.01} defaultValue={xAggregate} onChange={onXAggregate}
             style={{ width: width - left - right + 1, top: height - margin.bottom - sliderOffset, left: left + 1, position: "absolute",
-            display: (( isZoomable && onXGroup ) ? "inline" : "none" )}} />
-        <Slider min={0} max={1} step={0.01} defaultValue={yGroup} onChange={onYGroup}  orientation="vertical"
+            display: (( isZoomable && onXAggregate ) ? "inline" : "none" )}} />
+        <Slider min={0} max={1} step={0.01} defaultValue={yAggregate} onChange={onYAggregate}  orientation="vertical"
             style={{ height: height - top - bottom + 1, top: top + 1, left: margin.left - sliderOffset - 1, position: "absolute",
-            display: (( isZoomable && onYGroup ) ? "inline" : "none" )}} />
+            display: (( isZoomable && onYAggregate ) ? "inline" : "none" )}} />
     </div>;
 });
 

@@ -17,7 +17,7 @@ const App = () => {
                 Shneiderman taught us all to <a href="http://www.cs.umd.edu/~ben/papers/Shneiderman1996eyes.pdf">"Overview first, zoom and filter, then details-on-demand"</a>.
                 </p>
                 <p>
-                Overview, filtering, and details-on-demand can be supported straightforwardly in most graphs.  For graphs that display individual points, zooming is also straightforward, because it only requires a simple rescaling.  On the Web, a familiar user interface displays plus (+) and minus (-) buttons.  Scroll bars provide both user feedback and one-dimensional zooming.
+                These operations are straightforward for graphs that display individual points, like the scatter plot below.  For zooming, on the Web, a familiar user interface displays plus (+) and minus (-) buttons.  Scroll bars provide both user feedback and one-dimensional zooming.
                 </p>
             </div>
             <div className="Graph">
@@ -26,7 +26,10 @@ const App = () => {
             <div className="Description">
                 <h2>Zooming Aggregate Graphs</h2>
                 <p>
-                For large data sets, we can't display individual points, but must aggregate the data into bins, bars, tiles, or other groupings.  Therefore, exploring aggregate graphs requires zooming both the scales and the aggregates.  To maximize the user's flexibility, scales and aggregates must be independently zoomable.
+                For graphs that display individual points, zooming requires only a simple rescaling.  However, for large data sets, we can't display individual points, but must group the data into bins, bars, tiles, or other aggregates.
+                </p>
+                <p>
+                Therefore, exploring aggregate graphs requires zooming both scales and aggregates; and to maximize the user's flexibility, these must be independently zoomable.
                 </p>
                 <p>
                 A slider control on the axis affords zooming of aggregates.  For continuous data, as in a histogram, users can explore their data by independently zooming scales and bins.
@@ -57,16 +60,16 @@ const App = () => {
             <div className="Description">
                 <h2>Why This User Interface</h2>
                 <p>
-                There are three positions where one can place controls for zooming:  on the data, on the axis, or outside the graph.
+                There are three positions where one can place controls for zooming:  on the data, along the axes, or outside the graph.
                 </p>
                 <p>
-                We expected that the third position would be easiest to learn, because the control is more visible and can be labeled, e.g. a slider labeled "Zoom Factor (0-1):", or a numeric entry field labeled "Bin Width:".  However, this position requires additional screen real estate, which may not be available; or placement in a secondary dialog, which is less efficient for the user.  Shneiderman's Mantra suggests that all four operations (overview, zoom, filter, details on demand) should be easy and efficient for the user to explore their data.
+                We expected that the third position, outside the graph, would be the easiest to learn, because the control can be more visible and labeled, e.g. a slider labeled "Zoom Factor (0-1):", or an entry field labeled "Bin Width:".  However, this position requires additional screen real estate, which may not be available; or placement in a secondary dialog, which is less efficient for the user.  Shneiderman's Mantra suggests that all four operations (overview, zoom, filter, details on demand) should be readily available in order for the user to efficiently explore their data.
                 </p>
                 <p>
-                Shneiderman also stated that direct manipulation is superior to indirect manipulation.  This argues for the first position.  This user interface is implemented in JMP(r) software, using a hand cursor to manipulate histogram bars.  We expected that this position would be most difficult to learn, particularly on the Web, because manipulating a data display directly is not a familiar action, and a hand cursor displays only a few pixels.
+                Shneiderman also stated that direct manipulation is superior to indirect manipulation.  This argues for the first position, on the data.  This position is supported in JMP(r) software, using a hand cursor to adjust histogram bars.  We expected that this position would be most difficult to learn, particularly on the Web, because manipulating a data display is not a familiar action.  Also, a hand cursor displays only a few pixels, so it may be missed, and on mobile platforms is not even available.
                 </p>
                 <p>
-                TODO:  These three positions were tested, with results as expected.
+                TODO:  These three positions were tested, for the aggregate zooming controls, with results as expected.
                 </p>
                 <p>
                 The graphs above are implemented in React and d3, and the source code is available to anyone who wants it.

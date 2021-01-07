@@ -28,18 +28,18 @@ const Histogram = ( props ) => {
     const [ xDomain, setXDomain ] = useState( xDomain0 );
     xScale = d3.scaleLinear().domain( xDomain ).range([ margin.left + padding.left, width - margin.right - padding.right ]);
     
-    // Assign the X group factor.
-    const [ xGroup, setXGroup ] = useState( 0 );
-    let onXGroup = ( event, value ) => {
+    // Assign the X aggregate factor.
+    const [ xAggregate, setXAggregate ] = useState( 0 );
+    let onXAggregate = ( event, value ) => {
         setXDomain( xScale.domain());
-        setXGroup( value );
+        setXAggregate( value );
     };
 
     // Calculate the histogram bins.
     histogram = d3.histogram()
         .value( d => d[ 2 ])
         .domain( xDomain0 )
-        .thresholds( Math.round( 8 + Math.exp( 5 * xGroup )));
+        .thresholds( Math.round( 8 + Math.exp( 5 * xAggregate )));
     bins = histogram( data );
 
     // Get the Y scale.
@@ -72,7 +72,7 @@ const Histogram = ( props ) => {
     
     // Return the component.
     return <Graph width={width} height={height} margin={margin} padding={padding}
-        onZoom={onZoom2D} onMouseDown={onMouseDown} onMouseUp={onMouseUp} onXGroup={onXGroup} ref={ref} />
+        onZoom={onZoom2D} onMouseDown={onMouseDown} onMouseUp={onMouseUp} onXAggregate={onXAggregate} ref={ref} />
 };
     
 // Draws the histogram.

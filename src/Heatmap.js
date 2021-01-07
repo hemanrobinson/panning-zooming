@@ -38,25 +38,25 @@ const Heatmap = ( props ) => {
     const [ yDomain, setYDomain ] = useState( yDomain0 );
     yScale = d3.scaleBand().domain( yDomain ).range([ height - margin.bottom - padding.bottom, margin.top + padding.top ]);
     
-    // Assign the X group factor.
-    const [ xGroup, setXGroup ] = useState( 0.5 );
-    let onXGroup = ( event, value ) => {
+    // Assign the X aggregate factor.
+    const [ xAggregate, setXAggregate ] = useState( 0.5 );
+    let onXAggregate = ( event, value ) => {
         setXDomain( xScale.domain());
-        setXGroup( value );
+        setXAggregate( value );
     };
     
-    // Assign the Y group factor.
-    const [ yGroup, setYGroup ] = useState( 0 );
-    let onYGroup = ( event, value ) => {
+    // Assign the Y aggregate factor.
+    const [ yAggregate, setYAggregate ] = useState( 0 );
+    let onYAggregate = ( event, value ) => {
         setYDomain( yScale.domain());
-        setYGroup( value );
+        setYAggregate( value );
     };
 
     // Calculate the X bins.
     histogram = d3.histogram()
         .value( d => d[ 1 ])
         .domain( xDomain0 )
-        .thresholds( Math.round( Math.exp( 4 * xGroup )));
+        .thresholds( Math.round( Math.exp( 4 * xAggregate )));
     bins = histogram( data );
     
     // Count the number of values in each tile.
@@ -74,7 +74,7 @@ const Heatmap = ( props ) => {
     });
     
     // Combine tiles if requested.
-    let n = Math.round( yGroup * yDomain0.length );
+    let n = Math.round( yAggregate * yDomain0.length );
     if( 0 < n ) {
         for( let j = bins.length - 1; ( j >= 0 ); j-- ) {
             let total = 0;
@@ -85,6 +85,8 @@ const Heatmap = ( props ) => {
         }
         yDomain0.splice( yDomain0.length - n, n, "Other" );
     }
+    
+    console.log( yDomain0 );
     
     // Assign the Y domain.
     yScale.domain( yDomain0 );
@@ -125,7 +127,7 @@ const Heatmap = ( props ) => {
     
     // Return the component.
     return <Graph width={width} height={height} margin={margin} padding={padding} isZoomable="false"
-        onZoom={onZoom2D} onMouseDown={onMouseDown} onMouseUp={onMouseUp} xGroup={0.5} yGroup={0} onXGroup={onXGroup} onYGroup={onYGroup} ref={ref} />
+        onZoom={onZoom2D} onMouseDown={onMouseDown} onMouseUp={onMouseUp} xAggregate={0.5} yAggregate={0} onXAggregate={onXAggregate} onYAggregate={onYAggregate} ref={ref} />
 };
     
 // Draws the Bar Chart.
