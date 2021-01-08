@@ -20,7 +20,7 @@ const Graph = React.forwardRef(( props, ref ) => {
     
     // Return the component.
     return <div style={{width: width, height: height}} className="parent" ref={ref}>
-        <svg width={width} height={height} onMouseOver={onMouseOver} onMouseOut={onMouseOut} onMouseDown={onMouseDown} onMouseMove={onMouseUp} onMouseUp={onMouseUp} />
+        <svg width={width} height={height} onMouseDown={onMouseDown} onMouseMove={onMouseUp} onMouseUp={onMouseUp} />
         <input type="button" value="+" onClick={()=>onZoom(true )}
             style={{ width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1,
             display: ( isZoomable ? "inline" : "none" )}} />
@@ -38,6 +38,11 @@ const Graph = React.forwardRef(( props, ref ) => {
 
 // Width of scroll bar.
 Graph.scrollSize = 15;
+    
+// Returns whether controls are displayed.
+Graph.isVisibleControls = ( ref ) => {
+    return ( ref.current.childNodes[ 1 ].style.display === "inline" );
+};
 
 // Down location.
 Graph.downLocation = { x: 0, y: 0, xDomain: [], yDomain: [], isX: false, isY: false, isMin: false, isMax: false };
@@ -507,11 +512,6 @@ Graph.drawControls = ( ref, height, width, margin, padding, isZoomable, xScale, 
             ref.current.childNodes[ i ].style.display = ( isZoomable ? "inline" : "none" );
         }
     }
-};
-    
-// Returns whether controls are displayed.
-Graph.isVisibleControls = ( ref ) => {
-    return ( ref.current.childNodes[ 1 ].style.display === "inline" );
 };
 
 export default Graph;
