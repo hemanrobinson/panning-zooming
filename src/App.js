@@ -63,13 +63,16 @@ const App = () => {
                 There are three positions where one can place controls for zooming:  on the data, along the axes, or outside the graph.
                 </p>
                 <p>
-                We expected that the third position, outside the graph, would be the easiest to learn, because the control can be more visible and labeled, e.g. a slider labeled "Zoom Factor (0-1):", or an entry field labeled "Bin Width:".  However, this position requires additional screen real estate, which may not be available; or placement in a secondary dialog, which is less efficient for the user.  Shneiderman's Mantra suggests that all four operations (overview, zoom, filter, details on demand) should be readily available in order for the user to efficiently explore their data.
+                Usability tests showed that the first position, on the data, was implemented by means of a hand or "grabber" cursor.  This position was most difficult to learn.  This may be because manipulating a data display is not a familiar action, and a hand cursor displays only a few pixels, so it may easily be missed.
                 </p>
                 <p>
-                Shneiderman also stated that direct manipulation is superior to indirect manipulation.  This argues for the first position, on the data.  This position is supported in JMP(r) software, using a hand cursor to adjust histogram bars.  We expected that this position would be most difficult to learn, particularly on the Web, because manipulating a data display is not a familiar action.  Also, a hand cursor displays only a few pixels, so it may be missed, and on mobile platforms is not even available.
+                The third position, outside the graph, was the easiest to learn.  The control can be more visible and labeled, e.g. a slider labeled "Zoom Factor (0-1):", or an entry field labeled "Bin Width:".  However, this position requires additional screen real estate, which may not be available; or placement in a secondary dialog, which is less efficient for the user.
                 </p>
                 <p>
-                These three positions were tested for the aggregate zooming controls, with results as expected.  The graphs above are implemented in React and d3, and the source code is available to anyone who wants it.
+                The middle choice, a slider along the axis, is less visible than outside the graph.  However, this position was still easily learned, and test participants were able to correctly use the controls.
+                </p>
+                <p>
+                The graphs above are implemented in React and d3, and the source code is available to anyone who wants it.
                 </p>
             </div>
         </div>
