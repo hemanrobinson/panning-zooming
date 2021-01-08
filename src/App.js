@@ -69,10 +69,7 @@ const App = () => {
                 Shneiderman also stated that direct manipulation is superior to indirect manipulation.  This argues for the first position, on the data.  This position is supported in JMP(r) software, using a hand cursor to adjust histogram bars.  We expected that this position would be most difficult to learn, particularly on the Web, because manipulating a data display is not a familiar action.  Also, a hand cursor displays only a few pixels, so it may be missed, and on mobile platforms is not even available.
                 </p>
                 <p>
-                TODO:  These three positions were tested, for the aggregate zooming controls, with results as expected.
-                </p>
-                <p>
-                The graphs above are implemented in React and d3, and the source code is available to anyone who wants it.
+                These three positions were tested for the aggregate zooming controls, with results as expected.  The graphs above are implemented in React and d3, and the source code is available to anyone who wants it.
                 </p>
             </div>
         </div>
