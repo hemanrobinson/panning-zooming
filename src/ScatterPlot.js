@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState }  from 'react';
+import React, { useEffect, useRef }  from 'react';
 import * as d3 from 'd3';
 import Data from './Data';
 import Graph from './Graph';
@@ -19,22 +19,14 @@ const ScatterPlot = ( props ) => {
         data = Data.getValues( dataSet ),
         xDomain0 = [ d3.min( data, d => d[ 2 ]), d3.max( data, d => d[ 2 ])],
         yDomain0 = [ d3.min( data, d => d[ 1 ]), d3.max( data, d => d[ 1 ])],
-        xScale,
-        yScale,
-        symbolScale;
-        
-    // Get the scales.
-    const [ xDomain, setXDomain ] = useState( xDomain0 );
-    const [ yDomain, setYDomain ] = useState( yDomain0 );
-    xScale = d3.scaleLinear().domain( xDomain ).range([ margin.left + padding.left, width - margin.right - padding.right ]);
-    yScale = d3.scaleLinear().domain( yDomain ).range([ height - margin.bottom - padding.bottom, margin.top + padding.top ]);
-    symbolScale = d3.scaleOrdinal( data.map( datum => datum[ 0 ]), d3.symbols.map( s => d3.symbol().type( s ).size( 100 )()));
+        xScale = d3.scaleLinear().domain( xDomain0 ).range([ margin.left + padding.left, width - margin.right - padding.right ]),
+        yScale = d3.scaleLinear().domain( yDomain0 ).range([ height - margin.bottom - padding.bottom, margin.top + padding.top ]),
+        symbolScale = d3.scaleOrdinal( data.map( datum => datum[ 0 ]), d3.symbols.map( s => d3.symbol().type( s ).size( 100 )()));
     
     // Zoom in two dimensions.
     let onZoom2D = ( isIn ) => {
         Graph.onZoom2D( isIn, xScale, yScale, xDomain0, yDomain0 );
-        setXDomain( xScale.domain());
-        setYDomain( yScale.domain());
+        ScatterPlot.draw( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
     };
     
     // Zoom in one dimension.
@@ -44,17 +36,7 @@ const ScatterPlot = ( props ) => {
     onMouseUp = ( event ) => {
         if( Graph.downLocation.isX || Graph.downLocation.isY ) {
             Graph.onMouseUp( ref, event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0 );
-            
-            // For mousemove events, just redraw, as they seem to come in too quickly for the React framework...
-            if( event.type === "mousemove" ) {
-                ScatterPlot.draw( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
-            }
-            
-            // ...for mouseup events, set the state to cause a redraw.
-            else {
-                setXDomain( xScale.domain());
-                setYDomain( yScale.domain());
-            }
+            ScatterPlot.draw( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
         }
     };
     
