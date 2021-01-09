@@ -5,13 +5,15 @@ import './Graph.css';
 
 // Graph in an SVG element.
 //
+// This component contains code that is common to the different types of graphs.
+//
 // React functional components don't support inheritance; this is the recommended pattern:
 //    https://reactjs.org/docs/composition-vs-inheritance.html#specialization
 const Graph = React.forwardRef(( props, ref ) => {
     
     // Initialization.
     const buttonSize = 30, sliderOffset = 12;
-    let { width, height, margin, padding, isZoomable, onMouseOver, onMouseOut, onMouseDown, onMouseUp, onZoom, xAggregate, yAggregate, onXAggregate, onYAggregate } = props,
+    let { width, height, margin, padding, isZoomable, onMouseDown, onMouseUp, onZoom, xAggregate, yAggregate, onXAggregate, onYAggregate } = props,
         top    = margin.top    + padding.top,
         right  = margin.right  + padding.right,
         bottom = margin.bottom + padding.bottom,

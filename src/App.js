@@ -58,21 +58,21 @@ const App = () => {
                 <Heatmap dataSet={ "Food" } />
             </div>
             <div className="Description">
-                <h2>Why This User Interface</h2>
+                <h2>About This User Interface</h2>
                 <p>
-                There are three positions where one can place controls for zooming:  on the data, along the axes, or outside the graph.
+                On the Web, plus (+) and minus (-) buttons are standard controls for zooming scales, and scroll bars are standard for user feedback.  The handles on the ends of the scroll bars are less standard but are common in graphics applications.
                 </p>
                 <p>
-                Usability tests showed that the first position, on the data, was implemented by means of a hand or "grabber" cursor.  This position was most difficult to learn.  This may be because manipulating a data display is not a familiar action, and a hand cursor displays only a few pixels, so it may easily be missed.
+                For zooming aggregates, there are three locations where one can place controls:  on the data, along the axes, or outside the graph.
                 </p>
                 <p>
-                The third position, outside the graph, was the easiest to learn.  The control can be more visible and labeled, e.g. a slider labeled "Zoom Factor (0-1):", or an entry field labeled "Bin Width:".  However, this position requires additional screen real estate, which may not be available; or placement in a secondary dialog, which is less efficient for the user.
+                The first location, on the data, can be implemented by a hand or "grabber" cursor.  A cursor does not interfere with the data display, but usability tests showed that this was difficult to learn.  This may be a cursor displays only a few pixels, so  may easily be missed, and because manipulating a data display is not a familiar action.
                 </p>
                 <p>
-                The middle choice, a slider along the axis, is less visible than outside the graph.  However, this position was still easily learned, and test participants were able to correctly use the controls.
+                The third location, outside the graph, is easy to learn.  The control can be more visible and labeled, such as a slider or entry field labeled "Bin Width:".  However, this location requires either additional screen real estate, which may not be available; or placement in a secondary dialog, which is less efficient for the user.
                 </p>
                 <p>
-                The graphs above are implemented in React and d3, and the source code is available to anyone who wants it.
+                The second location, a slider along the axis, is not as visible than the third; but manipulating a slider is a familiar action so still easily learned.
                 </p>
             </div>
         </div>
