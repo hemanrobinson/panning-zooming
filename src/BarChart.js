@@ -4,7 +4,16 @@ import Data from './Data';
 import Graph from './Graph';
 import './BarChart.css';
 
-// Bar Chart in an SVG element.
+/**
+ * Bar chart in an SVG element.
+ *
+ * The X domain is stored as a state.  The Y domain is calculated from the X domain.
+ *
+ * The X aggregate factor, which determines how the bars are aggregated, is also stored as a state.
+ *
+ * @param  {Object}  props  properties
+ * @return component
+ */
 const BarChart = ( props ) => {
     
     // Initialization.
@@ -85,8 +94,23 @@ const BarChart = ( props ) => {
     return <Graph width={width} height={height} margin={margin} padding={padding}
         onZoom={onZoom2D} onMouseDown={onMouseDown} onMouseUp={onMouseUp} onXAggregate={onXAggregate} ref={ref} />
 };
-    
-// Draws the Bar Chart.
+
+/**
+ * Draws the bar chart.
+ *
+ * @param  {Object}   ref          reference to DIV
+ * @param  {number}   height       height, in pixels
+ * @param  {number}   width        width, in pixels
+ * @param  {Box}      margin       margin
+ * @param  {Box}      padding      padding
+ * @param  {D3Scale}  xScale       X scale
+ * @param  {D3Scale}  yScale       Y scale
+ * @param  {Array}    xDomain0     Initial X domain
+ * @param  {Array}    yDomain0     Initial Y domain
+ * @param  {string}   xLabel       X axis label
+ * @param  {string}   yLabel       Y axis label
+ * @param  {Array}    bars         bars
+ */
 BarChart.draw = ( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bars ) => {
     
     // Initialization.

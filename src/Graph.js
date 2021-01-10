@@ -3,12 +3,64 @@ import * as d3 from 'd3';
 import { Slider } from '@material-ui/core';
 import './Graph.css';
 
-// Graph in an SVG element.
-//
-// This component contains code that is common to the different types of graphs.
-//
-// React functional components don't support inheritance; this is the recommended pattern:
-//    https://reactjs.org/docs/composition-vs-inheritance.html#specialization
+/**
+ * @typedef  Box  distances around an object
+ *
+ * @type  {object}
+ * @property  {number}  top     top distance, in pixels
+ * @property  {number}  right   right distance, in pixels
+ * @property  {number}  bottom  bottom distance, in pixels
+ * @property  {number}  left    left distance, in pixels
+ */
+
+/**
+ * @typedef  D3Scale  d3 scale
+ *
+ * @type  {(d3.scaleLinear|d3.scaleBand)}  continuous linear or ordinal scale
+ */
+ 
+/**
+ * @typedef  Domains  initial and current domains
+ *
+ * @type  {object}
+ * @property  {number}  xMin0  initial X minimum
+ * @property  {number}  xMax0  initial X maximum
+ * @property  {number}  xMin   current X minimum
+ * @property  {number}  xMax   current X maximum
+ * @property  {number}  xD     X difference
+ * @property  {number}  yMin0  initial Y minimum
+ * @property  {number}  yMax0  initial Y maximum
+ * @property  {number}  yMin   current Y minimum
+ * @property  {number}  yMax   current Y maximum
+ * @property  {number}  yD     Y difference
+ */
+
+/**
+ * @typedef  EventLocation  event location
+ *
+ * @type  {object}
+ * @property  {number}   x        X coordinate, in pixels
+ * @property  {number}   y        Y coordinate, in pixels
+ * @property  {Array}    xDomain  current X domain
+ * @property  {Array}    yDomain  current Y domain
+ * @property  {boolean}  isX      true iff on X scrollbar
+ * @property  {boolean}  isY      true iff on Y scrollbar
+ * @property  {boolean}  isMin    true iff on minimum
+ * @property  {boolean}  isMax    true iff on maximum
+ */
+
+/**
+ * Graph in an SVG element.
+ *
+ * This component contains code common to the different types of graphs.
+ *
+ * React functional components don't support inheritance; this is the recommended pattern:
+ *    https://reactjs.org/docs/composition-vs-inheritance.html#specialization
+ *
+ * @param  {Object}  props  properties
+ * @param  {Object}  ref    reference to DIV
+ * @return component
+ */
 const Graph = React.forwardRef(( props, ref ) => {
     
     // Initialization.
@@ -38,18 +90,41 @@ const Graph = React.forwardRef(( props, ref ) => {
     </div>;
 });
 
-// Width of scroll bar.
+/**
+ * Width of scroll bar, in pixels.
+ *
+ * @const {number}
+ */
 Graph.scrollSize = 15;
     
-// Returns whether controls are displayed.
+/**
+ * Returns whether controls are displayed.
+ *
+ * @param  {Object}   ref  reference to DIV
+ * @return {boolean}  true iff controls are displayed
+ */
 Graph.isVisibleControls = ( ref ) => {
     return ( ref.current.childNodes[ 1 ].style.display === "inline" );
 };
-
-// Down location.
+ 
+/**
+ * Down event location.
+ *
+ * @type {EventLocation}
+ */
 Graph.downLocation = { x: 0, y: 0, xDomain: [], yDomain: [], isX: false, isY: false, isMin: false, isMax: false };
 
-// Returns initial and current domains.
+/**
+ * Returns initial and current domains.
+ *
+ * @param  {Array}    xDomain0    initial X domain
+ * @param  {Array}    yDomain0    initial Y domain
+ * @param  {Array}    xDomain     current X domain
+ * @param  {Array}    yDomain     current Y domain
+ * @param  {boolean}  isXOrdinal  true iff X scale is ordinal
+ * @param  {boolean}  isYOrdinal  true iff Y scale is ordinal
+ * @return {Domains}  initial and current domains
+ */
 Graph.getDomains = ( xDomain0, yDomain0, xDomain, yDomain, isXOrdinal, isYOrdinal ) => {
     let domains = {};
     if( isXOrdinal ) {
@@ -81,7 +156,15 @@ Graph.getDomains = ( xDomain0, yDomain0, xDomain, yDomain, isXOrdinal, isYOrdina
     return domains;
 }
     
-// Zooms in two dimensions.
+/**
+ * Zooms in two dimensions.
+ *
+ * @param   {boolean}  isIn      true iff zooming in, otherwise zooming out
+ * @param   {D3Scale}  xScale    X scale (returned)
+ * @param   {D3Scale}  yScale    Y scale (returned)
+ * @param   {Array}    xDomain0  Initial X domain
+ * @param   {Array}    yDomain0  Initial Y domain
+ */
 Graph.onZoom2D = ( isIn, xScale, yScale, xDomain0, yDomain0 ) => {
 
     // Initialization.
@@ -152,7 +235,21 @@ Graph.onZoom2D = ( isIn, xScale, yScale, xDomain0, yDomain0 ) => {
     }
 };
     
-// Zooms in one dimension: mousedown event.
+/**
+ * Initiates zoom in one dimension.
+ *
+ * This method modifies Graph.downLocation.
+ *
+ * @param  {Event}    event     event
+ * @param  {number}   height    height, in pixels
+ * @param  {number}   width     width, in pixels
+ * @param  {Box}      margin    margin
+ * @param  {Box}      padding   padding
+ * @param  {D3Scale}  xScale    X scale
+ * @param  {D3Scale}  yScale    Y scale
+ * @param  {Array}    xDomain0  Initial X domain
+ * @param  {Array}    yDomain0  Initial Y domain
+ */
 Graph.onMouseDown = ( event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0 ) => {
 
     // Initialization.
@@ -209,8 +306,23 @@ Graph.onMouseDown = ( event, height, width, margin, padding, xScale, yScale, xDo
         }
     }
 };
-    
-// Zooms in one dimension: mousemove and mouseup events.
+
+/**
+ * Completes zoom in one dimension.
+ *
+ * This method modifies Graph.downLocation.
+ *
+ * @param  {Object}   ref       reference to DIV
+ * @param  {Event}    event     event
+ * @param  {number}   height    height, in pixels
+ * @param  {number}   width     width, in pixels
+ * @param  {Box}      margin    margin
+ * @param  {Box}      padding   padding
+ * @param  {D3Scale}  xScale    X scale (returned)
+ * @param  {D3Scale}  yScale    Y scale (returned)
+ * @param  {Array}    xDomain0  Initial X domain
+ * @param  {Array}    yDomain0  Initial Y domain
+ */
 Graph.onMouseUp = ( ref, event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0 ) => {
 
     // Initialization.
@@ -354,7 +466,22 @@ Graph.onMouseUp = ( ref, event, height, width, margin, padding, xScale, yScale, 
     }
 };
     
-// Draws the axes.
+/**
+ * Draws the axes.
+ *
+ * @param  {Object}   ref         reference to DIV
+ * @param  {number}   height      height, in pixels
+ * @param  {number}   width       width, in pixels
+ * @param  {Box}      margin      margin
+ * @param  {Box}      padding     padding
+ * @param  {boolean}  isZoomable  true iff this graph can be zoomed
+ * @param  {D3Scale}  xScale      X scale
+ * @param  {D3Scale}  yScale      Y scale
+ * @param  {Array}    xDomain0    Initial X domain
+ * @param  {Array}    yDomain0    Initial Y domain
+ * @param  {string}   xLabel      X axis label
+ * @param  {string}   yLabel      Y axis label
+ */
 Graph.drawAxes = ( ref, height, width, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel ) => {
     
     // Initialization.
@@ -409,7 +536,22 @@ Graph.drawAxes = ( ref, height, width, margin, padding, isZoomable, xScale, ySca
         .text( yLabel );
 };
     
-// Draws the controls.
+/**
+ * Draws the controls.
+ *
+ * @param  {Object}   ref         reference to DIV
+ * @param  {number}   height      height, in pixels
+ * @param  {number}   width       width, in pixels
+ * @param  {Box}      margin      margin
+ * @param  {Box}      padding     padding
+ * @param  {boolean}  isZoomable  true iff this graph can be zoomed
+ * @param  {D3Scale}  xScale      X scale
+ * @param  {D3Scale}  yScale      Y scale
+ * @param  {Array}    xDomain0    Initial X domain
+ * @param  {Array}    yDomain0    Initial Y domain
+ * @param  {string}   xLabel      X axis label
+ * @param  {string}   yLabel      Y axis label
+ */
 Graph.drawControls = ( ref, height, width, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel ) => {
     
     // Initialization.

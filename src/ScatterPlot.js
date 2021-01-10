@@ -4,7 +4,14 @@ import Data from './Data';
 import Graph from './Graph';
 import './ScatterPlot.css';
 
-// Scatter plot in an SVG element.
+/**
+ * Scatter plot in an SVG element.
+ *
+ * This component is stateless because the zoom can be calculated from the event coordinates and the initial domains.
+ *
+ * @param  {Object}  props  properties
+ * @return component
+ */
 const ScatterPlot = ( props ) => {
 
     // Initialization.
@@ -49,8 +56,24 @@ const ScatterPlot = ( props ) => {
     return <Graph width={width} height={height} margin={margin} padding={padding}
         onZoom={onZoom2D} onMouseDown={onMouseDown} onMouseUp={onMouseUp} ref={ref} />
 };
-    
-// Draws the points.
+
+/**
+ * Draws the scatter plot.
+ *
+ * @param  {Object}   ref          reference to DIV
+ * @param  {number}   height       height, in pixels
+ * @param  {number}   width        width, in pixels
+ * @param  {Box}      margin       margin
+ * @param  {Box}      padding      padding
+ * @param  {D3Scale}  xScale       X scale
+ * @param  {D3Scale}  yScale       Y scale
+ * @param  {Array}    xDomain0     Initial X domain
+ * @param  {Array}    yDomain0     Initial Y domain
+ * @param  {string}   xLabel       X axis label
+ * @param  {string}   yLabel       Y axis label
+ * @param  {string}   dataSet      data set name
+ * @param  {D3Scale}  symbolScale  symbol scale
+ */
 ScatterPlot.draw = ( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale ) => {
     
     // Initialization.
