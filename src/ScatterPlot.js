@@ -40,7 +40,7 @@ const ScatterPlot = ( props ) => {
         }
     };
     
-    // Set hook to draw on mounting, or on any other lifecycle update.
+    // Set hook to draw on mounting.
     useEffect(() => {
         ScatterPlot.draw( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
     });

@@ -76,7 +76,7 @@ const BarChart = ( props ) => {
         }
     };
     
-    // Set hook to draw on mounting, or on any other lifecycle update.
+    // Set hook to draw on mounting or any state change.
     useEffect(() => {
         BarChart.draw( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bars );
     });

@@ -118,7 +118,7 @@ const Heatmap = ( props ) => {
         }
     };
     
-    // Set hook to draw on mounting, or on any other lifecycle update.
+    // Set hook to draw on mounting or any state change.
     useEffect(() => {
         Heatmap.draw( ref, height, width, margin, padding, Graph.isVisibleControls( ref ), xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins, tiles );
     });
