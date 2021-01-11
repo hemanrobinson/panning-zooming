@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
+		F86BECBF25ACB4520068BBF0 /* userInterface.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = userInterface.png; sourceTree = "<group>"; };
 		F8928E6125A9F2CD00C008DE /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		F8928E6225A9F2CD00C008DE /* LICENSE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 		F8928E6925A9F67100C008DE /* package-lock.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "package-lock.json"; sourceTree = "<group>"; };
@@ -19,6 +20,7 @@
 		F8EECFA4258F86CC0043B422 = {
 			isa = PBXGroup;
 			children = (
+				F86BECBF25ACB4520068BBF0 /* userInterface.png */,
 				F8928E6225A9F2CD00C008DE /* LICENSE.txt */,
 				F8928E6125A9F2CD00C008DE /* README.md */,
 				F8EECFB1258F86FA0043B422 /* package.json */,

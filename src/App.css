@@ -5,7 +5,8 @@ div {
 }
 .Description {
     text-align: left;
-    margin: 0 200px;
+    max-width: 1000px;
+    margin: 0 auto;
 }
 .Column {
     display: flex;

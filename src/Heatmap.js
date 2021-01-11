@@ -85,12 +85,12 @@ const Heatmap = ( props ) => {
     // Combine tiles if requested.
     let n = Math.round( yAggregate * yDomain0.length );
     if( 0 < n ) {
-        for( let j = bins.length - 1; ( j >= 0 ); j-- ) {
+        for( let j = bins.length; ( j > 0 ); j-- ) {
             let total = 0;
             for( let i = 1; ( i <= n ); i++ ) {
-                total += tiles[( j + 1 ) * yDomain0.length - i ];
+                total += tiles[ j * yDomain0.length - i ];
             }
-            tiles.splice(( j + 1 ) * yDomain0.length - n, n, total );
+            tiles.splice( j * yDomain0.length - n, n, total );
         }
         yDomain0.splice( yDomain0.length - n, n, "Other" );
     }

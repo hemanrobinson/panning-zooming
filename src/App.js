@@ -12,7 +12,7 @@ const App = () => {
     return (
         <div className="Column">
             <div className="Description">
-                <h1>Applying Shneiderman's Mantra<br/>to Aggregate Graphs</h1>
+                <h1>Applying Shneiderman's Mantra to Aggregate Graphs</h1>
                 <p>
                 Shneiderman taught us all to <a href="http://www.cs.umd.edu/~ben/papers/Shneiderman1996eyes.pdf">"Overview first, zoom and filter, then details-on-demand"</a>.
                 </p>
@@ -26,10 +26,10 @@ const App = () => {
             <div className="Description">
                 <h2>Zooming Aggregate Graphs</h2>
                 <p>
-                For graphs that display individual points, zooming requires only a simple rescaling.  However, for large data sets, we can't display individual points, but must group the data into bins, bars, tiles, or other aggregates.
+                For graphs that display individual points, zooming requires only a simple rescaling.  However, for large data sets, we must group the data into bins, bars, tiles, or other aggregates.
                 </p>
                 <p>
-                Therefore, exploring aggregate graphs requires zooming both scales and aggregates; and to maximize the user's flexibility, these must be independently zoomable.
+                Therefore, exploring aggregate graphs requires zooming both scales and aggregates.  To maximize the user's flexibility, these must be independently zoomable.
                 </p>
                 <p>
                 A slider control on the axis affords zooming of aggregates.  For continuous data, as in a histogram, users can explore their data by independently zooming scales and bins.
