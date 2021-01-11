@@ -4,7 +4,7 @@ Shneiderman taught us all to [Overview first, zoom and filter, then details-on-d
 
 These operations are straightforward for graphs that display individual points.  However, for large data sets, we must group the data into bins, bars, tiles, or other aggregates. Therefore, exploring aggregate graphs requires zooming both scales and aggregates.  
 
-This project demonstrates [a user interface for efficient zooming](https://hemanrobinson.github.io/zoom/), of both continuous and categorical scales and aggregates, in multiple dimensions.
+[This project demonstrates a user interface for efficient zooming, of both continuous and categorical scales and aggregates, in multiple dimensions.](https://hemanrobinson.github.io/zoom/)
 
 [![User Interface](userInterface.png "User Interface")](https://hemanrobinson.github.io/zoom/)
 
