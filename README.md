@@ -6,6 +6,4 @@ These operations are straightforward for graphs that display individual points. 
 
 This project demonstrates a modern user interface for efficient zooming, of both continuous and categorical aggregate scales and aggregates, in multiple dimensions.
 
-![Histogram](Histogram.png "Histogram")
-
 This project uses [d3](https://github.com/d3/d3) and [Material-UI](https://github.com/mui-org/material-ui), and was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
