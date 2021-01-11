@@ -75,12 +75,12 @@ const Graph = React.forwardRef(( props, ref ) => {
     // Return the component.
     return <div style={{width: width, height: height}} className="parent" ref={ref}>
         <svg width={width} height={height} onMouseDown={onMouseDown} onMouseMove={onMouseUp} onMouseUp={onMouseUp} />
-        <input type="button" value="+" onClick={()=>onZoom(true )}
+        <button onClick={()=>onZoom(true )}
             style={{ width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1,
-            display: ( isZoomable ? "inline" : "none" )}} />
-        <input type="button" value="-" onClick={()=>onZoom(false)}
+            display: ( isZoomable ? "inline" : "none" )}}>+</button>
+        <button onClick={()=>onZoom(false)}
             style={{ width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1 + buttonSize,
-            display: ( isZoomable ? "inline" : "none" )}} />
+            display: ( isZoomable ? "inline" : "none" )}}>-</button>
         <Slider min={0} max={1} step={0.01} defaultValue={xAggregate} onChange={onXAggregate}
             style={{ width: width - left - right + 1, top: height - margin.bottom - sliderOffset, left: left + 1, position: "absolute",
             display: (( isZoomable && onXAggregate ) ? "inline" : "none" )}} />
