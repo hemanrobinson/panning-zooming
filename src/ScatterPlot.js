@@ -2,7 +2,7 @@ import React, { useEffect, useRef }  from 'react';
 import * as d3 from 'd3';
 import Data from './Data';
 import Graph from './Graph';
-import './ScatterPlot.css';
+import './Graph.css';
 
 /**
  * Scatter plot in an SVG element.

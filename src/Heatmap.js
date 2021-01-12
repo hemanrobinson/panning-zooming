@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState }  from 'react';
 import * as d3 from 'd3';
 import Data from './Data';
 import Graph from './Graph';
-import './Heatmap.css';
+import './Graph.css';
 
 /**
  * Heat map in an SVG element.
