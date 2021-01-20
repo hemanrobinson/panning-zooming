@@ -241,8 +241,8 @@ Graph.onZoom2D = ( isIn, xScale, yScale, xDomain0, yDomain0 ) => {
  * This method modifies Graph.downLocation.
  *
  * @param  {Event}    event     event
- * @param  {number}   height    height, in pixels
  * @param  {number}   width     width, in pixels
+ * @param  {number}   height    height, in pixels
  * @param  {Box}      margin    margin
  * @param  {Box}      padding   padding
  * @param  {D3Scale}  xScale    X scale
@@ -250,7 +250,7 @@ Graph.onZoom2D = ( isIn, xScale, yScale, xDomain0, yDomain0 ) => {
  * @param  {Array}    xDomain0  Initial X domain
  * @param  {Array}    yDomain0  Initial Y domain
  */
-Graph.onMouseDown = ( event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0 ) => {
+Graph.onMouseDown = ( event, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0 ) => {
 
     // Initialization.
     const scrollSize = Graph.scrollSize,
@@ -314,8 +314,8 @@ Graph.onMouseDown = ( event, height, width, margin, padding, xScale, yScale, xDo
  *
  * @param  {Object}   ref       reference to DIV
  * @param  {Event}    event     event
- * @param  {number}   height    height, in pixels
  * @param  {number}   width     width, in pixels
+ * @param  {number}   height    height, in pixels
  * @param  {Box}      margin    margin
  * @param  {Box}      padding   padding
  * @param  {D3Scale}  xScale    X scale (returned)
@@ -323,7 +323,7 @@ Graph.onMouseDown = ( event, height, width, margin, padding, xScale, yScale, xDo
  * @param  {Array}    xDomain0  Initial X domain
  * @param  {Array}    yDomain0  Initial Y domain
  */
-Graph.onMouseUp = ( ref, event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0 ) => {
+Graph.onMouseUp = ( ref, event, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0 ) => {
 
     // Initialization.
     const d = 8;
@@ -470,8 +470,8 @@ Graph.onMouseUp = ( ref, event, height, width, margin, padding, xScale, yScale, 
  * Draws the axes.
  *
  * @param  {Object}   ref         reference to DIV
- * @param  {number}   height      height, in pixels
  * @param  {number}   width       width, in pixels
+ * @param  {number}   height      height, in pixels
  * @param  {Box}      margin      margin
  * @param  {Box}      padding     padding
  * @param  {boolean}  isZoomable  true iff this graph can be zoomed
@@ -482,7 +482,7 @@ Graph.onMouseUp = ( ref, event, height, width, margin, padding, xScale, yScale, 
  * @param  {string}   xLabel      X axis label
  * @param  {string}   yLabel      Y axis label
  */
-Graph.drawAxes = ( ref, height, width, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel ) => {
+Graph.drawAxes = ( ref, width, height, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel ) => {
     
     // Initialization.
     const svg = d3.select( ref.current.childNodes[ 0 ]),
@@ -540,8 +540,8 @@ Graph.drawAxes = ( ref, height, width, margin, padding, isZoomable, xScale, ySca
  * Draws the controls.
  *
  * @param  {Object}   ref         reference to DIV
- * @param  {number}   height      height, in pixels
  * @param  {number}   width       width, in pixels
+ * @param  {number}   height      height, in pixels
  * @param  {Box}      margin      margin
  * @param  {Box}      padding     padding
  * @param  {boolean}  isZoomable  true iff this graph can be zoomed
@@ -552,7 +552,7 @@ Graph.drawAxes = ( ref, height, width, margin, padding, isZoomable, xScale, ySca
  * @param  {string}   xLabel      X axis label
  * @param  {string}   yLabel      Y axis label
  */
-Graph.drawControls = ( ref, height, width, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel ) => {
+Graph.drawControls = ( ref, width, height, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel ) => {
     
     // Initialization.
     const svg = d3.select( ref.current.childNodes[ 0 ]),

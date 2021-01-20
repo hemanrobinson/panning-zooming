@@ -33,23 +33,23 @@ const ScatterPlot = ( props ) => {
     // Zoom in two dimensions.
     let onZoom2D = ( isIn ) => {
         Graph.onZoom2D( isIn, xScale, yScale, xDomain0, yDomain0 );
-        ScatterPlot.draw( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
+        ScatterPlot.draw( ref, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
     };
     
     // Zoom in one dimension.
     let onMouseDown = ( event ) => {
-        Graph.onMouseDown( event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0 );
+        Graph.onMouseDown( event, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0 );
     },
     onMouseUp = ( event ) => {
         if( Graph.downLocation.isX || Graph.downLocation.isY ) {
-            Graph.onMouseUp( ref, event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0 );
-            ScatterPlot.draw( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
+            Graph.onMouseUp( ref, event, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0 );
+            ScatterPlot.draw( ref, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
         }
     };
     
     // Set hook to draw on mounting.
     useEffect(() => {
-        ScatterPlot.draw( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
+        ScatterPlot.draw( ref, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
     });
     
     // Return the component.
@@ -61,8 +61,8 @@ const ScatterPlot = ( props ) => {
  * Draws the scatter plot.
  *
  * @param  {Object}   ref          reference to DIV
- * @param  {number}   height       height, in pixels
  * @param  {number}   width        width, in pixels
+ * @param  {number}   height       height, in pixels
  * @param  {Box}      margin       margin
  * @param  {Box}      padding      padding
  * @param  {D3Scale}  xScale       X scale
@@ -74,7 +74,7 @@ const ScatterPlot = ( props ) => {
  * @param  {string}   dataSet      data set name
  * @param  {D3Scale}  symbolScale  symbol scale
  */
-ScatterPlot.draw = ( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale ) => {
+ScatterPlot.draw = ( ref, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale ) => {
     
     // Initialization.
     const svg = d3.select( ref.current.childNodes[ 0 ]);
@@ -91,8 +91,8 @@ ScatterPlot.draw = ( ref, height, width, margin, padding, xScale, yScale, xDomai
     });
     
     // Draw the axes and the controls.
-    Graph.drawAxes(     ref, height, width, margin, padding, true, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
-    Graph.drawControls( ref, height, width, margin, padding, true, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+    Graph.drawAxes(     ref, width, height, margin, padding, true, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+    Graph.drawControls( ref, width, height, margin, padding, true, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
 };
 
 export default ScatterPlot;

@@ -71,23 +71,23 @@ const BarChart = ( props ) => {
     // Zoom in two dimensions.
     let onZoom2D = ( isIn ) => {
         Graph.onZoom2D( isIn, xScale, yScale, xDomain0, yDomain0 );
-        BarChart.draw( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bars );
+        BarChart.draw( ref, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bars );
     };
     
     // Zoom in one dimension.
     let onMouseDown = ( event ) => {
-        Graph.onMouseDown( event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0 );
+        Graph.onMouseDown( event, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0 );
     },
     onMouseUp = ( event ) => {
         if( Graph.downLocation.isX || Graph.downLocation.isY ) {
-            Graph.onMouseUp( ref, event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0 );
-            BarChart.draw( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bars );
+            Graph.onMouseUp( ref, event, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0 );
+            BarChart.draw( ref, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bars );
         }
     };
     
     // Set hook to draw on mounting or any state change.
     useEffect(() => {
-        BarChart.draw( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bars );
+        BarChart.draw( ref, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bars );
     });
     
     // Return the component.
@@ -99,8 +99,8 @@ const BarChart = ( props ) => {
  * Draws the bar chart.
  *
  * @param  {Object}   ref          reference to DIV
- * @param  {number}   height       height, in pixels
  * @param  {number}   width        width, in pixels
+ * @param  {number}   height       height, in pixels
  * @param  {Box}      margin       margin
  * @param  {Box}      padding      padding
  * @param  {D3Scale}  xScale       X scale
@@ -111,7 +111,7 @@ const BarChart = ( props ) => {
  * @param  {string}   yLabel       Y axis label
  * @param  {Array}    bars         bars
  */
-BarChart.draw = ( ref, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bars ) => {
+BarChart.draw = ( ref, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bars ) => {
     
     // Initialization.
     const svg = d3.select( ref.current.childNodes[ 0 ]);
@@ -129,8 +129,8 @@ BarChart.draw = ( ref, height, width, margin, padding, xScale, yScale, xDomain0,
         .style( "fill", "#99bbdd" );
     
     // Draw the axes and the controls.
-    Graph.drawAxes(     ref, height, width, margin, padding, true, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
-    Graph.drawControls( ref, height, width, margin, padding, true, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+    Graph.drawAxes(     ref, width, height, margin, padding, true, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+    Graph.drawControls( ref, width, height, margin, padding, true, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
 };
 
 export default BarChart;

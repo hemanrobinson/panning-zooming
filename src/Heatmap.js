@@ -101,12 +101,12 @@ const Heatmap = ( props ) => {
     // Zoom in two dimensions.
     let onZoom2D = ( isIn ) => {
         Graph.onZoom2D( isIn, xScale, yScale, xDomain0, yDomain0 );
-        Heatmap.draw( ref, height, width, margin, padding, true, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins, tiles );
+        Heatmap.draw( ref, width, height, margin, padding, true, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins, tiles );
     };
     
     // Zoom in one dimension.
     let onMouseDown = ( event ) => {
-        Graph.onMouseDown( event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0 );
+        Graph.onMouseDown( event, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0 );
     },
     onMouseUp = ( event ) => {
     
@@ -117,19 +117,19 @@ const Heatmap = ( props ) => {
         
         // Handle the mouse up event...
         if( Graph.downLocation.isX || Graph.downLocation.isY ) {
-            Graph.onMouseUp( ref, event, height, width, margin, padding, xScale, yScale, xDomain0, yDomain0 );
-            Heatmap.draw( ref, height, width, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins, tiles );
+            Graph.onMouseUp( ref, event, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0 );
+            Heatmap.draw( ref, width, height, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins, tiles );
         }
     
         // ...or show or hide the controls.
         else {
-            Graph.drawControls( ref, height, width, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+            Graph.drawControls( ref, width, height, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
         }
     };
     
     // Set hook to draw on mounting or any state change.
     useEffect(() => {
-        Heatmap.draw( ref, height, width, margin, padding, Graph.isVisibleControls( ref ), xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins, tiles );
+        Heatmap.draw( ref, width, height, margin, padding, Graph.isVisibleControls( ref ), xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins, tiles );
     });
     
     // Return the component.
@@ -141,8 +141,8 @@ const Heatmap = ( props ) => {
  * Draws the heat map.
  *
  * @param  {Object}    ref       reference to DIV
- * @param  {number}    height    height, in pixels
  * @param  {number}    width     width, in pixels
+ * @param  {number}    height    height, in pixels
  * @param  {Box}       margin    margin
  * @param  {Box}       padding   padding
  * @param  {D3Scale}   xScale    X scale
@@ -154,17 +154,15 @@ const Heatmap = ( props ) => {
  * @param  {Array}     bins      bins
  * @param  {number[]}  tiles     tiles
  */
-Heatmap.draw = ( ref, height, width, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins, tiles ) => {
+Heatmap.draw = ( ref, width, height, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins, tiles ) => {
     
     // Initialization.
     const svg = d3.select( ref.current.childNodes[ 0 ]);
     svg.selectAll( "*" ).remove();
-    
-    // Get the color scale.
-    let colorScale = d3.scaleLinear().domain([ 0, d3.max( tiles, t => t )]).range([ "#99bbdd", "#ff0000" ]);
 
     // Draw the tiles.
     const nY = yDomain0.length;
+    let colorScale = d3.scaleLinear().domain([ 0, d3.max( tiles, t => t )]).range([ "#99bbdd", "#ff0000" ]);
     svg.selectAll( "rect" )
         .data( tiles )
         .enter()
@@ -176,8 +174,8 @@ Heatmap.draw = ( ref, height, width, margin, padding, isZoomable, xScale, yScale
         .style( "fill", ( d ) => colorScale( d ));
         
     // Draw the axes and the controls.
-    Graph.drawAxes(     ref, height, width, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
-    Graph.drawControls( ref, height, width, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+    Graph.drawAxes(     ref, width, height, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+    Graph.drawControls( ref, width, height, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
 };
 
 export default Heatmap;
