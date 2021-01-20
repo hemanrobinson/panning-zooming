@@ -9,4 +9,3 @@ These operations are straightforward for graphs that display individual points. 
 [![User Interface](src/userInterface.png "User Interface")](https://hemanrobinson.github.io/zoom/)
 
 This project uses [d3](https://github.com/d3/d3) and [Material-UI](https://github.com/mui-org/material-ui), and was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-/Users/hemanrobinson/Documents/Software/foo
