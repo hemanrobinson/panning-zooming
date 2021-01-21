@@ -486,33 +486,34 @@ Graph.drawAxes = ( ref, width, height, margin, padding, isZoomable, xScale, ySca
     
     // Initialization.
     const svg = d3.select( ref.current.childNodes[ 0 ]),
-        scrollSize = Graph.scrollSize;
+        scrollSize = Graph.scrollSize,
+        colorLight = "#ebeeef";
         
     // Clear the margins.
     svg.append( "rect" )
         .attr( "x", 0 )
         .attr( "y", 0 )
         .attr( "width", width )
-        .attr( "height", margin.top )
-        .style( "fill", "#ffffff" );
+        .attr( "height", padding.top )
+        .style( "fill", colorLight );
     svg.append( "rect" )
-        .attr( "x", width - margin.right )
+        .attr( "x", width - padding.right )
         .attr( "y", 0 )
-        .attr( "width", margin.right )
+        .attr( "width", padding.right )
         .attr( "height", height )
-        .style( "fill", "#ffffff" );
+        .style( "fill", colorLight );
     svg.append( "rect" )
         .attr( "x", 0 )
         .attr( "y", height - margin.bottom )
         .attr( "width", width )
         .attr( "height", margin.bottom )
-        .style( "fill", "#ffffff" );
+        .style( "fill", colorLight );
     svg.append( "rect" )
         .attr( "x", 0 )
         .attr( "y", 0 )
         .attr( "width", margin.left )
         .attr( "height", height )
-        .style( "fill", "#ffffff" );
+        .style( "fill", colorLight );
     
     // Draw the X axis.
     svg.append( "g" )
@@ -557,7 +558,10 @@ Graph.drawControls = ( ref, width, height, margin, padding, isZoomable, xScale, 
     // Initialization.
     const svg = d3.select( ref.current.childNodes[ 0 ]),
         scrollSize = Graph.scrollSize,
-        halfSize = scrollSize / 2;
+        halfSize = scrollSize / 2,
+        colorLight = "#ebeeef",
+        colorDark = "#939ba1",
+        colorLine = "#cbd2d7";
     let xDomain = xScale.domain(),
         yDomain = yScale.domain(),
         { xMin0, xMax0, yMin0, yMax0, xMin, xMax, yMin, yMax, xD, yD } = Graph.getDomains( xDomain0, yDomain0, xDomain, yDomain, !!xScale.bandwidth, !!yScale.bandwidth ),
@@ -577,29 +581,31 @@ Graph.drawControls = ( ref, width, height, margin, padding, isZoomable, xScale, 
             .attr( "y", height - scrollSize )
             .attr( "width", w )
             .attr( "height", scrollSize )
-            .style( "fill", "#eeeeee" );
+            .style( "fill", "#ffffff" );
         svg.append( "line" )
             .attr( "x1", x1 + halfSize )
             .attr( "y1", height - halfSize )
             .attr( "x2", x2 - halfSize )
             .attr( "y2", height - halfSize )
             .style( "stroke-width", scrollSize )
-            .style( "stroke", "#cccccc" )
+            .style( "stroke", colorDark )
             .style( "stroke-linecap", "round" );
         svg.append( "line" )
             .attr( "x1", x1 + halfSize + 1 )
-            .attr( "y1", height - scrollSize )
-            .attr( "x2", x1 + halfSize + 1 )
-            .attr( "y2", height )
-            .style( "stroke-width", 1 )
-            .style( "stroke", "#ffffff" );
-        svg.append( "line" )
-            .attr( "x1", x2 - halfSize - 1 )
-            .attr( "y1", height - scrollSize )
+            .attr( "y1", height - halfSize )
             .attr( "x2", x2 - halfSize - 1 )
-            .attr( "y2", height )
-            .style( "stroke-width", 1 )
-            .style( "stroke", "#ffffff" );
+            .attr( "y2", height - halfSize )
+            .style( "stroke-width", scrollSize )
+            .style( "stroke", "#ffffff" )
+            .style( "stroke-linecap", "butt" );
+        svg.append( "line" )
+            .attr( "x1", x1 + halfSize + 2 )
+            .attr( "y1", height - halfSize )
+            .attr( "x2", x2 - halfSize - 2 )
+            .attr( "y2", height - halfSize )
+            .style( "stroke-width", scrollSize )
+            .style( "stroke", colorLine )
+            .style( "stroke-linecap", "butt" );
         
         // Draw the Y scrollbar.
         let y1 = y + h * ( 1 - ( yMin - yMin0      ) / ( yMax0 - yMin0 + yD )),
@@ -609,29 +615,31 @@ Graph.drawControls = ( ref, width, height, margin, padding, isZoomable, xScale, 
             .attr( "y", y )
             .attr( "width", scrollSize )
             .attr( "height", h )
-            .style( "fill", "#eeeeee" );
+            .style( "fill", "#ffffff" );
         svg.append( "line" )
             .attr( "x1", halfSize )
             .attr( "y1", y2 + halfSize )
             .attr( "x2", halfSize )
             .attr( "y2", y1 - halfSize )
             .style( "stroke-width", scrollSize )
-            .style( "stroke", "#cccccc" )
+            .style( "stroke", colorDark )
             .style( "stroke-linecap", "round" );
         svg.append( "line" )
-            .attr( "x1", 0 )
+            .attr( "x1", halfSize )
             .attr( "y1", y2 + halfSize + 1 )
-            .attr( "x2", scrollSize )
-            .attr( "y2", y2 + halfSize + 1 )
-            .style( "stroke-width", 1 )
-            .style( "stroke", "#ffffff" );
-        svg.append( "line" )
-            .attr( "x1", 0 )
-            .attr( "y1", y1 - halfSize - 1 )
-            .attr( "x2", scrollSize )
+            .attr( "x2", halfSize )
             .attr( "y2", y1 - halfSize - 1 )
-            .style( "stroke-width", 1 )
-            .style( "stroke", "#ffffff" );
+            .style( "stroke-width", scrollSize )
+            .style( "stroke", "#ffffff" )
+            .style( "stroke-linecap", "butt" );
+        svg.append( "line" )
+            .attr( "x1", halfSize )
+            .attr( "y1", y2 + halfSize + 2 )
+            .attr( "x2", halfSize )
+            .attr( "y2", y1 - halfSize - 2 )
+            .style( "stroke-width", scrollSize )
+            .style( "stroke", colorLine )
+            .style( "stroke-linecap", "butt" );
     }
     
     // ...or hide the scrollbars.
@@ -641,13 +649,13 @@ Graph.drawControls = ( ref, width, height, margin, padding, isZoomable, xScale, 
             .attr( "y", height - scrollSize )
             .attr( "width", w )
             .attr( "height", scrollSize )
-            .style( "fill", "#ffffff" );
+            .style( "fill", colorLight );
         svg.append( "rect" )
             .attr( "x", 0 )
             .attr( "y", y )
             .attr( "width", scrollSize )
             .attr( "height", h )
-            .style( "fill", "#ffffff" );
+            .style( "fill", colorLight );
     }
 
     // Show or hide the buttons and sliders.

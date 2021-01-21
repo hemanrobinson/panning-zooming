@@ -5,7 +5,7 @@
 
 /* SVG element. */
 svg {
-    border: 1px solid black;
+    border: 1px solid #939ba1;
     background-color: #ffffff;
     font-size: 10px;
     position: absolute;
@@ -14,6 +14,11 @@ svg {
 }
 
 /* Buttons and Sliders */
+button {
+    background-color: #ffffff;
+    border: 1px solid #939ba1;
+    border-radius: 4px;
+}
 button, .MuiSlider-root {
     position: absolute;
     z-index: 2;
@@ -24,7 +29,7 @@ button, .MuiSlider-root {
 .axis line,
 .axisRotated path,
 .axisRotated line {
-    stroke: #a0a0a0;
+    stroke: #939ba1;
 }
 .axisRotated text {
     text-anchor: end;

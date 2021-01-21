@@ -63,7 +63,7 @@ const BarChart = ( props ) => {
     xScale.domain( xDomain0 );
 
     // Get the Y scale.
-    yDomain0 = [ 0, d3.max( bars, d => d[ 1 ])];
+    yDomain0 = [ 0, 1.05 * d3.max( bars, d => d[ 1 ])];     // a 5% margin
     yScale = d3.scaleLinear()
         .domain( yDomain0 )
         .range([ height - margin.bottom - padding.bottom, margin.top + padding.top ]);

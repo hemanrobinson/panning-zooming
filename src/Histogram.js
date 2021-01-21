@@ -50,7 +50,7 @@ const Histogram = ( props ) => {
     bins = histogram( data );
 
     // Get the Y scale.
-    yDomain0 = [ 0, d3.max( bins, d => d.length )];
+    yDomain0 = [ 0, 1.05 * d3.max( bins, d => d.length )];      // a 5% margin
     yScale = d3.scaleLinear()
         .range([ height - margin.bottom - padding.bottom, margin.top + padding.top ])
         .domain( yDomain0 );
