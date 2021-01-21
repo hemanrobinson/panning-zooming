@@ -157,15 +157,17 @@ Graph.getDomains = ( xDomain0, yDomain0, xDomain, yDomain, isXOrdinal, isYOrdina
 }
     
 /**
- * Zooms in two dimensions.
+ * Zooms in one or two dimensions.
  *
  * @param   {boolean}  isIn      true iff zooming in, otherwise zooming out
  * @param   {D3Scale}  xScale    X scale (returned)
  * @param   {D3Scale}  yScale    Y scale (returned)
  * @param   {Array}    xDomain0  Initial X domain
  * @param   {Array}    yDomain0  Initial Y domain
+ * @param   {boolean}  isX       true iff zooming in X dimension
+ * @param   {boolean}  isY       true iff zooming in Y dimension
  */
-Graph.onZoom2D = ( isIn, xScale, yScale, xDomain0, yDomain0 ) => {
+Graph.onZoom2D = ( isIn, xScale, yScale, xDomain0, yDomain0, isX, isY ) => {
 
     // Initialization.
     const d = 8,
@@ -223,15 +225,19 @@ Graph.onZoom2D = ( isIn, xScale, yScale, xDomain0, yDomain0 ) => {
     }
     
     // Assign the new scales.
-    if( xScale.bandwidth ) {
-        xScale.domain( xDomain0.slice( xMin, xMax + 1 ));
-    } else {
-        xScale.domain([ xMin, xMax ]);
+    if( isX ) {
+        if( xScale.bandwidth ) {
+            xScale.domain( xDomain0.slice( xMin, xMax + 1 ));
+        } else {
+            xScale.domain([ xMin, xMax ]);
+        }
     }
-    if( yScale.bandwidth ) {
-        yScale.domain( yDomain0.slice( yMin, yMax + 1 ));
-    } else {
-        yScale.domain([ yMin, yMax ]);
+    if( isY ) {
+        if( yScale.bandwidth ) {
+            yScale.domain( yDomain0.slice( yMin, yMax + 1 ));
+        } else {
+            yScale.domain([ yMin, yMax ]);
+        }
     }
 };
     

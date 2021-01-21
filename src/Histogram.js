@@ -57,7 +57,7 @@ const Histogram = ( props ) => {
         
     // Zoom in two dimensions.
     let onZoom2D = ( isIn ) => {
-        Graph.onZoom2D( isIn, xScale, yScale, xDomain0, yDomain0 );
+        Graph.onZoom2D( isIn, xScale, yScale, xDomain0, yDomain0, true, false );
         Histogram.draw( ref, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins );
     };
     
