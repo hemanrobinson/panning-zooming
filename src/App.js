@@ -12,7 +12,7 @@ const App = () => {
     return (
         <div className="Column">
             <div className="Description">
-                <h1>Applying Shneiderman's Mantra to Aggregate Graphs</h1>
+                <h1>Zooming Aggregate Graphs</h1>
                 <p>
                 Shneiderman taught us all to <a href="http://www.cs.umd.edu/~ben/papers/Shneiderman1996eyes.pdf">"Overview first, zoom and filter, then details-on-demand"</a>.
                 </p>
@@ -24,7 +24,7 @@ const App = () => {
                 <ScatterPlot dataSet={ "Cytometry" } />
             </div>
             <div className="Description">
-                <h2>Zooming Aggregate Graphs</h2>
+                <h2>Zooming Scales and Aggregates</h2>
                 <p>
                 For graphs that display individual points, zooming requires only a simple rescaling.  However, for large data sets, we must group the data into bins, bars, tiles, or other aggregates.
                 </p>
@@ -39,6 +39,7 @@ const App = () => {
                 <Histogram dataSet={ "Cytometry" } />
             </div>
             <div className="Description">
+                <h2>Categorical Data</h2>
                 <p>
                 Categorical data presents a different problem.  When there are only a few categories, zooming doesn't help.  When there are many, zooming can be done by combining smaller categories into an "Other" category.
                 </p>
@@ -50,8 +51,9 @@ const App = () => {
                 <BarChart dataSet={ "Food" } />
             </div>
             <div className="Description">
+                <h2>Multiple Dimensions</h2>
                 <p>
-                This user interface extends readily to multiple dimensions.  To minimize distraction from the data display, controls can be displayed only when needed, upon a hover or tap event.  The heatmap below demonstrates both features.
+                This user interface extends readily to multiple dimensions.  To minimize distraction from the data display, controls can be displayed only when needed, on receiving a hover or tap event.  The heatmap below demonstrates both features.
                 </p>
             </div>
             <div className="Graph">
@@ -60,7 +62,10 @@ const App = () => {
             <div className="Description">
                 <h2>About This User Interface</h2>
                 <p>
-                On the Web, plus (+) and minus (-) buttons are standard controls for zooming scales, and scroll bars are standard for user feedback.  The handles on the ends of the scroll bars are less standard but are common in graphics applications.
+                On the Web, plus (+) and minus (-) buttons and scrollbars are so familiar, they present the user with a zero learning curve.  The handles on the ends of the scroll bars have no standard appearance; various forms of these are used in graphics applications.
+                </p>
+                <p>
+                When a graph displays only one variable, the user rarely changes the dependent scale, so it's a convenient rule for the buttons to zoom as many variables as are displayed.
                 </p>
                 <p>
                 For zooming aggregates, there are three locations where one can place controls:  on the data, along the axes, or outside the graph.
@@ -75,6 +80,7 @@ const App = () => {
                 The second location, a slider along the axis, is not as visible than the third; but manipulating a slider is a familiar action so still easily learned.
                 </p>
             </div>
+            <a href="https://github.com/hemanrobinson/zoom/">Shared on GitHub</a>
         </div>
     );
 }
