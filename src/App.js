@@ -65,16 +65,16 @@ const App = () => {
                 On the Web, plus (+) and minus (-) buttons and scrollbars are standard controls; for these, the user has no learning curve.  The handles on the ends of the scroll bars are less standardized, but graphics applications use various forms of these.
                 </p>
                 <p>
-                When a graph displays only one variable, the user rarely changes the dependent scale.  Therefore, it's convenient for the buttons to zoom as many variables as are displayed, that is:  one for a histogram, two for a scatter plot, and so on.
+                When a graph displays only one variable, the user rarely changes the dependent scale.  Therefore, it's convenient for the buttons to zoom as many variables as are displayed, e.g. one for a histogram, two for a scatter plot, and so on.
                 </p>
                 <p>
                 For zooming aggregates, there are three locations where controls could be placed:  on the data, along the axes, or outside the graph.
                 </p>
                 <p>
-                The first location, on the data, can be implemented by a hand or "grabber" cursor.  A cursor does not interfere with the data display, but usability tests showed that this was difficult to learn.  This may be a cursor displays only a few pixels, so may easily be missed, and also because manipulating a data display is not a familiar action.
+                The first location, on the data, can be implemented with a hand or "grabber" cursor.  A cursor does not interfere with the data display, but usability tests showed that this was difficult to learn.  This may be because a cursor displays only a few pixels, so can easily be missed, or because manipulating a data display is an unfamiliar action.
                 </p>
                 <p>
-                The third location, outside the graph, is easy to learn.  Controls can be more visible and labeled, such as a slider or entry field labeled "Bin Width".  However, this location requires either additional screen real estate, which may not be available; or placement in a secondary dialog, which is less efficient for the user.
+                The third location, outside the graph, is easy to learn.  Controls can be more visible and labeled, such as a slider or entry field labeled "Bin Width".  However, a location outside the graph requires either additional screen real estate, which may not be available; or placement in a  dialog, which is less efficient for the user.
                 </p>
                 <p>
                 The second location, a slider along the axis, is less prominent than the third; but manipulating a slider is a familiar action so is still easily learned.
