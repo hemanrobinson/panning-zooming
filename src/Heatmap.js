@@ -109,22 +109,24 @@ const Heatmap = ( props ) => {
         Graph.onMouseDown( event, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0 );
     },
     onMouseUp = ( event ) => {
-    
-        // Initialization.
-        let xUp = event.nativeEvent.offsetX,
-            yUp = event.nativeEvent.offsetY,
-            isZoomable = (( 0 <= xUp ) && ( xUp < width ) && ( 0 <= yUp ) && ( yUp < height ));
-        
-        // Handle the mouse up event...
         if( Graph.downLocation.isX || Graph.downLocation.isY ) {
+            let xUp = event.nativeEvent.offsetX,
+                yUp = event.nativeEvent.offsetY,
+                isZoomable = (( 0 <= xUp ) && ( xUp < width ) && ( 0 <= yUp ) && ( yUp < height ));
             Graph.onMouseUp( ref, event, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0 );
             Heatmap.draw( ref, width, height, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins, tiles );
         }
+    };
     
-        // ...or show or hide the controls.
-        else {
-            Graph.drawControls( ref, width, height, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
-        }
+    // Show or hide the controls.
+    let onMouseOver = ( event ) => {
+        Graph.drawControls( ref, width, height, margin, padding, true, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+    };
+    let onMouseOut = ( event ) => {
+        let xUp = event.nativeEvent.offsetX,
+            yUp = event.nativeEvent.offsetY,
+            isZoomable = (( 0 <= xUp ) && ( xUp < width ) && ( 0 <= yUp ) && ( yUp < height ));
+        Graph.drawControls( ref, width, height, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
     };
     
     // Set hook to draw on mounting or any state change.
@@ -134,7 +136,8 @@ const Heatmap = ( props ) => {
     
     // Return the component.
     return <Graph width={width} height={height} margin={margin} padding={padding} isZoomable="false"
-        onZoom={onZoom2D} onMouseDown={onMouseDown} onMouseUp={onMouseUp} xAggregate={0.5} yAggregate={0} onXAggregate={onXAggregate} onYAggregate={onYAggregate} ref={ref} />
+        onZoom={onZoom2D} onMouseDown={onMouseDown} onMouseUp={onMouseUp} onMouseOver={onMouseOver} onMouseOut={onMouseOut}
+        xAggregate={0.5} yAggregate={0} onXAggregate={onXAggregate} onYAggregate={onYAggregate} ref={ref} />
 };
 
 /**
