@@ -666,7 +666,7 @@ Graph.drawControls = ( ref, width, height, margin, padding, isZoomable, xScale, 
 
     // Show or hide the buttons and sliders.
     if( isZoomable !== Graph.isVisibleControls( ref )) {
-        for( let i = 1; ( i < 5 ); i++ ) {
+        for( let i = 1; ( i < ref.current.childNodes.length ); i++ ) {
             ref.current.childNodes[ i ].style.display = ( isZoomable ? "inline" : "none" );
         }
     }

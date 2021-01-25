@@ -5,6 +5,7 @@ import * as d3 from 'd3';
 import { render, unmountComponentAtNode } from "react-dom";
 import { act } from "react-dom/test-utils";
 
+import Graph from './Graph';
 import ScatterPlot from './ScatterPlot';
 
 let container = null;
@@ -26,7 +27,7 @@ it( "creates a ScatterPlot element", () => {
     
     // Test first render and componentDidMount.
     act(() => {
-        render( <ScatterPlot width="400" height="400" />, container );
+        render( <ScatterPlot width="400" height="400" />, container );  
     });
     
     // Test structure.
@@ -35,6 +36,13 @@ it( "creates a ScatterPlot element", () => {
     expect( div.nodeName ).toBe( "DIV" );
     let svg = div.firstChild;
     expect( svg.nodeName ).toBe( "svg" );
+    
+    // Test mouse events.
+    svg.dispatchEvent( new MouseEvent( "mousedown", { bubbles: true }));
+    Graph.downLocation.isX = true;
+    svg.dispatchEvent( new MouseEvent( "mouseup", { bubbles: true }));
+    Graph.downLocation.isX = false;
+    svg.dispatchEvent( new MouseEvent( "mouseup", { bubbles: true }));
 });
 
 it( "draws the ScatterPlot", () => {
