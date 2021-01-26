@@ -1,6 +1,6 @@
 import React from 'react';
 import * as d3 from 'd3';
-import { Slider } from '@material-ui/core';
+import { Button, Slider } from '@material-ui/core';
 import './Graph.css';
 
 /**
@@ -75,12 +75,12 @@ const Graph = React.forwardRef(( props, ref ) => {
     // Return the component.
     return <div style={{width: width, height: height}} className="parent" ref={ref}>
         <svg width={width} height={height} onMouseDown={onMouseDown} onMouseMove={onMouseUp} onMouseUp={onMouseUp} onMouseOver={onMouseOver} onMouseOut={onMouseOut} />
-        <button onClick={()=>onZoom(true )}
-            style={{ width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1,
-            display: ( isZoomable ? "inline" : "none" )}}>+</button>
-        <button onClick={()=>onZoom(false)}
-            style={{ width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1 + buttonSize,
-            display: ( isZoomable ? "inline" : "none" )}}>-</button>
+        <Button variant="contained" onClick={()=>onZoom(true )}
+            style={{ position: "absolute", padding: 0, minWidth: buttonSize, width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1,
+            display: ( isZoomable ? "inline" : "none" )}}>+</Button>
+        <Button variant="contained" onClick={()=>onZoom(false)}
+            style={{ position: "absolute", padding: 0, minWidth: buttonSize, width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1 + buttonSize,
+            display: ( isZoomable ? "inline" : "none" )}}>-</Button>
         <Slider min={0} max={1} step={0.01} defaultValue={xAggregate} onChange={onXAggregate}
             style={{ width: width - left - right + 1, top: height - margin.bottom - sliderOffset, left: left + 1, position: "absolute",
             display: (( isZoomable && onXAggregate ) ? "inline" : "none" )}} />
