@@ -48,7 +48,7 @@ const App = () => {
                 </p>
             </div>
             <div className="Graph">
-                <BarChart dataSet={ "Food" } />
+                <BarChart dataSet={ "Sales" } />
             </div>
             <div className="Description">
                 <h2>Multiple Dimensions</h2>

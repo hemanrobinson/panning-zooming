@@ -17,14 +17,14 @@ import './Graph.css';
 const BarChart = ( props ) => {
     
     // Initialization.
-    const width = 600,
+    const width = 1000,
         height = 400,
         padding = { top: 20, right: 20, bottom: 0, left: 20 },
-        margin = { top: 0, right: 0, bottom: 80, left: 50 };
+        margin = { top: 0, right: 0, bottom: 120, left: 50 };
     let ref = useRef(),
         { dataSet } = props,
         xLabel = Data.getColumnNames( dataSet )[ 0 ],
-        yLabel = "Frequency",
+        yLabel = Data.getColumnNames( dataSet )[ 1 ],
         data = Data.getValues( dataSet ),
         xDomain0,
         yDomain0,
