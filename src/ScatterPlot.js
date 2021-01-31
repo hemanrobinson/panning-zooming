@@ -18,14 +18,14 @@ const ScatterPlot = ( props ) => {
     const width = 400,
         height = 400,
         padding = { top: 20, right: 20, bottom: 20, left: 20 },
-        margin = { top: 0, right: 0, bottom: 50, left: 50 };
+        margin = { top: 10, right: 10, bottom: 50, left: 50 };
     let ref = useRef(),
         { dataSet } = props,
-        xLabel = Data.getColumnNames( dataSet )[ 2 ],
-        yLabel = Data.getColumnNames( dataSet )[ 1 ],
+        xLabel = Data.getColumnNames( dataSet )[ 1 ],
+        yLabel = Data.getColumnNames( dataSet )[ 2 ],
         data = Data.getValues( dataSet ),
-        xDomain0 = [ d3.min( data, d => d[ 2 ]), d3.max( data, d => d[ 2 ])],
-        yDomain0 = [ d3.min( data, d => d[ 1 ]), d3.max( data, d => d[ 1 ])],
+        xDomain0 = [ d3.min( data, d => d[ 1 ]), d3.max( data, d => d[ 1 ])],
+        yDomain0 = [ d3.min( data, d => d[ 2 ]), d3.max( data, d => d[ 2 ])],
         xScale = d3.scaleLinear().domain( xDomain0 ).range([ margin.left + padding.left, width - margin.right - padding.right ]),
         yScale = d3.scaleLinear().domain( yDomain0 ).range([ height - margin.bottom - padding.bottom, margin.top + padding.top ]),
         symbolScale = d3.scaleOrdinal( data.map( datum => datum[ 0 ]), d3.symbols.map( s => d3.symbol().type( s ).size( 100 )()));
@@ -85,7 +85,7 @@ ScatterPlot.draw = ( ref, width, height, margin, padding, xScale, yScale, xDomai
     data.forEach(( datum ) => {
         svg.append( "path" )
         .attr( "d", symbolScale( datum[ 0 ]))
-        .attr( "transform", d => "translate( " + Math.round( xScale( datum[ 2 ])) + ", " + Math.round( yScale( datum[ 1 ])) + " )" )
+        .attr( "transform", d => "translate( " + Math.round( xScale( datum[ 1 ])) + ", " + Math.round( yScale( datum[ 2 ])) + " )" )
         .style( "fill", "none" )
         .style( "stroke", "black" );
     });

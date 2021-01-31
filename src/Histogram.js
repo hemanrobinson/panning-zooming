@@ -18,13 +18,13 @@ const Histogram = ( props ) => {
     const width = 400,
         height = 400,
         padding = { top: 20, right: 20, bottom: 0, left: 20 },
-        margin = { top: 0, right: 0, bottom: 50, left: 50 };
+        margin = { top: 0, right: 10, bottom: 50, left: 50 };
     let ref = useRef(),
         { dataSet } = props,
-        xLabel = Data.getColumnNames( dataSet )[ 2 ],
+        xLabel = Data.getColumnNames( dataSet )[ 1 ],
         yLabel = "Frequency",
         data = Data.getValues( dataSet ),
-        xDomain0 = [ d3.min( data, d => d[ 2 ]), d3.max( data, d => d[ 2 ])],
+        xDomain0 = [ d3.min( data, d => d[ 1 ]), d3.max( data, d => d[ 1 ])],
         yDomain0,
         xScale,
         yScale,
