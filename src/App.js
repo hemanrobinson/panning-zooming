@@ -12,7 +12,7 @@ const App = () => {
     return (
         <div className="Column">
             <div className="Description">
-                <h1>Zooming Aggregate Graphs</h1>
+                <h1>Zooming Aggregates</h1>
                 <p>
                 Shneiderman taught us all to <a href="http://www.cs.umd.edu/~ben/papers/Shneiderman1996eyes.pdf">"Overview first, zoom and filter, then details-on-demand"</a>.
                 </p>

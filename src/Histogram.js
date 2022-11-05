@@ -55,13 +55,13 @@ const Histogram = ( props ) => {
         .range([ height - margin.bottom - padding.bottom, margin.top + padding.top ])
         .domain( yDomain0 );
         
-    // Zoom in two dimensions.
+    // Zooms in two dimensions.
     let onZoom2D = ( isIn ) => {
         Graph.onZoom2D( isIn, xScale, yScale, xDomain0, yDomain0, true, false );
         Histogram.draw( ref, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, bins );
     };
     
-    // Zoom in one dimension.
+    // Zooms in one dimension.
     let onMouseDown = ( event ) => {
         Graph.onMouseDown( event, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0 );
     },
