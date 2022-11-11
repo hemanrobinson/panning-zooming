@@ -21,4 +21,4 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-zoom.xcodeproj/project.xcworkspace/xcuserdata/hemanrobinson.xcuserdatad/UserInterfaceState.xcuserstate
+*.xcuserstate
