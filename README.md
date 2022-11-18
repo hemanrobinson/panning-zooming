@@ -1,4 +1,4 @@
-# Zooming Aggregates
+# Zooming
 
 Shneiderman taught us all to [Overview first, zoom and filter, then details-on-demand](http://www.cs.umd.edu/~ben/papers/Shneiderman1996eyes.pdf).
 

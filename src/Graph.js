@@ -65,28 +65,27 @@ const Graph = React.forwardRef(( props, ref ) => {
     
     // Initialization.
     const buttonSize = 30, sliderOffset = 12;
-    let { width, height, margin, padding, isZoomable, onMouseDown, onMouseUp, onMouseOver, onMouseOut, onZoom, xAggregate, yAggregate, onXAggregate, onYAggregate } = props,
+    let { width, height, margin, padding, onMouseDown, onMouseUp, onMouseOver, onMouseOut, onZoom, xAggregate, yAggregate, onXAggregate, onYAggregate } = props,
         top    = margin.top    + padding.top,
         right  = margin.right  + padding.right,
         bottom = margin.bottom + padding.bottom,
         left   = margin.left   + padding.left;
-    isZoomable = ( isZoomable === "false" ) ? false : true;
     
     // Return the component.
     return <div style={{width: width, height: height}} className="parent" ref={ref}>
         <svg width={width} height={height} onMouseDown={onMouseDown} onMouseMove={onMouseUp} onMouseUp={onMouseUp} onMouseOver={onMouseOver} onMouseOut={onMouseOut} />
         <Button variant="contained" onClick={()=>onZoom(true )}
             style={{ position: "absolute", padding: 0, minWidth: buttonSize, width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1,
-            display: ( isZoomable ? "inline" : "none" )}}>+</Button>
+            display: "none" }}>+</Button>
         <Button variant="contained" onClick={()=>onZoom(false)}
             style={{ position: "absolute", padding: 0, minWidth: buttonSize, width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1 + buttonSize,
-            display: ( isZoomable ? "inline" : "none" )}}>-</Button>
+            display: "none" }}>-</Button>
         <Slider min={0} max={1} step={0.01} defaultValue={xAggregate} onChange={onXAggregate}
             style={{ width: width - left - right + 1, top: height - margin.bottom - sliderOffset, left: left + 1, position: "absolute",
-            display: (( isZoomable && onXAggregate ) ? "inline" : "none" )}} />
-        <Slider min={0} max={1} step={0.01} defaultValue={yAggregate} onChange={onYAggregate}  orientation="vertical"
+            display: "none" }} />
+        <Slider min={0} max={1} step={0.01} defaultValue={yAggregate} onChange={onYAggregate} orientation="vertical"
             style={{ height: height - top - bottom + 1, top: top + 1, left: margin.left - sliderOffset - 1, position: "absolute",
-            display: (( isZoomable && onYAggregate ) ? "inline" : "none" )}} />
+            display: "none" }} />
     </div>;
 });
 
@@ -98,13 +97,33 @@ const Graph = React.forwardRef(( props, ref ) => {
 Graph.scrollSize = 15;
     
 /**
- * Returns whether controls are displayed.
+ * Returns whether zooming controls are displayed.
  *
  * @param  {Object}   ref  reference to DIV
- * @return {boolean}  true iff controls are displayed
+ * @return {boolean}  true iff zooming controls are displayed
  */
-Graph.isVisibleControls = ( ref ) => {
+Graph.isZooming = ( ref ) => {
     return ( ref.current.childNodes[ 1 ].style.display === "inline" );
+};
+    
+/**
+ * Returns whether binning controls are displayed in the X dimension.
+ *
+ * @param  {Object}   ref  reference to DIV
+ * @return {boolean}  true iff binning controls are displayed
+ */
+Graph.isXBinning = ( ref ) => {
+    return ( ref.current.childNodes[ 3 ].style.display === "inline" );
+};
+    
+/**
+ * Returns whether binning controls are displayed in the Y dimension.
+ *
+ * @param  {Object}   ref  reference to DIV
+ * @return {boolean}  true iff binning controls are displayed
+ */
+Graph.isYBinning = ( ref ) => {
+    return ( ref.current.childNodes[ 4 ].style.display === "inline" );
 };
  
 /**
@@ -480,7 +499,6 @@ Graph.onMouseUp = ( ref, event, width, height, margin, padding, xScale, yScale, 
  * @param  {number}   height      height, in pixels
  * @param  {Box}      margin      margin
  * @param  {Box}      padding     padding
- * @param  {boolean}  isZoomable  true iff this graph can be zoomed
  * @param  {D3Scale}  xScale      X scale
  * @param  {D3Scale}  yScale      Y scale
  * @param  {Array}    xDomain0    Initial X domain
@@ -488,7 +506,7 @@ Graph.onMouseUp = ( ref, event, width, height, margin, padding, xScale, yScale, 
  * @param  {string}   xLabel      X axis label
  * @param  {string}   yLabel      Y axis label
  */
-Graph.drawAxes = ( ref, width, height, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel ) => {
+Graph.drawAxes = ( ref, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel ) => {
     
     // Initialization.
     const svg = d3.select( ref.current.childNodes[ 0 ]),
@@ -551,7 +569,9 @@ Graph.drawAxes = ( ref, width, height, margin, padding, isZoomable, xScale, ySca
  * @param  {number}   height      height, in pixels
  * @param  {Box}      margin      margin
  * @param  {Box}      padding     padding
- * @param  {boolean}  isZoomable  true iff this graph can be zoomed
+ * @param  {boolean}  isZooming   true iff this graph can be zoomed
+ * @param  {boolean}  isXBinning  true iff this graph can be binned in the X dimension
+ * @param  {boolean}  isYBinning  true iff this graph can be binned in the Y dimension
  * @param  {D3Scale}  xScale      X scale
  * @param  {D3Scale}  yScale      Y scale
  * @param  {Array}    xDomain0    Initial X domain
@@ -559,14 +579,14 @@ Graph.drawAxes = ( ref, width, height, margin, padding, isZoomable, xScale, ySca
  * @param  {string}   xLabel      X axis label
  * @param  {string}   yLabel      Y axis label
  */
-Graph.drawControls = ( ref, width, height, margin, padding, isZoomable, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel ) => {
+Graph.drawControls = ( ref, width, height, margin, padding, isZooming, isXBinning, isYBinning, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel ) => {
     
     // Initialization.
     const svg = d3.select( ref.current.childNodes[ 0 ]),
         scrollSize = Graph.scrollSize,
         halfSize = scrollSize / 2,
         colorLight = "#ebeeef",
-        colorDark = "#939ba1",
+        colorDark = "#b1b7bb",
         colorLine = "#cbd2d7";
     let xDomain = xScale.domain(),
         yDomain = yScale.domain(),
@@ -577,7 +597,7 @@ Graph.drawControls = ( ref, width, height, margin, padding, isZoomable, xScale, 
         h = height - margin.bottom - padding.bottom - y + 1;
     
     // Draw the scrollbars...
-    if( isZoomable ) {
+    if( isZooming ) {
     
         // Draw the X scrollbar.
         let x1 = x + w * ( xMin - xMin0      ) / ( xMax0 - xMin0 + xD ),
@@ -612,6 +632,43 @@ Graph.drawControls = ( ref, width, height, margin, padding, isZoomable, xScale, 
             .style( "stroke-width", scrollSize )
             .style( "stroke", colorLine )
             .style( "stroke-linecap", "butt" );
+            
+        // Draw the X drag handles.
+        const d = halfSize / 2,
+            k = scrollSize / 4;
+        svg.append( "line" )
+            .attr( "x1", x1 + d )
+            .attr( "y1", height - scrollSize + k )
+            .attr( "x2", x1 + d )
+            .attr( "y2", height - k )
+            .style( "stroke-width", 1 )
+            .style( "stroke", "#000000" )
+            .style( "stroke-linecap", "butt" );
+        svg.append( "line" )
+            .attr( "x1", x1 + d + 2 )
+            .attr( "y1", height - scrollSize + k )
+            .attr( "x2", x1 + d + 2 )
+            .attr( "y2", height - k )
+            .style( "stroke-width", 1 )
+            .style( "stroke", "#000000" )
+            .style( "stroke-linecap", "butt" );
+        svg.append( "line" )
+            .attr( "x1", x2 - d )
+            .attr( "y1", height - scrollSize + k )
+            .attr( "x2", x2 - d )
+            .attr( "y2", height - k )
+            .style( "stroke-width", 1 )
+            .style( "stroke", "#000000" )
+            .style( "stroke-linecap", "butt" );
+        svg.append( "line" )
+            .attr( "x1", x2 - d - 2 )
+            .attr( "y1", height - scrollSize + k )
+            .attr( "x2", x2 - d - 2 )
+            .attr( "y2", height - k )
+            .style( "stroke-width", 1 )
+            .style( "stroke", "#000000" )
+            .style( "stroke-linecap", "butt" );
+
         
         // Draw the Y scrollbar.
         let y1 = y + h * ( 1 - ( yMin - yMin0      ) / ( yMax0 - yMin0 + yD )),
@@ -646,6 +703,40 @@ Graph.drawControls = ( ref, width, height, margin, padding, isZoomable, xScale, 
             .style( "stroke-width", scrollSize )
             .style( "stroke", colorLine )
             .style( "stroke-linecap", "butt" );
+            
+        // Draw the Y drag handles.
+        svg.append( "line" )
+            .attr( "x1", k )
+            .attr( "y1", y1 - d )
+            .attr( "x2", scrollSize - k )
+            .attr( "y2", y1 - d )
+            .style( "stroke-width", 1 )
+            .style( "stroke", "#000000" )
+            .style( "stroke-linecap", "butt" );
+        svg.append( "line" )
+            .attr( "x1", k )
+            .attr( "y1", y1 - d - 2 )
+            .attr( "x2", scrollSize - k )
+            .attr( "y2", y1 - d - 2 )
+            .style( "stroke-width", 1 )
+            .style( "stroke", "#000000" )
+            .style( "stroke-linecap", "butt" );
+        svg.append( "line" )
+            .attr( "x1", k )
+            .attr( "y1", y2 + d )
+            .attr( "x2", scrollSize - k )
+            .attr( "y2", y2 + d )
+            .style( "stroke-width", 1 )
+            .style( "stroke", "#000000" )
+            .style( "stroke-linecap", "butt" );
+        svg.append( "line" )
+            .attr( "x1", k )
+            .attr( "y1", y2 + d + 2 )
+            .attr( "x2", scrollSize - k )
+            .attr( "y2", y2 + d + 2 )
+            .style( "stroke-width", 1 )
+            .style( "stroke", "#000000" )
+            .style( "stroke-linecap", "butt" );
     }
     
     // ...or hide the scrollbars.
@@ -665,10 +756,16 @@ Graph.drawControls = ( ref, width, height, margin, padding, isZoomable, xScale, 
     }
 
     // Show or hide the buttons and sliders.
-    if( isZoomable !== Graph.isVisibleControls( ref )) {
-        for( let i = 1; ( i < ref.current.childNodes.length ); i++ ) {
-            ref.current.childNodes[ i ].style.display = ( isZoomable ? "inline" : "none" );
+    if( isZooming !== Graph.isZooming( ref )) {
+        for( let i = 1; ( i < 3 ); i++ ) {
+            ref.current.childNodes[ i ].style.display = ( isZooming ? "inline" : "none" );
         }
+    }
+    if( isXBinning !== Graph.isXBinning( ref )) {
+        ref.current.childNodes[ 3 ].style.display = ( isXBinning ? "inline" : "none" );
+    }
+    if( isYBinning !== Graph.isYBinning( ref )) {
+        ref.current.childNodes[ 4 ].style.display = ( isYBinning ? "inline" : "none" );
     }
 };
 

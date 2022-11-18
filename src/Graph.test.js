@@ -44,8 +44,16 @@ it( "returns width of scroll bar", () => {
 });
     
 it( "returns whether controls are displayed", () => {
-    let ref = { current: { childNodes: [ document.createElement( "svg" ), { style: { display: "inline" }}]}};
-    expect( Graph.isVisibleControls( ref )).toBe( true );
+    let ref = { current: { childNodes: [
+            document.createElement( "svg" ),
+            document.createElement( "BUTTON" ),
+            document.createElement( "BUTTON" ),
+            document.createElement( "SPAN" ),
+            document.createElement( "SPAN" )
+        ]}};
+    expect( Graph.isZooming( ref )).toBe( false );
+    expect( Graph.isXBinning( ref )).toBe( false );
+    expect( Graph.isYBinning( ref )).toBe( false );
 });
 
 it( "returns mousedown location", () => {
@@ -121,20 +129,32 @@ it( "zooms in one dimension: mousedown, mousemove, and mouseup events", () => {
 });
 
 it( "draws the axes", () => {
-    let ref = { current: { childNodes: [ document.createElement( "svg" ), { style: { display: "inline" }}]}},
+    let ref = { current: { childNodes: [
+            document.createElement( "svg" ),
+            document.createElement( "BUTTON" ),
+            document.createElement( "BUTTON" ),
+            document.createElement( "SPAN" ),
+            document.createElement( "SPAN" )
+        ]}},
         margin = { top: 0, right: 0, bottom: 50, left: 50 },
         padding = { top: 0, right: 0, bottom: 0, left: 0 },
         xScale = d3.scaleLinear().domain([ 0, 1 ]).range([ 0, 100 ]),
         yScale = d3.scaleLinear().domain([ 0, 1 ]).range([ 0, 100 ]);
-    Graph.drawAxes( ref, 400, 400, margin, padding, true, xScale, yScale, [ 0, 1 ], [ 0, 1 ], "X", "Y" );
+    Graph.drawAxes( ref, 400, 400, margin, padding,xScale, yScale, [ 0, 1 ], [ 0, 1 ], "X", "Y" );
 });
 
 it( "draws the controls", () => {
-    let ref = { current: { childNodes: [ document.createElement( "svg" ), { style: { display: "inline" }}]}},
+    let ref = { current: { childNodes: [
+            document.createElement( "svg" ),
+            document.createElement( "BUTTON" ),
+            document.createElement( "BUTTON" ),
+            document.createElement( "SPAN" ),
+            document.createElement( "SPAN" )
+        ]}},
         margin = { top: 0, right: 0, bottom: 50, left: 50 },
         padding = { top: 0, right: 0, bottom: 0, left: 0 },
         xScale = d3.scaleLinear().domain([ 0, 1 ]).range([ 0, 100 ]),
         yScale = d3.scaleLinear().domain([ 0, 1 ]).range([ 0, 100 ]);
-    Graph.drawControls( ref, 400, 400, margin, padding, true, xScale, yScale, [ 0, 1 ], [ 0, 1 ], "X", "Y" );
-    Graph.drawControls( ref, 400, 400, margin, padding, false, xScale, yScale, [ 0, 1 ], [ 0, 1 ], "X", "Y" );
+    Graph.drawControls( ref, 400, 400, margin, padding, true, true, true, xScale, yScale, [ 0, 1 ], [ 0, 1 ], "X", "Y" );
+    Graph.drawControls( ref, 400, 400, margin, padding, false, false, false, xScale, yScale, [ 0, 1 ], [ 0, 1 ], "X", "Y" );
 });
