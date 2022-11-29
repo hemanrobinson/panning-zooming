@@ -2,14 +2,14 @@ import React from 'react';
 import ScatterPlot from './ScatterPlot';
 import './App.css';
 
-// Application:  Zooming
+// Application:  Learnable Zooming
 const App = () => {
     
     // Return the App.
     return (
         <div className="Column">
             <div className="Description">
-                <h1>Zooming</h1>
+                <h1>Learnable Zooming</h1>
                 <p>
                 What is the most easily learned user interface for zooming a graph?
                 </p>

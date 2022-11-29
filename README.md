@@ -1,10 +1,10 @@
-# Zooming
+# Learnable Zooming
 
-Shneiderman taught us all to [Overview first, zoom and filter, then details-on-demand](http://www.cs.umd.edu/~ben/papers/Shneiderman1996eyes.pdf).
+What is the most easily learned user interface for zooming a graph?
+              
+The most familiar user interface uses plus (+) and minus (-) buttons, with scroll bars to provide panning and user feedback.  Handles on the ends of the scroll bars support one-dimensional zooming.
 
-These operations are straightforward for graphs that display individual points.  However, for large data sets, we must group the data into bins, bars, tiles, or other aggregates. Therefore, exploring aggregate graphs requires zooming both scales and aggregates.  
-
-[This project demonstrates a user interface for efficient zooming, of both continuous and categorical scales and aggregates, in multiple dimensions.](https://hemanrobinson.github.io/zoom/)
+[This project demonstrates a user interface for zooming.  The elements of this design are easily learned because they are familiar.](https://hemanrobinson.github.io/zoom/)
 
 [![Zoom](src/zoom.png "Zoom")](https://hemanrobinson.github.io/zoom/)
 
