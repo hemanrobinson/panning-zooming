@@ -15,13 +15,10 @@ const App = () => {
                 What is the most easily learned user interface for zooming a graph?
                 </p>
                 <p>
-                The most familiar user interface uses plus (+) and minus (-) buttons, with scroll bars to provide panning and user feedback.
+                The most familiar user interface uses plus (+) and minus (-) buttons, with scroll bars to provide panning and user feedback.  Handles  on the ends of the scroll bars support one-dimensional zooming.
                 </p>
                 <p>
-                Handles  on the ends of the scroll bars are less familiar, but are useful to support one-dimensional zooming.
-                </p>
-                <p>
-                To minimize distraction from the data display, controls are displayed only when needed.  Hover over the graph to see the zooming controls.
+                Hover over the graph to see the zooming controls.
                 </p>
             </div>
             <div className="Graph">
@@ -36,7 +33,13 @@ const App = () => {
                 <AreaPlot dataSet={ "S&P 500" } />
             </div>
             <div className="Description">
-                <h2>About This User Interface</h2>
+                <h2>About this Design</h2>
+                <p>
+                To minimize distraction from the data display, controls are displayed only when they can be used.
+                </p>
+                <p>
+                Some user interfaces implement zooming in by dragging a rectangle around the area of interest.  That's not implemented here, but it is compatible with this design.  Dragging a rectangle is the most efficient way to zoom in on a cluster of points.
+                </p>
                 <p>
                 Plus (+) and minus (-) buttons and scrollbars are standard controls, for which the user has no learning curve. This design is the most easily learned because it is the most familiar.
                 </p>
