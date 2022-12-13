@@ -18,7 +18,7 @@ const App = () => {
                 The most familiar user interface uses plus (+) and minus (-) buttons, with scroll bars to provide panning and user feedback.  Handles  on the ends of the scroll bars support one-dimensional zooming.
                 </p>
                 <p>
-                Hover over the graphs below to see the zooming controls.
+                Hover over the graphs below to see the zooming controls.  Use the buttons and scrollbars to adjust the bins.
                 </p>
             </div>
             <div className="Graph">
