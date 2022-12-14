@@ -3,6 +3,9 @@ div {
     text-align: center;
     gap: 10px;
 }
+img {
+  border: 1px solid #999999;
+}
 .Description {
     text-align: left;
     max-width: 1000px;
@@ -16,4 +19,8 @@ div {
     display: grid;
     grid-template-columns: repeat( 1, 1fr );
     justify-items: center;
+}
+.MuiSlider-rail,
+.MuiSlider-track {
+    height: 3px !important;
 }
