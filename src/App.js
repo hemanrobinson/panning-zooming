@@ -10,7 +10,7 @@ const App = () => {
     return (
         <div className="Column">
             <div className="Description">
-                <h1>Better Zooming</h1>
+                <h1>Learnable Zooming</h1>
                 <p>
                 What is the most easily learned user interface for zooming a graph?
                 </p>
