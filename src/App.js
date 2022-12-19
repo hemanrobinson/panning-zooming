@@ -35,13 +35,16 @@ const App = () => {
             <div className="Description">
                 <h2>About this Design</h2>
                 <p>
+                Affordances are visible.  The user can see the zooming controls.
+                </p>
+                <p>
                 To minimize distraction from the data display, controls are displayed only when they can be used.
                 </p>
                 <p>
-                Some user interfaces implement zooming in by dragging a rectangle around the area of interest.  That's not implemented here, but it is compatible with this design.  Dragging a rectangle is the most efficient way to zoom in on a cluster of points.
+                Plus (+) and minus (-) buttons and scrollbars are standard controls, so the user has no learning curve. This design is the most easily learned because it is the most familiar.
                 </p>
                 <p>
-                Plus (+) and minus (-) buttons and scrollbars are standard controls, for which the user has no learning curve. This design is the most easily learned because it is the most familiar.
+                Some user interfaces implement zooming in by dragging a rectangle around the area of interest.  Dragging a rectangle is the most efficient way to zoom in on a cluster of points.  This feature is not implemented here, but is compatible with this design.
                 </p>
             </div>
             <a href="https://github.com/hemanrobinson/zoom/">Code Shared on GitHub</a>
