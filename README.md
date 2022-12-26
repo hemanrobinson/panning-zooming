@@ -1,4 +1,4 @@
-# Learnable Zooming
+# Discoverable Zooming
 
 What is the most easily learned user interface for zooming a graph?
               

@@ -3,14 +3,14 @@ import AreaPlot from './AreaPlot';
 import ScatterPlot from './ScatterPlot';
 import './App.css';
 
-// Application:  Learnable Zooming
+// Application:  Discoverable Zooming
 const App = () => {
     
     // Return the App.
     return (
         <div className="Column">
             <div className="Description">
-                <h1>Learnable Zooming</h1>
+                <h1>Discoverable Zooming</h1>
                 <p>
                 What is the most easily learned user interface for zooming a graph?
                 </p>
@@ -44,7 +44,7 @@ const App = () => {
                 Plus (+) and minus (-) buttons and scrollbars are standard controls, so the user has no learning curve. This design is the most easily learned because it is the most familiar.
                 </p>
                 <p>
-                Some user interfaces implement zooming in by dragging a rectangle around the area of interest.  Dragging a rectangle is the most efficient way to zoom in on a cluster of points.  This feature is not implemented here, but is compatible with this design.
+                Some user interfaces implement zooming in by dragging a rectangle around the area of interest.  This feature is not implemented here, but is compatible with this design.  Dragging a rectangle is the most efficient way to zoom in on a cluster of points.  
                 </p>
             </div>
             <a href="https://github.com/hemanrobinson/zoom/">Code Shared on GitHub</a>
