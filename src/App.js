@@ -44,7 +44,7 @@ const App = () => {
                 Plus (+) and minus (-) buttons and scrollbars are standard controls, so the user has no learning curve. This design is the most easily learned because it is the most familiar.
                 </p>
                 <p>
-                Some user interfaces implement zooming in by dragging a rectangle around the area of interest.  This feature is not implemented here, but is compatible with this design.  Dragging a rectangle is the most efficient way to zoom in on a cluster of points.  
+                Some user interfaces provide an efficient way to zoom in by dragging a rectangle around objects of interest.  This feature, though not implemented here, is compatible with this design.  Dragging a rectangle has no obvious inverse action, but the minus (-) button provides a clear path to invert.
                 </p>
             </div>
             <a href="https://github.com/hemanrobinson/zoom/">Code Shared on GitHub</a>
