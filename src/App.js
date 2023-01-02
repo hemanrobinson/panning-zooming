@@ -13,7 +13,7 @@ const App = () => {
             <div className="Description">
                 <h1>Learnable Zooming</h1>
                 <p>
-                One great principle of web design is:  <i>people surf</i>.
+                The one great lesson of web design is:  <i>people surf</i>.
                 </p>
                 <p>
                 If users don't get value from a web page, quickly -- they move on.  Jakob Nielsen recommends engaging the user within <a href="https://www.nngroup.com/articles/how-long-do-users-stay-on-web-pages/">10 seconds</a>.
@@ -32,7 +32,7 @@ const App = () => {
                 </p>
             </div>
             <div className="Graph">
-                <ScatterPlot dataSet={ "Cytometry" } />
+                <ScatterPlot dataSet={ "Iris" } />
             </div>
             <div className="Description">
                 <p>
@@ -40,17 +40,15 @@ const App = () => {
                 </p>
             </div>
             <div className="Graph">
-                <AreaPlot dataSet={ "S&P 500" } />
-            </div>
-            <div className="Description">
-                <p>
-                Some user interfaces provide a way to zoom in by dragging a rectangle around objects of interest.  This feature is not highly learnable and is not implemented here.  However, it's an efficient way to zoom in, and is compatible with this design.  Dragging a rectangle has no clear inverse, but the minus (-) button provides an easy way to invert.
-                </p>
+                <AreaPlot dataSet={ "Stocks" } />
             </div>
             <div className="Description">
                 <h2>Design Notes</h2>
                 <p>
-                To minimize distraction from the data display, controls are displayed only when they can be used.  Controls are discoverable simply by hovering over the graph.
+                Some user interfaces support zooming in by dragging a rectangle around objects of interest.  This feature is not easily learnable and is not implemented here.  However, it's an efficient way to zoom in, and is compatible with this design.  Dragging a rectangle is not clearly reversable, but the minus (-) button solves that problem.
+                </p>
+                <p>
+                To minimize distraction from the data display, controls are displayed only when they can be used.  Controls are discoverable by simply hovering over the graph.
                 </p>
                 <p>
                 Plus (+) and minus (-) buttons and scrollbars are standard controls, so the user has no learning curve. This design is the most easily learned because it is the most familiar.
