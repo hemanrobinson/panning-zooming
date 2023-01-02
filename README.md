@@ -2,9 +2,9 @@
 
 What is the most easily learned user interface for zooming a graph?
               
-The most familiar user interface uses plus (+) and minus (-) buttons, with scroll bars to provide panning and user feedback.  Handles on the ends of the scroll bars support one-dimensional zooming.
+The most familiar user interface includes plus (+) and minus (-) buttons and scroll bars.  Handles on the ends of the scroll bars support one-dimensional zooming.
 
-[This project demonstrates a user interface for zooming.  The elements of this design are easily learned because they are familiar.](https://hemanrobinson.github.io/zoom/)
+[This project demonstrates an easily learned user interface for zooming.](https://hemanrobinson.github.io/zoom/)
 
 [![Zoom](src/zoom.png "Zoom")](https://hemanrobinson.github.io/zoom/)
 
