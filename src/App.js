@@ -13,19 +13,19 @@ const App = () => {
             <div className="Description">
                 <h1>Learnable Zooming</h1>
                 <p>
-                The one great lesson of web usability is:  people surf.
+                One great principle of web design is:  <i>people surf</i>.
                 </p>
                 <p>
-                Jakob Nielsen recommends engaging the user within <a href="https://www.nngroup.com/articles/how-long-do-users-stay-on-web-pages/">10 seconds</a> -- because if users don't get value, quickly, they'll move on.
+                If users don't get value from a web page, quickly -- they move on.  Jakob Nielsen recommends engaging the user within <a href="https://www.nngroup.com/articles/how-long-do-users-stay-on-web-pages/">10 seconds</a>.
                 </p>
                 <p className="center">
                     <a href="https://www.nngroup.com"><img alt="Dr. Jakob Nielsen" src={nielsen}/></a>
                 </p>
                 <p>
-                For this reason, we should all be concerned with the ability of users to learn our user interfaces.
+                For this reason, we should all be concerned with the <i>learnability</i> of our user interfaces.
                 </p>
                 <p>
-                The most easily learned user interface for zooming includes plus (+) and minus (-) buttons, with scroll bars to provide panning and user feedback.  Handles on the ends of the scroll bars enable one-dimensional zooming.
+                For zooming, the most easily learned user interface includes plus (+) and minus (-) buttons and scroll bars.  Handles on the ends of the scroll bars enable one-dimensional zooming.
                 </p>
                 <p>
                 Hover over the graphs below to see the zooming controls.  Use the buttons and scrollbars to adjust the bins.
@@ -44,14 +44,11 @@ const App = () => {
             </div>
             <div className="Description">
                 <p>
-                Some user interfaces provide an way to zoom in by dragging a rectangle around objects of interest.  This feature is not so easily learned and is not implemented here.  However, it's an efficient way to zoom in, and is compatible with this design.  Dragging a rectangle has no obvious inverse action, but the minus (-) button provides an easy way to invert.
+                Some user interfaces provide a way to zoom in by dragging a rectangle around objects of interest.  This feature is not highly learnable and is not implemented here.  However, it's an efficient way to zoom in, and is compatible with this design.  Dragging a rectangle has no clear inverse, but the minus (-) button provides an easy way to invert.
                 </p>
             </div>
             <div className="Description">
-                <h2>About this Design</h2>
-                <p>
-                Affordances are visible.  The user can see the zooming controls.
-                </p>
+                <h2>Design Notes</h2>
                 <p>
                 To minimize distraction from the data display, controls are displayed only when they can be used.  Controls are discoverable simply by hovering over the graph.
                 </p>
