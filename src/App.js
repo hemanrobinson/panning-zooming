@@ -22,7 +22,7 @@ const App = () => {
                     <a href="https://www.nngroup.com"><img alt="Dr. Jakob Nielsen" src={nielsen}/></a>
                 </p>
                 <p>
-                For this reason, we should all be concerned with the <i>learnability</i> of our user interfaces.
+                This is why we strive for <i>learnability</i> in our user interfaces.
                 </p>
                 <p>
                 For zooming, the most easily learned user interface includes plus (+) and minus (-) buttons and scroll bars.  Handles on the ends of the scroll bars enable one-dimensional zooming.
