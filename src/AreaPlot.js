@@ -44,7 +44,7 @@ const AreaPlot = ( props ) => {
     },
     onMouseUp = ( event ) => {
         if( Graph.downLocation.isX || Graph.downLocation.isY ) {
-            Graph.onMouseUp( ref, event, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0 );
+            Graph.onMouseUp( event, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0 );
             AreaPlot.draw( ref, width, height, margin, padding, overviewPadding, true, false, false, xScale, yScale, xScale1, yScale1, xDomain0, yDomain0, xLabel, yLabel, dataSet );
         }
     };

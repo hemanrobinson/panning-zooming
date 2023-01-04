@@ -42,7 +42,7 @@ const ScatterPlot = ( props ) => {
     },
     onMouseUp = ( event ) => {
         if( Graph.downLocation.isX || Graph.downLocation.isY ) {
-            Graph.onMouseUp( ref, event, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0 );
+            Graph.onMouseUp( event, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0 );
             ScatterPlot.draw( ref, width, height, margin, padding, true, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
         }
     };

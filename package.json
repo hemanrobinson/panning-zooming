@@ -5,7 +5,7 @@
   "homepage": "https://hemanrobinson.github.io/zoom",
   "dependencies": {
     "@material-ui/core": "^4.11.2",
-    "@testing-library/jest-dom": "^5.11.6",
+    "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^11.2.2",
     "@testing-library/user-event": "^12.6.0",
     "d3": "^6.3.1",
