@@ -45,7 +45,7 @@ const App = () => {
             <div className="Description">
                 <h2>Design Notes</h2>
                 <p>
-                Some user interfaces support zooming in by dragging a rectangle around objects of interest.  This feature is not easily learnable and is not implemented here.  However, it's an efficient way to zoom in, and is compatible with this design.  Dragging a rectangle is not clearly reversable, but the minus (-) button solves that problem.
+                Some user interfaces support zooming in by dragging a rectangle around objects of interest.  This feature is not implemented here, but is compatible with this design.  Dragging a rectangle has no obvious inverse, but the minus (-) button solves that problem.
                 </p>
                 <p>
                 To minimize distraction from the data display, controls are displayed only when they can be used.  Controls are discoverable by simply hovering over the graph.
