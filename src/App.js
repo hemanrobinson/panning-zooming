@@ -16,27 +16,34 @@ const App = () => {
                 The one great lesson of web design is:  <i>people surf</i>.
                 </p>
                 <p>
-                If users don't get value from a web page, quickly -- they move on.  Jakob Nielsen recommends engaging the user within <a href="https://www.nngroup.com/articles/how-long-do-users-stay-on-web-pages/">10 seconds</a>.
+                If users don't get value from a web page, quickly -- they move on.  For this reason, Jakob Nielsen recommends engaging the user <a href="https://www.nngroup.com/articles/how-long-do-users-stay-on-web-pages/">within the first 10 seconds</a>.
                 </p>
                 <p className="center">
                     <a href="https://www.nngroup.com"><img alt="Dr. Jakob Nielsen" src={nielsen}/></a>
                 </p>
                 <p>
-                This is why we strive for <i>learnability</i> in our user interfaces.
+                This is why we strive for <i>learnability</i> in our web applications.
                 </p>
                 <p>
-                For zooming, the most easily learned user interface includes plus (+) and minus (-) buttons and scroll bars.  Handles on the ends of the scroll bars enable one-dimensional zooming.
+                For zooming, the most familiar includes plus (+) and minus (-) buttons and scroll bars.  These are standard controls, for which the user has no learning curve.
                 </p>
                 <p>
                 Hover over the graphs below to see the zooming controls.  Use the buttons and scrollbars to adjust the bins.
+                </p>
+            </div>
+            <div className="Description">
+                <h2>Two Dimensions</h2>
+                <p>
+                Plus (+) and minus (-) buttons and scrollbars are sufficient for the user to zoom in on any objects of interest.  The handles on the ends of the scrollbars require some learning curve, but provide visible affordances for one-dimensional zooming and fine-grained adjustments.
                 </p>
             </div>
             <div className="Graph">
                 <ScatterPlot dataSet={ "Iris" } />
             </div>
             <div className="Description">
+                <h2>One Dimension</h2>
                 <p>
-                This design can be combined with other patterns.  One-dimensional zooming often employs the <a href="https://observablehq.com/@d3/focus-context">overview-plus-detail</a> pattern, which combines the scrollbar with an overview of the data.
+                Plus (+) and minus (-) buttons and scrollbars are compatible with other design patterns.  One-dimensional zooming often employs the <a href="https://observablehq.com/@d3/focus-context">overview-plus-detail</a> pattern, which combines the scrollbar with an overview of the data.
                 </p>
             </div>
             <div className="Graph">
@@ -45,14 +52,22 @@ const App = () => {
             <div className="Description">
                 <h2>Design Notes</h2>
                 <p>
-                Some user interfaces support zooming in by dragging a rectangle around objects of interest.  This feature is not implemented here, but is compatible with this design.  Dragging a rectangle has no obvious inverse, but the minus (-) button solves that problem.
-                </p>
-                <p>
                 To minimize distraction from the data display, controls are displayed only when they can be used.  Controls are discoverable by simply hovering over the graph.
                 </p>
                 <p>
-                Plus (+) and minus (-) buttons and scrollbars are standard controls, so the user has no learning curve. This design is the most easily learned because it is the most familiar.
+                This design is compatible with shortcuts that save steps for the user.  A drag action in the data display often supports two-dimensional panning, or zooming in on objects of interest.  These features are less easily learned because they have no visible affordance; but either can be implemented as an advanced feature.
                 </p>
+                <p>
+                The user has a goal, and it is not to learn our user interface.  So our goal must be to get the user value, quickly.  They can learn our advanced features if they have time.
+                </p>
+                <p>
+                Plus (+) and minus (-) buttons and scrollbars are standard controls.  For these, the user has no learning curve. This design is the most easily learned because it is the most familiar.
+                </p>
+                <br/>
+                <h2>References</h2>
+                <ul>
+                    <li><a href="https://www.nngroup.com/articles/how-long-do-users-stay-on-web-pages/">Nielsen, Jakob. (2011). "How Long Do Users Stay on Web Pages?". Nielsen Norman Group</a><br/>Nielsen's recommendation, with research by Liu et. al.</li>
+                </ul>
             </div>
             <a href="https://github.com/hemanrobinson/zoom/">Code Shared on GitHub</a>
         </div>
