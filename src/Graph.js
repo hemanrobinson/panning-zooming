@@ -491,6 +491,59 @@ Graph.onMouseUp = ( event, width, height, margin, padding, xScale, yScale, xDoma
         Graph.downLocation.isMax = false;
     }
 };
+
+/**
+ * Returns binned values for a continuous set of values and specified aggregate value.
+ *
+ * @param  {Array[]}     data           data set
+ * @param  {number}      columnIndex    index of column to be binned
+ * @param  {D3Scale}     xScale         X scale
+ * @param  {number}      aggregate      aggregate value, between 0 and 1
+ * @return {number[][]}  binned values
+ */
+Graph.getBins = ( data, columnIndex, xScale, aggregate ) => {
+
+    // Get the values.
+    let values = [];
+    data.forEach( d => values.push( d[ columnIndex ]));
+    
+    // Get the ticks.
+    const ticks = xScale.ticks();
+    const n = ticks.length;
+    const tickWidth = ticks[ 1 ] - ticks[ 0 ];
+    const domain = ticks[ n - 1 ] - ticks[ 0 ];
+    
+    // Get the initial bin width from Scott's algorithm.
+    let bins = d3.bin().thresholds( d3.thresholdScott )( values );
+    let binWidth = domain / bins.length;
+
+    // Recalculate the bin width based on the aggregate value, rounded to the minimum tick width.
+    const k = 4;
+    const minWidth = tickWidth / 12;
+    const maxWidth = binWidth * Math.pow( 2, k );
+    let newBinWidth = maxWidth * Math.pow( aggregate, k );
+    newBinWidth = Math.min( Math.max( newBinWidth, minWidth ), maxWidth );
+    newBinWidth = minWidth * Math.round( newBinWidth / minWidth );
+
+    // If the new bin width does not evenly span the domain, reduce it.
+    if( newBinWidth < domain / Math.floor( domain / newBinWidth )) {
+        newBinWidth = domain / Math.floor( domain / newBinWidth );
+    }
+
+    // Calculate the thresholds.
+    let thresholds = [];
+    const nBins = ( ticks[ n - 1 ] - ticks[ 0 ]) / newBinWidth;
+    for( let i = 0; ( i < nBins ); i++ ) {
+        thresholds.push( ticks[ 0 ] + i * newBinWidth );
+    }
+
+    // Return the bins.
+    const histogram = d3.histogram()
+        .value( d => d[ columnIndex ])
+        .domain([ ticks[ 0 ], ticks[ n - 1 ]])
+        .thresholds( thresholds );
+    return histogram( data );
+};
     
 /**
  * Draws the axes.

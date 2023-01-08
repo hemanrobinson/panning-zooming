@@ -52,16 +52,19 @@ const App = () => {
             <div className="Description">
                 <h2>Design Notes</h2>
                 <p>
-                To minimize distraction from the data display, controls are displayed only when they can be used.  Controls are discoverable by simply hovering over the graph.
+                To minimize distraction from the data display, controls are fully displayed only when they can be used.  On desktop devices, controls are discoverable by hovering over the graph.
                 </p>
                 <p>
-                This design is compatible with shortcuts that save steps for the user.  A drag action in the data display often supports two-dimensional panning, or zooming in on objects of interest.  These features are less easily learned because they have no visible affordance; but either can be implemented as an advanced feature.
+                This design is compatible with shortcuts that save steps for the user.  A drag action in the data display often supports two-dimensional panning, or zooming in on objects of interest.  These features are less easily learned because they have no visible affordance; but either can be implemented as an advanced feature.  Separate modes could support both.
                 </p>
                 <p>
-                The user has a goal, and it is not to learn our user interface.  So our goal must be to get the user value, quickly.  They can learn our advanced features if they have time.
+                On mobile devices (not supported here) there is no hover action, but scrollbars may grow when the user is scrolling, and shrink when they stop. These unobtrusive scrollbars could be displayed on axes, which provide natural locations for pinching and swiping in one dimension. In two dimensions, rather than plus (+) and minus (-) buttons, pinching and swiping in the data display might be enabled by a separate mode.  A separate mode would eliminate confusion between panning and zooming the graph versus the whole page.
                 </p>
                 <p>
-                Plus (+) and minus (-) buttons and scrollbars are standard controls.  For these, the user has no learning curve. This design is the most easily learned because it is the most familiar.
+                On any device, the user has a goal, and it is not to learn our user interface.  So our goal must be to get the user value, quickly.  They can learn our advanced features if they have time.
+                </p>
+                <p>
+                We can achieve learnability by following standards.  This ensures that our designs are easily learned, because they are familiar.
                 </p>
                 <br/>
                 <h2>References</h2>
