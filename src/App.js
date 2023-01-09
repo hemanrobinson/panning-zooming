@@ -55,16 +55,16 @@ const App = () => {
                 To minimize distraction from the data display, controls are fully displayed only when they can be used.  Controls are discoverable by hovering over the graph.
                 </p>
                 <p>
-                This design is compatible with shortcuts that save steps for the user.  A drag action in the data display often supports two-dimensional panning, or zooming in on objects of interest.  These features are less easily learned because they have no visible affordance; but either can be implemented as an advanced feature.  Separate modes could support both.
+                This design supports advanced features that save steps for the user.  A drag action in the data display often supports two-dimensional panning, or zooming in on objects of interest.  These features are less easily learned, because they have no visible affordance; but either can be implemented.  Separate modes could support both.
                 </p>
                 <p>
-                This design is for desktop devices.  A mobile design would apply the same principle.  On mobile devices, plus (+) and minus (-) are not standard; instead, the pinch and swipe gestures support zooming and panning.  Mobile devices have no hover action, but scrollbars are unobtrusive:  they grow when the user is scrolling, and shrink when they stop.  The axes provide natural locations for pinching and swiping, with scrollbars, to support zooming and panning in one dimension.  In two dimensions, zooming and panning in the data display could be treated as an advanced feature.  A separate mode would eliminate confusion between zooming and panning the graph versus the whole page.
+                This design is for desktops; a mobile design follows the same principles.  On mobile devices, plus (+) and minus (-) are not standard; instead, the pinch and swipe gestures support zooming and panning.  On mobile devices, the user can't hover, but scrollbars are unobtrusive:  they grow when the user scrolls, and shrink when they stop.  The axes provide natural locations for pinching and swiping, with scrollbars, to support zooming and panning in one dimension.  In two dimensions, separate modes could eliminate confusion between zooming and panning the data display versus the whole page.
                 </p>
                 <p>
-                The user always has a goal, and it is never to learn our user interface.  For this reason, our goal must be to get the user value, quickly.  They can learn our advanced features if they have time.
+                The user always has a goal, and it is never to learn our user interface.  For this reason, our goal is to get the user value, quickly.  They can learn our advanced features if they have time.
                 </p>
                 <p>
-                We can achieve learnability by following standards.  This ensures that our designs are easily learned, because they are familiar.
+                We can achieve learnability by following standards.  This makes our user interfaces easily learned, because they are familiar.
                 </p>
                 <br/>
                 <h2>References</h2>
