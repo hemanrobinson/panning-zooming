@@ -25,7 +25,7 @@ const App = () => {
                 This is why we strive for <i>learnability</i> in our web applications.
                 </p>
                 <p>
-                For zooming, the most familiar user interface includes plus (+) and minus (-) buttons and scroll bars.  These are standard controls, for which the user has no learning curve.
+                The most learnable user interface is one thet the users already know.  For zooming, this includes plus (+) and minus (-) buttons and scroll bars.  These are standard controls, for which the user has no learning curve.
                 </p>
                 <p>
                 Hover over the graphs below to see the zooming controls.  Use the buttons and scrollbars to adjust the bins.
@@ -64,7 +64,7 @@ const App = () => {
                 On any device, the user always has some goal in mind.  Their goal is never to learn our user interface (no matter how much we like it!).  For this reason, our goal must be to get the user value, quickly.  They can learn our advanced features if they have time.
                 </p>
                 <p>
-                We can achieve learnability by following standards.  This ensures that our user interfaces are easily learned, because they are familiar.
+                We can achieve learnability by following standards.  This ensures that our user interfaces are easily learned, because they are already known.
                 </p>
                 <br/>
                 <h2>References</h2>
