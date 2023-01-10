@@ -55,16 +55,16 @@ const App = () => {
                 To minimize distraction from the data display, controls are fully displayed only when they can be used.  Controls are discoverable by hovering over the graph.
                 </p>
                 <p>
-                This design supports advanced features that save steps for the user.  A drag action in the data display can support two-dimensional panning, or zooming in on objects of interest.  These features are less easily learned, because they have no visible affordance.  But either can be implemented, and separate modes could support both.
+                This design supports advanced features that save steps for the user.  A drag action in the data display can support two-dimensional panning, or zooming in on objects of interest.  These features are less easily learned, because they have no visible affordance; but both could be implemented in separate modes, expressed through menus or a toolbox metaphor.
                 </p>
                 <p>
-                This design is for desktops; a mobile design follows the same principles.  On mobile, plus (+) and minus (-) buttons are not standard; instead, the pinch and swipe gestures support zooming and panning.  On mobile, the user can't hover, but scrollbars are unobtrusive:  they grow when the user scrolls, and shrink when they stop.  The axes are natural locations for pinching and swiping, with scrollbars, to support zooming and panning in one dimension.  In two dimensions, separate modes can eliminate confusion between zooming and panning the data display versus the whole page.
+                This design follows desktop standards.  A mobile design applies the same principle to different standards.  On mobile, rather than plus (+) and minus (-) buttons, pinch and swipe gestures enable zooming and panning.  On mobile, the user can't hover, but scrollbars are unobtrusive:  they grow when the user scrolls, and shrink when they stop.  Because of the pinch gesture, scrollbars don't need handles.  The axes provide natural locations for zooming and panning in one dimension.  As on the desktop, two-dimensional zooming and panning can be supported as advanced features in separate modes.
                 </p>
                 <p>
-                The user's goal is not to learn our user interface.  For this reason, our goal is to get the user value, quickly.  They can learn our advanced features if they have time.
+                On any device, the user always has some goal in mind.  Their goal is never to learn our user interface (no matter how much we like it!).  For this reason, our goal must be to get the user value, quickly.  They can learn our advanced features if they have time.
                 </p>
                 <p>
-                We can achieve learnability by following standards.  This makes our user interfaces easily learned, because they are familiar.
+                We can achieve learnability by following standards.  This ensures that our user interfaces are easily learned, because they are familiar.
                 </p>
                 <br/>
                 <h2>References</h2>
