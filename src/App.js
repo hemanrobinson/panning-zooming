@@ -6,6 +6,8 @@ import nielsen from './nielsen.jpg';
 
 // Application:  Learnable Zooming
 const App = () => {
+
+    // TODO:  Disable/enable the plus (+) and minus (-) buttons at their limits, and describe those limits in the Design Notes.
     
     // Return the App.
     return (
@@ -34,13 +36,13 @@ const App = () => {
                 For zooming, the most familiar user interface includes plus (+) and minus (-) buttons and scroll bars.  These are standard controls, for which the user has no learning curve.
                 </p>
                 <p>
-                Hover over the graphs below to see the zooming controls.  Use the buttons and scrollbars to adjust the bins.
+                Hover over the graphs below to see the zooming controls.  Use the buttons and scrollbars to adjust the scales.
                 </p>
             </div>
             <div className="Description">
                 <h2>Two Dimensions</h2>
                 <p>
-                Plus (+) and minus (-) buttons and scrollbars are sufficient for the user to zoom in on any objects of interest.  The handles on the ends of the scrollbars require some learning curve, but provide visible affordances for one-dimensional zooming and fine-grained adjustments.
+                Plus (+) and minus (-) buttons and scrollbars are sufficient for the user to zoom in on objects of interest.  The handles on the ends of the scrollbars require some learning curve, but provide visible affordances for one-dimensional zooming and fine-grained adjustments.
                 </p>
             </div>
             <div className="Graph">
