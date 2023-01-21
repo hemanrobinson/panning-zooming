@@ -1,6 +1,7 @@
 import React from 'react';
 import AreaPlot from './AreaPlot';
 import ScatterPlot from './ScatterPlot';
+import Map from './Map';
 import './App.css';
 import nielsen from './nielsen.jpg';
 
@@ -33,25 +34,44 @@ const App = () => {
                     <li>"Don't make me think!" (Krug, 2014)</li>
                 </ul>
                 <p>
-                For zooming, the most familiar user interface includes plus (+) and minus (-) buttons and scroll bars.  These are standard controls, for which the user has no learning curve.
+                For zooming, the most familiar user interface includes plus (+) and minus (-) buttons.  They are standard controls, for which the user has no learning curve.
                 </p>
                 <p>
-                Hover over the graphs below to see the zooming controls.  Use the buttons and scrollbars to adjust the scales.
+                Hover over the graphs below to see the zooming controls.
+                </p>
+                <h2>Two Dependent Dimensions</h2>
+                <p>
+                Plus (+) and minus (-) buttons are standard controls for zooming when dimensions are synchronized.  Two-dimensional panning is supported by dragging in the data display.
                 </p>
             </div>
+            <div className="Graph">
+                <Map dataSet={ "World" } />
+            </div>
             <div className="Description">
-                <h2>Two Dimensions</h2>
                 <p>
-                Plus (+) and minus (-) buttons and scrollbars are sufficient for the user to zoom in on objects of interest.  The handles on the ends of the scrollbars require some learning curve, but provide visible affordances for one-dimensional zooming and fine-grained adjustments.
+                This is how maps work, in Google Maps, Apple Maps, Bing Maps, MapQuest, ArcGIS, OpenStreetMap, and others.This user interface is familiar to everyone.  It is also accessible to people who cannot use a scroll wheel.
+                </p>
+                <p>
+                TODO:  Support scroll wheel.
+                </p>
+                <h2>Two Independent Dimensions</h2>
+                <p>
+                Unlike maps, other types of graphs may have independent dimensions; and the drag action in the data display may be needed for other purposes besides panning.
+                </p>
+                <p>
+                Everyone has used scrollbars to pan in independent dimensions.  Handles on the ends of the scrollbars provide affordances for one-dimensional zooming.
                 </p>
             </div>
             <div className="Graph">
                 <ScatterPlot dataSet={ "Iris" } />
             </div>
             <div className="Description">
+                <p>
+                TODO:  Support scroll wheel along the axes for one-dimensional zooming.  The scroll wheel is faster for users who know it; but scrollbars are more easily learned, and the handles offer greater precision.
+                </p>
                 <h2>One Dimension</h2>
                 <p>
-                Plus (+) and minus (-) buttons and scrollbars are compatible with other design patterns.  One-dimensional zooming often employs the <a href="https://vega.github.io/vega/examples/overview-plus-detail/">Overview Plus Detail pattern</a> (Tidwell 2006) (Cockburn, Karlson, and Bederson, 2008), which combines the scrollbar with an overview of the data.
+                These controls are compatible with other design patterns.  One-dimensional zooming often employs the <a href="https://vega.github.io/vega/examples/overview-plus-detail/">Overview Plus Detail pattern</a> (Tidwell 2006) (Cockburn, Karlson, and Bederson, 2008), which combines the scrollbar with an overview of the data.
                 </p>
             </div>
             <div className="Graph">
@@ -66,7 +86,13 @@ const App = () => {
                 This design supports advanced features that save steps for the user.  A drag action in the data display can support two-dimensional panning, or zooming in on objects of interest.  These features are less easily learned, because they have no visible affordance; but both could be implemented in separate modes, expressed through menus or a toolbox metaphor.
                 </p>
                 <p>
+                If a drag in the data display supports two-dimensional panning, and the axes are synchronized, then scroll bars are not needed; plus (+) and minus (-) buttons are sufficient.  This is the familiar user experience for maps.
+                </p>
+                <p>
                 This design follows desktop standards.  A mobile design applies the same principle to different standards.  On mobile, rather than plus (+) and minus (-) buttons, pinch and swipe gestures enable zooming and panning.  On mobile, the user can't hover, but scrollbars are unobtrusive:  they grow when the user scrolls, and shrink when they stop.  Because of the pinch gesture, scrollbars don't need handles.  The axes provide natural locations for zooming and panning in one dimension.  As on the desktop, two-dimensional zooming and panning can be supported as advanced features in separate modes.
+                </p>
+                TODO:  Support mobile devices.
+                <p>
                 </p>
                 <p>
                 The user always has some goal, and it's never to learn our user interface (no matter how much we admire it!).  For this reason, our goal must be to get the user value, quickly.  They can learn our advanced features if they have time.

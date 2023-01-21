@@ -40,7 +40,7 @@ const AreaPlot = ( props ) => {
     
     // Zoom in one dimension.
     let onMouseDown = ( event ) => {
-        Graph.onMouseDown( event, width, height, margin, padding, overviewPadding, xScale, yScale, xDomain0, yDomain0 );
+        Graph.onMouseDown( event, width, height, margin, padding, false, overviewPadding, -1, xScale, yScale, xDomain0, yDomain0 );
     },
     onMouseUp = ( event ) => {
         if( Graph.downLocation.isX || Graph.downLocation.isY ) {
@@ -68,7 +68,7 @@ const AreaPlot = ( props ) => {
     
     // Set hook to draw on mounting.
     useEffect(() => {
-        AreaPlot.draw( ref, width, height, margin, padding, overviewPadding, Graph.isZooming( ref ), false, false, xScale, yScale, xScale1, yScale1, xDomain0, yDomain0, xLabel, yLabel, dataSet );
+        AreaPlot.draw( ref, width, height, margin, padding, overviewPadding, Graph.isZooming.get( ref ), false, false, xScale, yScale, xScale1, yScale1, xDomain0, yDomain0, xLabel, yLabel, dataSet );
     });
     
     // Return the component.
@@ -125,7 +125,7 @@ AreaPlot.draw = ( ref, width, height, margin, padding, overviewPadding, isZoomin
         );
     
     // Draw the axes and the controls.
-    Graph.drawAxes(     ref, width, height - overviewPadding, margin, padding, overviewPadding, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+    Graph.drawAxes( ref, width, height - overviewPadding, margin, padding, overviewPadding, -1, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
     svg.append("path")
         .datum( data )
         .attr( "fill", "#99bbdd" )
@@ -136,7 +136,7 @@ AreaPlot.draw = ( ref, width, height, margin, padding, overviewPadding, isZoomin
             .y0( height )
             .y1( d => yScale1( d[ 1 ]))
         );
-    Graph.drawControls( ref, width, height, margin, padding, overviewPadding, isZooming, false, isXBinning, isYBinning, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+    Graph.drawControls( ref, width, height, margin, padding, overviewPadding, -1, isZooming, isZooming, false, isXBinning, isYBinning, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
 };
 
 export default AreaPlot;

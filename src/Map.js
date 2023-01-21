@@ -5,14 +5,14 @@ import Graph from './Graph';
 import './Graph.css';
 
 /**
- * Scatter plot in an SVG element.
+ * Map in an SVG element.
  *
  * This component is stateless because the zoom can be calculated from the event coordinates and the initial domains.
  *
  * @param  {Object}  props  properties
  * @return component
  */
-const ScatterPlot = ( props ) => {
+const Map = ( props ) => {
 
     // Initialization.
     const width = 400,
@@ -33,34 +33,34 @@ const ScatterPlot = ( props ) => {
     // Zoom in two dimensions.
     let onZoom2D = ( isIn ) => {
         Graph.onZoom2D( isIn, xScale, yScale, xDomain0, yDomain0, true, true );
-        ScatterPlot.draw( ref, width, height, margin, padding, true, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
+        Map.draw( ref, width, height, margin, padding, true, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
     };
     
     // Zoom in one dimension.
     let onMouseDown = ( event ) => {
-        Graph.onMouseDown( event, width, height, margin, padding, false, 0, 0, xScale, yScale, xDomain0, yDomain0 );
+        Graph.onMouseDown( event, width, height, margin, padding, true, -1, -1, xScale, yScale, xDomain0, yDomain0 );
     },
     onMouseUp = ( event ) => {
         if( Graph.downLocation.isX || Graph.downLocation.isY ) {
             Graph.onMouseUp( event, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0 );
-            ScatterPlot.draw( ref, width, height, margin, padding, true, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
+            Map.draw( ref, width, height, margin, padding, true, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
         }
     };
     
     // Show or hide the controls.
     let onMouseOver = ( event ) => {
-        Graph.drawControls( ref, width, height, margin, padding, 0, 0, true, true, true, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+        Graph.drawControls( ref, width, height, margin, padding, -1, -1, true, false, false, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
     };
     let onMouseOut = ( event ) => {
         let xUp = event.nativeEvent.offsetX,
             yUp = event.nativeEvent.offsetY,
             isZooming = (( 0 <= xUp ) && ( xUp < width ) && ( 0 <= yUp ) && ( yUp < height ));
-        Graph.drawControls( ref, width, height, margin, padding, 0, 0, isZooming, isZooming, isZooming, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+        Graph.drawControls( ref, width, height, margin, padding, -1, -1, isZooming, false, false, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
     };
     
     // Set hook to draw on mounting.
     useEffect(() => {
-        ScatterPlot.draw( ref, width, height, margin, padding, Graph.isZooming.get( ref ), false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
+        Map.draw( ref, width, height, margin, padding, Graph.isZooming.get( ref ), false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
     });
     
     // Return the component.
@@ -69,7 +69,7 @@ const ScatterPlot = ( props ) => {
 };
 
 /**
- * Draws the scatter plot.
+ * Draws the map.
  *
  * @param  {Object}   ref          reference to DIV
  * @param  {number}   width        width, in pixels
@@ -88,25 +88,43 @@ const ScatterPlot = ( props ) => {
  * @param  {string}   dataSet      data set name
  * @param  {D3Scale}  symbolScale  symbol scale
  */
-ScatterPlot.draw = ( ref, width, height, margin, padding, isZooming, isXBinning, isYBinning, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale ) => {
+Map.draw = ( ref, width, height, margin, padding, isZooming, isXBinning, isYBinning, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale ) => {
     
     // Initialization.
     const svg = d3.select( ref.current.childNodes[ 0 ]);
     svg.selectAll( "*" ).remove();
     
-    // Draw the points.
-    let data = Data.getValues( dataSet );
-    data.forEach(( datum ) => {
-        svg.append( "path" )
-        .attr( "d", symbolScale( datum[ 0 ]))
-        .attr( "transform", d => "translate( " + Math.round( xScale( datum[ 1 ])) + ", " + Math.round( yScale( datum[ 2 ])) + " )" )
-        .style( "fill", "none" )
-        .style( "stroke", "black" );
+    // Get the scale and position.
+    const xDomain = xScale.domain(),
+//        yDomain = yScale.domain(),
+        scale = ( width / 1.3 / Math.PI ) * ( xDomain0[ 1 ] - xDomain0[ 0 ]) / ( xDomain[ 1 ] - xDomain[ 0 ]),
+        x = width / 2,
+        y = height / 2;
+
+//    x +=  width * ( xDomain[ 0 ] - xDomain0[ 0 ]) / ( xDomain0[ 1 ] - xDomain0[ 0 ]);
+//    y += height * ( yDomain[ 0 ] - yDomain0[ 0 ]) / ( yDomain0[ 1 ] - yDomain0[ 0 ]);
+    
+    // Get the projection.
+    var projection = d3.geoNaturalEarth1()
+        .scale( scale )
+        .translate([ x, y ]);
+
+    // Load external data and draw the map.
+    // @see https://d3-graph-gallery.com/graph/backgroundmap_basic.html
+    d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson").then( function(data) {
+        svg.append("g")
+            .selectAll("path")
+            .data(data.features)
+            .join("path")
+                .attr("fill", "#69b3a2")
+                .attr("d", d3.geoPath()
+                .projection(projection)
+                )
+                .style("stroke", "#fff");
     });
     
-    // Draw the axes and the controls.
-    Graph.drawAxes(     ref, width, height, margin, padding, 0, 0, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
-    Graph.drawControls( ref, width, height, margin, padding, 0, 0, isZooming, isZooming, isZooming, isXBinning, isYBinning, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+    // Draw the controls.
+    Graph.drawControls( ref, width, height, margin, padding, -1, -1, isZooming, false, false, isXBinning, isYBinning, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
 };
 
-export default ScatterPlot;
+export default Map;
