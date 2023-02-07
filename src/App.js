@@ -22,7 +22,7 @@ const App = () => {
                 If users don't get value from a web page, quickly -- they move on.  For this reason, Jakob Nielsen recommends engaging the user <a href="https://www.nngroup.com/articles/how-long-do-users-stay-on-web-pages/">within the first 10 seconds</a>.
                 </p>
                 <p className="center">
-                    <a href="https://www.nngroup.com"><img alt="Dr. Jakob Nielsen" src={nielsen}/></a>
+                    <a href="https://www.nngroup.com"><img title="Dr. Jakob Nielsen" alt="Dr. Jakob Nielsen" src={nielsen}/></a>
                 </p>
                 <p>
                 This is why we strive for <i>learnability</i> in our web applications, and the most learnable user interface is one that the users already know.  UX designers emphasize this principle of <i>familiarity</i>:
