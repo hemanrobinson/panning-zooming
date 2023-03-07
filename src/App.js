@@ -5,16 +5,32 @@ import Map from './Map';
 import './App.css';
 import nielsen from './nielsen.jpg';
 
-// Application:  Learnable Zooming
+// Application:  Accessible Zooming
 const App = () => {
 
     // TODO:  Disable/enable the plus (+) and minus (-) buttons at their limits, and describe those limits in the Design Notes.
+
+    // TODO:  Get scrollbars and plus (+) and minus (-) buttons in the tab order.
+
+    // TODO:  Support scroll wheel for two-dimensional zooming, and along the axes for one-dimensional zooming.
+    //
+    //        The scroll wheel is faster for users who know it; but scrollbars are more easily learned, and the handles offer greater precision.
+    
+    // TODO:  Justify scrollbars and plus (+) and minus (-) buttons.
+    //
+    //        Scrollbars and plus (+) and minus (-) buttons provide accessibility for those who can't use scroll wheels or the pinch-zoom gesture.
+    //
+    //        Scrollbars also show the limits of the data display.
+    //        Limiting the data display prevents the user from accidentally scrolling into areas of no data.
+    //
+    // TODO:  Support mobile devices.
+    //
     
     // Return the App.
     return (
         <div className="Column">
             <div className="Description">
-                <h1>Learnable Zooming</h1>
+                <h1>Accessible Zooming</h1>
                 <p>
                 The one great lesson of web design is:  <i>people surf</i>.
                 </p>
@@ -51,9 +67,6 @@ const App = () => {
                 <p>
                 This is how maps work, in Google Maps, Apple Maps, Bing Maps, MapQuest, ArcGIS, OpenStreetMap, and others.This user interface is familiar to everyone.  It is also accessible to people who cannot use a scroll wheel.
                 </p>
-                <p>
-                TODO:  Support scroll wheel.
-                </p>
                 <h2>Two Independent Dimensions</h2>
                 <p>
                 Unlike maps, other types of graphs may have independent dimensions; and the drag action in the data display may be needed for other purposes besides panning.
@@ -66,9 +79,6 @@ const App = () => {
                 <ScatterPlot dataSet={ "Iris" } />
             </div>
             <div className="Description">
-                <p>
-                TODO:  Support scroll wheel along the axes for one-dimensional zooming.  The scroll wheel is faster for users who know it; but scrollbars are more easily learned, and the handles offer greater precision.
-                </p>
                 <h2>One Dimension</h2>
                 <p>
                 These controls are compatible with other design patterns.  One-dimensional zooming often employs the <a href="https://vega.github.io/vega/examples/overview-plus-detail/">Overview Plus Detail pattern</a> (Tidwell 2006) (Cockburn, Karlson, and Bederson, 2008), which combines the scrollbar with an overview of the data.
@@ -90,9 +100,6 @@ const App = () => {
                 </p>
                 <p>
                 This design follows desktop standards.  A mobile design applies the same principle to different standards.  On mobile, rather than plus (+) and minus (-) buttons, pinch and swipe gestures enable zooming and panning.  On mobile, the user can't hover, but scrollbars are unobtrusive:  they grow when the user scrolls, and shrink when they stop.  Because of the pinch gesture, scrollbars don't need handles.  The axes provide natural locations for zooming and panning in one dimension.  As on the desktop, two-dimensional zooming and panning can be supported as advanced features in separate modes.
-                </p>
-                TODO:  Support mobile devices.
-                <p>
                 </p>
                 <p>
                 The user always has some goal, and it's never to learn our user interface (no matter how much we admire it!).  For this reason, our goal must be to get the user value, quickly.  They can learn our advanced features if they have time.
