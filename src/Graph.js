@@ -663,6 +663,10 @@ Graph.drawAxes = ( ref, width, height, margin, padding, xScrollSize, yScrollSize
 /**
  * Draws the controls.
  *
+ * N.B. I've set "isZooming" to false for all graphs.  I originally thought these buttons a good idea because of familiarity,
+ * but if we want people to use scroll wheels, the buttons are a distraction.  I believe their usage will fade away in future,
+ * except perhaps for accessibility.  I'm not sure they're needed even then, but have left them implemented just in case.
+ *
  * @param  {Object}   ref           reference to DIV
  * @param  {number}   width         width, in pixels
  * @param  {number}   height        height, in pixels

@@ -33,10 +33,10 @@ const AreaPlot = ( props ) => {
         yScale1 = d3.scaleLog().domain( yDomain0 ).range([ height, height - overviewPadding ]);
     
     // Zoom in two dimensions.
-    let onZoom2D = ( isIn ) => {
-        Graph.onZoom2D( isIn, xScale, yScale, xDomain0, yDomain0, true, false );
-        AreaPlot.draw( ref, width, height, margin, padding, overviewPadding, true, false, false, xScale, yScale, xScale1, yScale1, xDomain0, yDomain0, xLabel, yLabel, dataSet );
-    };
+//    let onZoom2D = ( isIn ) => {
+//        Graph.onZoom2D( isIn, xScale, yScale, xDomain0, yDomain0, true, false );
+//        AreaPlot.draw( ref, width, height, margin, padding, overviewPadding, true, false, false, xScale, yScale, xScale1, yScale1, xDomain0, yDomain0, xLabel, yLabel, dataSet );
+//    };
     
     // Zoom in one dimension.
     let onMouseDown = ( event ) => {
@@ -73,7 +73,7 @@ const AreaPlot = ( props ) => {
     
     // Return the component.
     return <Graph width={width} height={height} margin={margin} padding={padding}
-        onZoom={onZoom2D} onMouseDown={onMouseDown} onMouseUp={onMouseUp} onMouseOver={onMouseOver} onMouseOut={onMouseOut} ref={ref} />
+        onMouseDown={onMouseDown} onMouseUp={onMouseUp} onMouseOver={onMouseOver} onMouseOut={onMouseOut} ref={ref} />
 };
     
 /**
@@ -136,7 +136,7 @@ AreaPlot.draw = ( ref, width, height, margin, padding, overviewPadding, isZoomin
             .y0( height )
             .y1( d => yScale1( d[ 1 ]))
         );
-    Graph.drawControls( ref, width, height, margin, padding, overviewPadding, -1, isZooming, isZooming, false, isXBinning, isYBinning, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+    Graph.drawControls( ref, width, height, margin, padding, overviewPadding, -1, false, isZooming, false, isXBinning, isYBinning, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
 };
 
 export default AreaPlot;

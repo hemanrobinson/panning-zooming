@@ -11,8 +11,6 @@ const App = () => {
     // TODO:  Implement d3.zoom in the data display for two-dimensional zooming, and along the axes for one-dimensional zooming.
 
     // TODO:  Implement pointer events.
-
-    // TODO:  Remove plus (+) and minus (-) buttons.
     
     // Return the App.
     return (
@@ -20,16 +18,13 @@ const App = () => {
             <div className="Description">
                 <h1>Discoverable Zooming</h1>
                 <p>
-                The one great lesson of web design is:  <i>people surf</i>.
+                "Discoverability: the ease at which users can find new features or functions... and learn to use the things that they find."  (Interaction Design Foundation, 2023).
                 </p>
                 <p>
-                If users don't get value from a web page, quickly -- they move on.  For this reason, Jakob Nielsen recommends engaging the user <a href="https://www.nngroup.com/articles/how-long-do-users-stay-on-web-pages/">within the first 10 seconds</a>.
+                The one great lesson of web design is:  <i>people surf</i>.  If users don't get value from a web page, quickly -- they move on.  For this reason, Jakob Nielsen recommends engaging the user <a href="https://www.nngroup.com/articles/how-long-do-users-stay-on-web-pages/">within the first 10 seconds</a>.
                 </p>
                 <p className="center">
                     <a href="https://www.nngroup.com"><img title="Dr. Jakob Nielsen" alt="Dr. Jakob Nielsen" src={nielsen}/></a>
-                </p>
-                <p>
-                "Discoverability... is the ease at which users can find new features or functions... and learn to use the things that they find." -- <a href="https://www.interaction-design.org/literature/article/make-it-easy-on-the-user-designing-for-discoverability-within-mobile-apps">Interaction Design Foundation</a>
                 </p>
                 <p>
                 The most easily discovered user interface is one that the users already know.  UX designers emphasize this principle of <i>familiarity</i>:
@@ -41,17 +36,17 @@ const App = () => {
                     <li>"Don't make me think!" (Krug, 2014)</li>
                 </ul>
                 <p>
-                For zooming, the most familiar user interface includes scrollbars.  Scrollbars show the user where they have zoomed, and where they can zoom.  They are standard controls, for which the user has no learning curve.
+                For zooming, the most familiar user interface includes scrollbars.  Scrollbars show the user where they have zoomed, and where they can zoom.  These are standard controls, for which the user has no learning curve.
                 </p>
                 <p>
                 Hover over the graphs below to see the zooming controls.
                 </p>
-                <h2>Two Independent Dimensions</h2>
+                <h2>Two Dimensions</h2>
                 <p>
-                Except for special cases such as maps, graphs in general have independent dimensions; and the drag action in the data display may be needed for other purposes besides panning.
+                Everyone has used scrollbars for panning.  Handles on the ends of the scrollbars provide affordances for one-dimensional zooming.
                 </p>
                 <p>
-                Everyone has used scrollbars to pan in independent dimensions.  Handles on the ends of the scrollbars provide affordances for one-dimensional zooming.
+                The drag action in the data display can support panning, but it may be used for other purposes: for example, to drag a rectangle and zoom in on that area, or to drag a brush.  The scrollbars free the drag action for other purposes.
                 </p>
             </div>
             <div className="Graph">
@@ -60,7 +55,7 @@ const App = () => {
             <div className="Description">
                 <h2>One Dimension</h2>
                 <p>
-                These controls are compatible with other design patterns.  One-dimensional zooming often employs the <a href="https://vega.github.io/vega/examples/overview-plus-detail/">Overview Plus Detail pattern</a> (Tidwell 2006) (Cockburn, Karlson, and Bederson, 2008), which combines the scrollbar with an overview of the data.
+                These controls are consistent with other design patterns.  One-dimensional zooming often employs the <a href="https://vega.github.io/vega/examples/overview-plus-detail/">Overview Plus Detail pattern</a> (Tidwell 2006) (Cockburn, Karlson, and Bederson, 2008), which combines the scrollbar with an overview of the data.
                 </p>
             </div>
             <div className="Graph">
