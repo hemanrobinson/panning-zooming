@@ -18,13 +18,13 @@ const App = () => {
             <div className="Description">
                 <h1>Discoverable Zooming</h1>
                 <p>
-                "Discoverability: the ease at which users can find new features or functions... and learn to use the things that they find."  (Interaction Design Foundation, 2023).
-                </p>
-                <p>
-                The one great lesson of web design is:  <i>people surf</i>.  If users don't get value from a web page, quickly -- they move on.  For this reason, Jakob Nielsen recommends engaging the user <a href="https://www.nngroup.com/articles/how-long-do-users-stay-on-web-pages/">within the first 10 seconds</a>.
+                The one great lesson of web design is:  <i>people surf</i>.  If users don't get value from a web page, quickly -- they move on.  Jakob Nielsen recommends engaging the user <a href="https://www.nngroup.com/articles/how-long-do-users-stay-on-web-pages/">within the first 10 seconds</a>.
                 </p>
                 <p className="center">
                     <a href="https://www.nngroup.com"><img title="Dr. Jakob Nielsen" alt="Dr. Jakob Nielsen" src={nielsen}/></a>
+                </p>
+                <p>
+                For this reason, we want our user interfaces to achieve <em>discoverability</em>:  "the ease at which users can find new features or functions... and learn to use the things that they find."  (Interaction Design Foundation, 2023).
                 </p>
                 <p>
                 The most easily discovered user interface is one that the users already know.  UX designers emphasize this principle of <i>familiarity</i>:
@@ -39,21 +39,26 @@ const App = () => {
                 For zooming, the most familiar user interface includes scrollbars.  Scrollbars show the user where they have zoomed, and where they can zoom.  These are standard controls, for which the user has no learning curve.
                 </p>
                 <p>
-                Hover over the graphs below to see the zooming controls.
+                Hover over the graphs below to see the scrollbars.
                 </p>
-                <h2>Two Dimensions</h2>
+                <h2>In Two Dimensions</h2>
                 <p>
-                Everyone has used scrollbars for panning.  Handles on the ends of the scrollbars provide affordances for one-dimensional zooming.
+                Scrollbars have three purposes:
                 </p>
-                <p>
-                The drag action in the data display can support panning, but it may be used for other purposes: for example, to drag a rectangle and zoom in on that area, or to drag a brush.  The scrollbars free the drag action for other purposes.
-                </p>
+                <ol>
+                <li><strong>Navigation:</strong>  they show the user where they are, and where they can go</li>
+                <li><strong>Panning:</strong>  they enable the user to pan in one dimension</li>
+                <li><strong>Zooming:</strong>  handles on the ends of the scrollbars enable zooming in one dimension.</li>
+                </ol>
             </div>
             <div className="Graph">
                 <ScatterPlot dataSet={ "Iris" } />
             </div>
             <div className="Description">
-                <h2>One Dimension</h2>
+                <p>
+                Scrollbars don't preclude use of the scroll wheel for two-dimensional zooming, or the drag action for two-dimensional panning.  They provide visual feedback when these actions are performed, and visible affordance for performing them in one dimension.
+                </p>
+                <h2>In One Dimension</h2>
                 <p>
                 These controls are consistent with other design patterns.  One-dimensional zooming often employs the <a href="https://vega.github.io/vega/examples/overview-plus-detail/">Overview Plus Detail pattern</a> (Tidwell 2006) (Cockburn, Karlson, and Bederson, 2008), which combines the scrollbar with an overview of the data.
                 </p>
@@ -67,19 +72,16 @@ const App = () => {
                 To minimize distraction from the data display, controls are fully displayed only when they can be used.  Controls are discoverable by hovering over the graph.
                 </p>
                 <p>
-                This design supports advanced features that save steps for the user.  A drag action in the data display can support two-dimensional panning, or zooming in on objects of interest.  These features are less easily learned, because they have no visible affordance; but both could be implemented in separate modes, expressed through menus or a toolbox metaphor.
+                When there are no limits to the data, scrollbars are not needed.  This is the familiar user experience for maps.  When there are limits to the data, scrollbars show those limits, and prevent the user from accidentally scrolling into areas of no data.
                 </p>
                 <p>
-                If a drag in the data display supports two-dimensional panning, and the axes are synchronized, and there are no limits to the data, then scroll bars are not needed.  This is the familiar user experience for maps.  When there are limits to the data, scrollbars prevent the user from accidentally scrolling into areas of no data.
+                The drag action in the data display can support panning, but it may be used for other purposes: for example, to drag a rectangle and zoom in on that area, or to drag a brush.  The scrollbars free the drag action to be used for other purposes.
                 </p>
                 <p>
-                This design follows desktop standards.  A mobile design applies the same principle to different standards.  On mobile, the user can't hover, but scrollbars are unobtrusive:  they grow when the user scrolls, and shrink when they stop.  Because of the pinch gesture, scrollbars don't need handles.  The axes provide natural locations for zooming and panning in one dimension.  As on the desktop, two-dimensional zooming and panning can be supported as advanced features in separate modes.
+                This design follows desktop standards.  A mobile design would apply the same principles with different standards.  On mobile devices, the user can't hover, but scrollbars are unobtrusive:  they grow when the user scrolls, and shrink when they stop.  Because of the pinch gesture, scrollbars don't need handles.
                 </p>
                 <p>
-                The user always has some goal, and it's never to learn our user interface (no matter how much we admire it!).  For this reason, our goal must be to get the user value, quickly.  They can learn our advanced features if they have time.
-                </p>
-                <p>
-                We can achieve discoverability through familiarity, by following standards.  This ensures that our user interfaces are easily learned, because they are already known.
+                The user always has some goal, and it's never to learn our user interface (no matter how much we admire it!).  For this reason, our goal must be to get the user value, quickly.  We can achieve discoverability through familiarity, by following standards.  This ensures that our user interfaces are easily learned, because they are already known.
                 </p>
                 <br/>
                 <h2>Further Reading</h2>
