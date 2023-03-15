@@ -1,7 +1,6 @@
 import React from 'react';
 import AreaPlot from './AreaPlot';
 import ScatterPlot from './ScatterPlot';
-import Map from './Map';
 import './App.css';
 import nielsen from './nielsen.jpg';
 

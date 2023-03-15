@@ -52,9 +52,9 @@ const Map = ( props ) => {
         Graph.drawControls( ref, width, height, margin, padding, -1, -1, false, false, false, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
     };
     let onMouseOut = ( event ) => {
-        let xUp = event.nativeEvent.offsetX,
-            yUp = event.nativeEvent.offsetY,
-            isZooming = (( 0 <= xUp ) && ( xUp < width ) && ( 0 <= yUp ) && ( yUp < height ));
+//        let xUp = event.nativeEvent.offsetX,
+//            yUp = event.nativeEvent.offsetY,
+//            isZooming = (( 0 <= xUp ) && ( xUp < width ) && ( 0 <= yUp ) && ( yUp < height ));
         Graph.drawControls( ref, width, height, margin, padding, -1, -1, false, false, false, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
     };
     
