@@ -74,7 +74,7 @@ const Graph = React.forwardRef(( props, ref ) => {
     // Return the component.
     // Using "value" instead of "defaultValue" below suppresses a warning.
     return <div style={{width: width, height: height}} className="parent" ref={ref}>
-        <svg width={width} height={height} onPointerDown={onPointerDown} onPointerMove={onPointerUp} onPointerUp={onPointerUp} onPointerOver={onPointerOver} onPointerOut={onPointerOut} onTouchStart={()=>{alert( "onTouchStart" );}}/>
+        <svg width={width} height={height} onPointerDown={onPointerDown} onPointerMove={onPointerUp} onPointerUp={onPointerUp} onPointerOver={onPointerOver} onPointerOut={onPointerOut}/>
         <Button variant="contained" onClick={()=>onZoom(true )}
             style={{ position: "absolute", padding: 0, minWidth: buttonSize, width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1,
             display: "none" }}>+</Button>
@@ -300,11 +300,9 @@ Graph.onPointerDown = ( event, width, height, margin, padding, isDragging, xScro
         yDomain = yScale.domain(),
         { xMin0, xMax0, yMin0, yMax0, xMin, xMax, yMin, yMax, xD, yD } = Graph.getDomains( xDomain0, yDomain0, xDomain, yDomain, !!xScale.bandwidth, !!yScale.bandwidth );
     
-    alert( "onPointerDown" );
-    
     // Prevent default event handling.
-    event.preventDefault();
-    event.stopPropagation();
+//    event.preventDefault();
+//    event.stopPropagation();
         
     // Reset the mousedown coordinates.
     Graph.downLocation.x = xDown;
@@ -375,8 +373,8 @@ Graph.onPointerUp = ( event, width, height, margin, padding, xScale, yScale, xDo
         { xMin0, xMax0, yMin0, yMax0, xMin, xMax, yMin, yMax, xD, yD } = Graph.getDomains( xDomain0, yDomain0, xDomain, yDomain, !!xScale.bandwidth, !!yScale.bandwidth );
         
     // Prevent default event handling.
-    event.preventDefault();
-    event.stopPropagation();
+//    event.preventDefault();
+//    event.stopPropagation();
     
     // Handle event on X scrollbar...
     if( Graph.downLocation.isX ) {
