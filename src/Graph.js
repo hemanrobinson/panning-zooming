@@ -286,9 +286,7 @@ Graph.onZoom2D = ( isIn, xScale, yScale, xDomain0, yDomain0, isX, isY ) => {
  * @param  {Array}    yDomain0      Initial Y domain
  */
 Graph.onPointerDown = ( event, width, height, margin, padding, isDragging, xScrollSize, yScrollSize, xScale, yScale, xDomain0, yDomain0 ) => {
-        
-    alert( xScrollSize );
-
+    
     // Initialization.
     const scrollSize = (( event.pointerType === "touch" ) ? 2 : 1 ) * Graph.scrollSize,
         endCapSize = 0.8 * scrollSize;

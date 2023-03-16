@@ -126,6 +126,7 @@ AreaPlot.draw = ( ref, width, height, margin, padding, overviewPadding, isZoomin
     
     // Draw the axes and the controls.
     Graph.drawAxes( ref, width, height - overviewPadding, margin, padding, overviewPadding, -1, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+    Graph.drawControls( ref, width, height, margin, padding, overviewPadding, -1, false, isZooming, false, isXBinning, isYBinning, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
     svg.append("path")
         .datum( data )
         .attr( "fill", "#99bbdd" )
@@ -136,7 +137,6 @@ AreaPlot.draw = ( ref, width, height, margin, padding, overviewPadding, isZoomin
             .y0( height )
             .y1( d => yScale1( d[ 1 ]))
         );
-    Graph.drawControls( ref, width, height, margin, padding, overviewPadding, -1, false, isZooming, false, isXBinning, isYBinning, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
 };
 
 export default AreaPlot;
