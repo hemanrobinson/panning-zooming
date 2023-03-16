@@ -299,7 +299,9 @@ Graph.onPointerDown = ( event, width, height, margin, padding, isDragging, xScro
         xDomain = xScale.domain(),
         yDomain = yScale.domain(),
         { xMin0, xMax0, yMin0, yMax0, xMin, xMax, yMin, yMax, xD, yD } = Graph.getDomains( xDomain0, yDomain0, xDomain, yDomain, !!xScale.bandwidth, !!yScale.bandwidth );
-        
+    
+    alert( "onPointerDown" );
+    
     // Prevent default event handling.
     event.preventDefault();
     event.stopPropagation();
