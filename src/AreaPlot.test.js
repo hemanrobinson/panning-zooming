@@ -12,6 +12,7 @@ let container = null;
 
 // Sets up a DOM element as a render target.
 beforeEach(() => {
+    window.PointerEvent = MouseEvent;   // PointerEvent is not supported in JSDOM
     container = document.createElement( "div" );
     document.body.appendChild( container );
 });
@@ -38,11 +39,11 @@ it( "creates a AreaPlot element", () => {
     expect( svg.nodeName ).toBe( "svg" );
     
     // Test mouse events.
-    svg.dispatchEvent( new MouseEvent( "mousedown", { bubbles: true }));
+    svg.dispatchEvent( new PointerEvent( "pointerdown", { bubbles: true }));
     Graph.downLocation.isX = true;
-    svg.dispatchEvent( new MouseEvent( "mouseup", { bubbles: true }));
+    svg.dispatchEvent( new PointerEvent( "pointerup", { bubbles: true }));
     Graph.downLocation.isX = false;
-    svg.dispatchEvent( new MouseEvent( "mouseup", { bubbles: true }));
+    svg.dispatchEvent( new PointerEvent( "pointerup", { bubbles: true }));
 });
 
 it( "draws the AreaPlot", () => {

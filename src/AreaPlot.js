@@ -39,24 +39,24 @@ const AreaPlot = ( props ) => {
 //    };
     
     // Zoom in one dimension.
-    let onMouseDown = ( event ) => {
-        Graph.onMouseDown( event, width, height, margin, padding, false, overviewPadding, -1, xScale, yScale, xDomain0, yDomain0 );
+    let onPointerDown = ( event ) => {
+        Graph.onPointerDown( event, width, height, margin, padding, false, overviewPadding, -1, xScale, yScale, xDomain0, yDomain0 );
     },
-    onMouseUp = ( event ) => {
+    onPointerUp = ( event ) => {
         if( Graph.downLocation.isX || Graph.downLocation.isY ) {
-            Graph.onMouseUp( event, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0 );
+            Graph.onPointerUp( event, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0 );
             AreaPlot.draw( ref, width, height, margin, padding, overviewPadding, true, false, false, xScale, yScale, xScale1, yScale1, xDomain0, yDomain0, xLabel, yLabel, dataSet );
         }
     };
     
     // Show or hide the controls.
-    let onMouseOver = ( event ) => {
+    let onPointerOver = ( event ) => {
         if( !AreaPlot.isOver ) {
             AreaPlot.isOver = true;
             AreaPlot.draw( ref, width, height, margin, padding, overviewPadding, true, false, false, xScale, yScale, xScale1, yScale1, xDomain0, yDomain0, xLabel, yLabel, dataSet );
         }
     };
-    let onMouseOut = ( event ) => {
+    let onPointerOut = ( event ) => {
         if( AreaPlot.isOver ) {
             AreaPlot.isOver = false;
             let xUp = event.nativeEvent.offsetX,
@@ -73,7 +73,7 @@ const AreaPlot = ( props ) => {
     
     // Return the component.
     return <Graph width={width} height={height} margin={margin} padding={padding}
-        onMouseDown={onMouseDown} onMouseUp={onMouseUp} onMouseOver={onMouseOver} onMouseOut={onMouseOut} ref={ref} />
+        onPointerDown={onPointerDown} onPointerUp={onPointerUp} onPointerOver={onPointerOver} onPointerOut={onPointerOut} ref={ref} />
 };
     
 /**

@@ -37,21 +37,21 @@ const Map = ( props ) => {
 //    };
     
     // Zoom in one dimension.
-    let onMouseDown = ( event ) => {
-        Graph.onMouseDown( event, width, height, margin, padding, true, -1, -1, xScale, yScale, xDomain0, yDomain0 );
+    let onPointerDown = ( event ) => {
+        Graph.onPointerDown( event, width, height, margin, padding, true, -1, -1, xScale, yScale, xDomain0, yDomain0 );
     },
-    onMouseUp = ( event ) => {
+    onPointerUp = ( event ) => {
         if( Graph.downLocation.isX || Graph.downLocation.isY ) {
-            Graph.onMouseUp( event, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0 );
+            Graph.onPointerUp( event, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0 );
             Map.draw( ref, width, height, margin, padding, true, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
         }
     };
     
     // Show or hide the controls.
-    let onMouseOver = ( event ) => {
+    let onPointerOver = ( event ) => {
         Graph.drawControls( ref, width, height, margin, padding, -1, -1, false, false, false, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
     };
-    let onMouseOut = ( event ) => {
+    let onPointerOut = ( event ) => {
 //        let xUp = event.nativeEvent.offsetX,
 //            yUp = event.nativeEvent.offsetY,
 //            isZooming = (( 0 <= xUp ) && ( xUp < width ) && ( 0 <= yUp ) && ( yUp < height ));
@@ -65,7 +65,7 @@ const Map = ( props ) => {
     
     // Return the component.
     return <Graph width={width} height={height} margin={margin} padding={padding}
-        onMouseDown={onMouseDown} onMouseUp={onMouseUp} onMouseOver={onMouseOver} onMouseOut={onMouseOut} ref={ref} />
+        onPointerDown={onPointerDown} onPointerUp={onPointerUp} onPointerOver={onPointerOver} onPointerOut={onPointerOut} ref={ref} />
 };
 
 /**

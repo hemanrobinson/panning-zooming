@@ -65,7 +65,7 @@ const Graph = React.forwardRef(( props, ref ) => {
     
     // Initialization.
     const buttonSize = 30, sliderOffset = 12;
-    let { width, height, margin, padding, onMouseDown, onMouseUp, onMouseOver, onMouseOut, onZoom, xAggregate, yAggregate, onXAggregate, onYAggregate } = props,
+    let { width, height, margin, padding, onPointerDown, onPointerUp, onPointerOver, onPointerOut, onZoom, xAggregate, yAggregate, onXAggregate, onYAggregate } = props,
         top    = margin.top    + padding.top,
         right  = margin.right  + padding.right,
         bottom = margin.bottom + padding.bottom,
@@ -74,7 +74,7 @@ const Graph = React.forwardRef(( props, ref ) => {
     // Return the component.
     // Using "value" instead of "defaultValue" below suppresses a warning.
     return <div style={{width: width, height: height}} className="parent" ref={ref}>
-        <svg width={width} height={height} onMouseDown={onMouseDown} onMouseMove={onMouseUp} onMouseUp={onMouseUp} onMouseOver={onMouseOver} onMouseOut={onMouseOut} />
+        <svg width={width} height={height} onPointerDown={onPointerDown} onPointerMove={onPointerUp} onPointerUp={onPointerUp} onPointerOver={onPointerOver} onPointerOut={onPointerOut} />
         <Button variant="contained" onClick={()=>onZoom(true )}
             style={{ position: "absolute", padding: 0, minWidth: buttonSize, width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1,
             display: "none" }}>+</Button>
@@ -289,7 +289,7 @@ Graph.onZoom2D = ( isIn, xScale, yScale, xDomain0, yDomain0, isX, isY ) => {
  * @param  {Array}    xDomain0      Initial X domain
  * @param  {Array}    yDomain0      Initial Y domain
  */
-Graph.onMouseDown = ( event, width, height, margin, padding, isDragging, xScrollSize, yScrollSize, xScale, yScale, xDomain0, yDomain0 ) => {
+Graph.onPointerDown = ( event, width, height, margin, padding, isDragging, xScrollSize, yScrollSize, xScale, yScale, xDomain0, yDomain0 ) => {
 
     // Initialization.
     const scrollSize = Graph.scrollSize,
@@ -361,7 +361,7 @@ Graph.onMouseDown = ( event, width, height, margin, padding, isDragging, xScroll
  * @param  {Array}    xDomain0  Initial X domain
  * @param  {Array}    yDomain0  Initial Y domain
  */
-Graph.onMouseUp = ( event, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0 ) => {
+Graph.onPointerUp = ( event, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0 ) => {
 
     // Initialization.
     const d = 8;
@@ -496,7 +496,7 @@ Graph.onMouseUp = ( event, width, height, margin, padding, xScale, yScale, xDoma
     }
         
     // Reset the mousedown coordinates.
-    if(( Graph.downLocation.isX || Graph.downLocation.isY ) && ( event.type === "mouseup" )) {
+    if(( Graph.downLocation.isX || Graph.downLocation.isY ) && ( event.type === "pointerup" )) {
         Graph.downLocation.isX = false;
         Graph.downLocation.isY = false;
         Graph.downLocation.isMin = false;
@@ -705,7 +705,7 @@ Graph.drawControls = ( ref, width, height, margin, padding, xScrollSize, yScroll
     // Draw the X scroll bar.
     let x1 = x + w * ( xMin - xMin0      ) / ( xMax0 - xMin0 + xD ),
         x2 = x + w * ( xMax - xMin0 + xD ) / ( xMax0 - xMin0 + xD );
-    if( xScrollSize ) {
+    if(( xScrollSize >= 0 ) && ( x2 > x1 )) {
         svg.append( "rect" )
             .attr( "x", x1 )
             .attr( "y", height - xScrollSize )
@@ -826,11 +826,11 @@ Graph.drawControls = ( ref, width, height, margin, padding, xScrollSize, yScroll
     // Draw the Y scroll bar.
     let y1 = y + h * ( 1 - ( yMin - yMin0      ) / ( yMax0 - yMin0 + yD )),
         y2 = y + h * ( 1 - ( yMax - yMin0 + yD ) / ( yMax0 - yMin0 + yD ));
-    if( yScrollSize ) {
+    if(( yScrollSize >= 0 ) && ( y2 > y1 )) {
         svg.append( "rect" )
             .attr( "x", 0 )
             .attr( "y", y1 )
-            .attr( "width", width - xScrollSize )
+            .attr( "width", width - yScrollSize )
             .attr( "height", y2 - y1 )
             .attr( "opacity","0.5" )
             .style( "fill", colorLine );
