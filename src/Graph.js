@@ -74,7 +74,7 @@ const Graph = React.forwardRef(( props, ref ) => {
     // Return the component.
     // Using "value" instead of "defaultValue" below suppresses a warning.
     return <div style={{width: width, height: height}} className="parent" ref={ref}>
-        <svg width={width} height={height} onPointerDown={onPointerDown} onPointerMove={onPointerUp} onPointerUp={onPointerUp} onPointerOver={onPointerOver} onPointerOut={onPointerOut} />
+        <svg width={width} height={height} onPointerDown={onPointerDown} onPointerMove={onPointerUp} onPointerUp={onPointerUp} onPointerOver={onPointerOver} onPointerOut={onPointerOut} onTouchStart={()=>{alert( "onTouchStart" );}}/>
         <Button variant="contained" onClick={()=>onZoom(true )}
             style={{ position: "absolute", padding: 0, minWidth: buttonSize, width: buttonSize, height: buttonSize, top: ( height + 1 - buttonSize ), left: 1,
             display: "none" }}>+</Button>
