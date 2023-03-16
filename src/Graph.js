@@ -184,8 +184,6 @@ Graph.getDomains = ( xDomain0, yDomain0, xDomain, yDomain, isXOrdinal, isYOrdina
 /**
  * Zooms in one or two dimensions.
  *
- * TODO:  Enable and disable zoom buttons.
- *
  * @param   {boolean}  isIn      true iff zooming in, otherwise zooming out
  * @param   {D3Scale}  xScale    X scale (returned)
  * @param   {D3Scale}  yScale    Y scale (returned)
@@ -271,8 +269,6 @@ Graph.onZoom2D = ( isIn, xScale, yScale, xDomain0, yDomain0, isX, isY ) => {
     
 /**
  * Initiates zoom in one dimension.
- *
- * TODO:  Implement d3-zoom.
  *
  * This method modifies Graph.downLocation.
  *
@@ -374,6 +370,11 @@ Graph.onPointerUp = ( event, width, height, margin, padding, xScale, yScale, xDo
         xDomain = Graph.downLocation.xDomain,
         yDomain = Graph.downLocation.yDomain,
         { xMin0, xMax0, yMin0, yMax0, xMin, xMax, yMin, yMax, xD, yD } = Graph.getDomains( xDomain0, yDomain0, xDomain, yDomain, !!xScale.bandwidth, !!yScale.bandwidth );
+        
+    // Prevent panning.
+    if( Graph.downLocation.isX || Graph.downLocation.isY ) {
+        event.preventDefault();
+    }
     
     // Handle event on X scrollbar...
     if( Graph.downLocation.isX ) {

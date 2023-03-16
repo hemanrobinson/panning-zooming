@@ -11,6 +11,7 @@ svg {
     position: absolute;
     left: 0;
     z-index: 1;
+    touch-action: none;
 }
 
 /* Buttons and Sliders */
