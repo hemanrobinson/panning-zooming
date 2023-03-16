@@ -8,8 +8,6 @@ import nielsen from './nielsen.jpg';
 const App = () => {
 
     // TODO:  Implement d3.zoom in the data display for two-dimensional zooming, and along the axes for one-dimensional zooming.
-
-    // TODO:  Implement pointer events.
     
     // Return the App.
     return (
