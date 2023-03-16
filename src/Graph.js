@@ -312,6 +312,8 @@ Graph.onPointerDown = ( event, width, height, margin, padding, isDragging, xScro
     Graph.downLocation.isY = false;
     Graph.downLocation.isMin = false;
     Graph.downLocation.isMax = false;
+        
+    alert( xScrollSize );
     
     // Handle event on X scrollbar...
     if(( left <= xDown ) && ( xDown <= width - right ) && ( height - ( xScrollSize ? xScrollSize : scrollSize ) <= yDown ) && ( yDown <= height )) {
@@ -320,9 +322,6 @@ Graph.onPointerDown = ( event, width, height, margin, padding, isDragging, xScro
             x1 = left + w * ( xMax - xMin0 + xD ) / ( xMax0 - xMin0 + xD );
         Graph.downLocation.xDomain = xScale.domain();
         Graph.downLocation.isX = true;
-        
-        alert( x0, x1, xDown, endCapSize );
-        
         if(( x0 <= xDown ) && ( xDown <= x0 + endCapSize )) {
             Graph.downLocation.isMin = true;
         } else if(( x1 - endCapSize <= xDown ) && ( xDown <= x1 )) {
