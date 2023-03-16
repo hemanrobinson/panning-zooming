@@ -286,6 +286,8 @@ Graph.onZoom2D = ( isIn, xScale, yScale, xDomain0, yDomain0, isX, isY ) => {
  * @param  {Array}    yDomain0      Initial Y domain
  */
 Graph.onPointerDown = ( event, width, height, margin, padding, isDragging, xScrollSize, yScrollSize, xScale, yScale, xDomain0, yDomain0 ) => {
+        
+    alert( xScrollSize );
 
     // Initialization.
     const scrollSize = (( event.pointerType === "touch" ) ? 2 : 1 ) * Graph.scrollSize,
@@ -312,8 +314,6 @@ Graph.onPointerDown = ( event, width, height, margin, padding, isDragging, xScro
     Graph.downLocation.isY = false;
     Graph.downLocation.isMin = false;
     Graph.downLocation.isMax = false;
-        
-    alert( xScrollSize );
     
     // Handle event on X scrollbar...
     if(( left <= xDown ) && ( xDown <= width - right ) && ( height - ( xScrollSize ? xScrollSize : scrollSize ) <= yDown ) && ( yDown <= height )) {
