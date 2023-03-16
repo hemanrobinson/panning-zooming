@@ -14,6 +14,11 @@ svg {
     touch-action: none;
 }
 
+/* Hack for overview scrollbar on iPad. */
+path {
+    pointer-events: none;
+}
+
 /* Buttons and Sliders */
 button {
     background-color: #ffffff;
