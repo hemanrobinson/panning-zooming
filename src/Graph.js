@@ -288,7 +288,7 @@ Graph.onZoom2D = ( isIn, xScale, yScale, xDomain0, yDomain0, isX, isY ) => {
 Graph.onPointerDown = ( event, width, height, margin, padding, isDragging, xScrollSize, yScrollSize, xScale, yScale, xDomain0, yDomain0 ) => {
 
     // Initialization.
-    const scrollSize = Graph.scrollSize,
+    const scrollSize = (( event.pointerType === "touch" ) ? 2 : 1 ) * Graph.scrollSize,
         endCapSize = 0.8 * scrollSize;
     let top    = margin.top    + padding.top,
         right  = margin.right  + padding.right,
@@ -301,8 +301,7 @@ Graph.onPointerDown = ( event, width, height, margin, padding, isDragging, xScro
         { xMin0, xMax0, yMin0, yMax0, xMin, xMax, yMin, yMax, xD, yD } = Graph.getDomains( xDomain0, yDomain0, xDomain, yDomain, !!xScale.bandwidth, !!yScale.bandwidth );
     
     // Prevent default event handling.
-//    event.preventDefault();
-//    event.stopPropagation();
+    event.preventDefault();
         
     // Reset the mousedown coordinates.
     Graph.downLocation.x = xDown;
@@ -373,8 +372,7 @@ Graph.onPointerUp = ( event, width, height, margin, padding, xScale, yScale, xDo
         { xMin0, xMax0, yMin0, yMax0, xMin, xMax, yMin, yMax, xD, yD } = Graph.getDomains( xDomain0, yDomain0, xDomain, yDomain, !!xScale.bandwidth, !!yScale.bandwidth );
         
     // Prevent default event handling.
-//    event.preventDefault();
-//    event.stopPropagation();
+    event.preventDefault();
     
     // Handle event on X scrollbar...
     if( Graph.downLocation.isX ) {
