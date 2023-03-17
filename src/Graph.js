@@ -761,6 +761,7 @@ Graph.drawControls = ( ref, width, height, margin, padding, xScrollSize, yScroll
                 .attr( "x2", x1 + halfSize + 1 )
                 .attr( "y2", height )
                 .attr( "opacity","0.5" )
+                .attr( "pointer-events", "none" )
                 .style( "stroke-width", 1 )
                 .style( "stroke", "#ffffff" )
                 .style( "stroke-linecap", "butt" );
@@ -770,6 +771,7 @@ Graph.drawControls = ( ref, width, height, margin, padding, xScrollSize, yScroll
                 .attr( "x2", x2 - halfSize - 1 )
                 .attr( "y2", height )
                 .attr( "opacity","0.5" )
+                .attr( "pointer-events", "none" )
                 .style( "stroke-width", 1 )
                 .style( "stroke", "#ffffff" )
                 .style( "stroke-linecap", "butt" );

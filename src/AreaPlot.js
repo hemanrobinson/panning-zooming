@@ -131,6 +131,7 @@ AreaPlot.draw = ( ref, width, height, margin, padding, overviewPadding, isZoomin
         .attr( "fill", "#99bbdd" )
         .attr( "stroke", "#99bbdd" )
         .attr( "stroke-width", 1.5 )
+        .attr( "pointer-events", "none" )
         .attr( "d", d3.area()
             .x( d => xScale1( d[ 0 ]))
             .y0( height )
