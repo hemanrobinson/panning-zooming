@@ -113,7 +113,8 @@ AreaPlot.draw = ( ref, width, height, margin, padding, overviewPadding, isZoomin
     
     // Draw the area.
     let data = Data.getValues( dataSet );
-    svg.append("path")
+    const g = svg.append( "g" );
+    g.append("path")
         .datum( data )
         .attr( "fill", "#99bbdd" )
         .attr( "stroke", "#99bbdd" )
@@ -126,7 +127,7 @@ AreaPlot.draw = ( ref, width, height, margin, padding, overviewPadding, isZoomin
     
     // Draw the axes and the controls.
     Graph.drawAxes( ref, width, height - overviewPadding, margin, padding, overviewPadding, -1, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
-    svg.append("path")
+    g.append("path")
         .datum( data )
         .attr( "fill", "#99bbdd" )
         .attr( "stroke", "#99bbdd" )

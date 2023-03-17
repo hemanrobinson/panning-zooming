@@ -301,7 +301,7 @@ Graph.onPointerDown = ( event, width, height, margin, padding, isDragging, xScro
         { xMin0, xMax0, yMin0, yMax0, xMin, xMax, yMin, yMax, xD, yD } = Graph.getDomains( xDomain0, yDomain0, xDomain, yDomain, !!xScale.bandwidth, !!yScale.bandwidth );
     
     // Prevent default event handling.
-//    event.preventDefault();
+    event.preventDefault();
         
     // Reset the mousedown coordinates.
     Graph.downLocation.x = xDown;
@@ -372,7 +372,7 @@ Graph.onPointerUp = ( event, width, height, margin, padding, xScale, yScale, xDo
         { xMin0, xMax0, yMin0, yMax0, xMin, xMax, yMin, yMax, xD, yD } = Graph.getDomains( xDomain0, yDomain0, xDomain, yDomain, !!xScale.bandwidth, !!yScale.bandwidth );
         
     // Prevent default event handling.
-//    event.preventDefault();
+    event.preventDefault();
     
     // Handle event on X scrollbar...
     if( Graph.downLocation.isX ) {
@@ -937,6 +937,16 @@ Graph.drawControls = ( ref, width, height, margin, padding, xScrollSize, yScroll
     Graph.isYZooming.set( ref, isYZooming );
     Graph.isXBinning.set( ref, isXBinning );
     Graph.isYBinning.set( ref, isYBinning );
+    
+    // Hook up the scroll wheel.
+    svg.call( d3.zoom()
+        .extent([[ 0, 0 ], [ width, height ]])
+        .scaleExtent([ 1, 8 ])
+        .on( "zoom", zoomed ));
+    function zoomed({ transform }) {
+        const g = svg.select( "g" );
+        g.attr( "transform", transform );
+    }
 };
 
 export default Graph;

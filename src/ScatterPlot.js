@@ -95,9 +95,10 @@ ScatterPlot.draw = ( ref, width, height, margin, padding, isZooming, isXBinning,
     svg.selectAll( "*" ).remove();
     
     // Draw the points.
+    const g = svg.append( "g" );
     let data = Data.getValues( dataSet );
     data.forEach(( datum ) => {
-        svg.append( "path" )
+        g.append( "path" )
         .attr( "d", symbolScale( datum[ 0 ]))
         .attr( "transform", d => "translate( " + Math.round( xScale( datum[ 1 ])) + ", " + Math.round( yScale( datum[ 2 ])) + " )" )
         .style( "fill", "none" )

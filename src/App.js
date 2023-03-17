@@ -60,7 +60,7 @@ const App = () => {
                 </p>
                 <h2>In One Dimension</h2>
                 <p>
-                The principle of <em>consistency</em> also reduces the user's learning curve.  When they learn how things work in one place, they can apply that knowledge in another.
+                The principle of <em>consistency</em> also reduces the user's learning curve.  When users learn how things work in one place, they can apply that knowledge in another.
                 </p>
                 <p>
                 These controls are consistent with the <a href="https://vega.github.io/vega/examples/overview-plus-detail/">Overview Plus Detail pattern</a> (Tidwell 2006) (Cockburn, Karlson, and Bederson, 2008).  This combines the scrollbar with an overview of the data for one-dimensional zooming.
@@ -71,6 +71,9 @@ const App = () => {
             </div>
             <div className="Description">
                 <h2>Design Notes</h2>
+                <p>
+                This implementation reuses some code from the <a href="https://observablehq.com/collection/@d3/d3-zoom">d3-zoom collection</a>.
+                </p>
                 <p>
                 To minimize distraction from the data display, controls are fully displayed only when they can be used.  Controls are discoverable by hovering over the graph.
                 </p>
