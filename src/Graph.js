@@ -301,7 +301,7 @@ Graph.onPointerDown = ( event, width, height, margin, padding, isDragging, xScro
         { xMin0, xMax0, yMin0, yMax0, xMin, xMax, yMin, yMax, xD, yD } = Graph.getDomains( xDomain0, yDomain0, xDomain, yDomain, !!xScale.bandwidth, !!yScale.bandwidth );
     
     // Prevent default event handling.
-    event.preventDefault();
+//    event.preventDefault();
         
     // Reset the mousedown coordinates.
     Graph.downLocation.x = xDown;
@@ -372,7 +372,7 @@ Graph.onPointerUp = ( event, width, height, margin, padding, xScale, yScale, xDo
         { xMin0, xMax0, yMin0, yMax0, xMin, xMax, yMin, yMax, xD, yD } = Graph.getDomains( xDomain0, yDomain0, xDomain, yDomain, !!xScale.bandwidth, !!yScale.bandwidth );
         
     // Prevent default event handling.
-    event.preventDefault();
+//    event.preventDefault();
     
     // Handle event on X scrollbar...
     if( Graph.downLocation.isX ) {
