@@ -14,13 +14,8 @@ svg {
     touch-action: none;
 }
 
-/* Buttons and Sliders */
-button {
-    background-color: #ffffff;
-    border: 1px solid #939ba1;
-    border-radius: 4px;
-}
-button, .MuiSlider-root {
+/* Sliders */
+.MuiSlider-root {
     position: absolute;
     z-index: 2;
 }
@@ -44,4 +39,3 @@ button, .MuiSlider-root {
     text-anchor: end;
     transform: translateX(-13px) translateY(6px) rotate( -90deg );
 }
-

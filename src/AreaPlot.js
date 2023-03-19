@@ -32,12 +32,6 @@ const AreaPlot = ( props ) => {
         xScale1 = d3.scaleLinear().domain( xDomain0 ).range([ margin.left + padding.left, width - margin.right - padding.right ]),
         yScale1 = d3.scaleLog().domain( yDomain0 ).range([ height, height - overviewPadding ]);
     
-    // Zoom in two dimensions.
-//    let onZoom2D = ( isIn ) => {
-//        Graph.onZoom2D( isIn, xScale, yScale, xDomain0, yDomain0, true, false );
-//        AreaPlot.draw( ref, width, height, margin, padding, overviewPadding, true, false, false, xScale, yScale, xScale1, yScale1, xDomain0, yDomain0, xLabel, yLabel, dataSet );
-//    };
-    
     // Zoom in one dimension.
     let onPointerDown = ( event ) => {
         Graph.onPointerDown( event, width, height, margin, padding, false, overviewPadding, -1, xScale, yScale, xDomain0, yDomain0 );
@@ -59,16 +53,13 @@ const AreaPlot = ( props ) => {
     let onPointerOut = ( event ) => {
         if( AreaPlot.isOver ) {
             AreaPlot.isOver = false;
-            let xUp = event.nativeEvent.offsetX,
-                yUp = event.nativeEvent.offsetY,
-                isZooming = (( 0 <= xUp ) && ( xUp < width ) && ( 0 <= yUp ) && ( yUp < height ));
-            AreaPlot.draw( ref, width, height, margin, padding, overviewPadding, isZooming, false, false, xScale, yScale, xScale1, yScale1, xDomain0, yDomain0, xLabel, yLabel, dataSet );
+            AreaPlot.draw( ref, width, height, margin, padding, overviewPadding, false, false, false, xScale, yScale, xScale1, yScale1, xDomain0, yDomain0, xLabel, yLabel, dataSet );
         }
     };
     
     // Set hook to draw on mounting.
     useEffect(() => {
-        AreaPlot.draw( ref, width, height, margin, padding, overviewPadding, Graph.isZooming.get( ref ), false, false, xScale, yScale, xScale1, yScale1, xDomain0, yDomain0, xLabel, yLabel, dataSet );
+        AreaPlot.draw( ref, width, height, margin, padding, overviewPadding, false, false, false, xScale, yScale, xScale1, yScale1, xDomain0, yDomain0, xLabel, yLabel, dataSet );
     });
     
     // Return the component.
@@ -137,7 +128,7 @@ AreaPlot.draw = ( ref, width, height, margin, padding, overviewPadding, isZoomin
             .y0( height )
             .y1( d => yScale1( d[ 1 ]))
         );
-    Graph.drawControls( ref, width, height, margin, padding, overviewPadding, -1, false, isZooming, false, isXBinning, isYBinning, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+    Graph.drawControls( ref, width, height, margin, padding, overviewPadding, -1, isZooming, false, isXBinning, isYBinning, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
 };
 
 export default AreaPlot;

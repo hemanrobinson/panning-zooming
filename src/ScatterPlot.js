@@ -29,12 +29,10 @@ const ScatterPlot = ( props ) => {
         xScale = d3.scaleLinear().domain( xDomain0 ).range([ margin.left + padding.left, width - margin.right - padding.right ]),
         yScale = d3.scaleLinear().domain( yDomain0 ).range([ height - margin.bottom - padding.bottom, margin.top + padding.top ]),
         symbolScale = d3.scaleOrdinal( data.map( datum => datum[ 0 ]), d3.symbolsStroke.map( s => d3.symbol().type( s ).size( 80 )()));
-    
-    // Zoom in two dimensions.
-//    let onZoom2D = ( isIn ) => {
-//        Graph.onZoom2D( isIn, xScale, yScale, xDomain0, yDomain0, true, true );
-//        ScatterPlot.draw( ref, width, height, margin, padding, true, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
-//    };
+        
+    // Create reference scales for scroll wheel.
+    const xScale0 = xScale.copy(),
+        yScale0 = yScale.copy();
     
     // Zoom in one dimension.
     let onPointerDown = ( event ) => {
@@ -49,22 +47,54 @@ const ScatterPlot = ( props ) => {
     
     // Show or hide the controls.
     let onPointerOver = ( event ) => {
-        Graph.drawControls( ref, width, height, margin, padding, 0, 0, false, true, true, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+        Graph.drawControls( ref, width, height, margin, padding, 0, 0, true, true, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
     };
     let onPointerOut = ( event ) => {
         let xUp = event.nativeEvent.offsetX,
             yUp = event.nativeEvent.offsetY,
             isZooming = (( 0 <= xUp ) && ( xUp < width ) && ( 0 <= yUp ) && ( yUp < height ));
-        Graph.drawControls( ref, width, height, margin, padding, 0, 0, false, isZooming, isZooming, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+        Graph.drawControls( ref, width, height, margin, padding, 0, 0, isZooming, isZooming, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
     };
     
-    // Set hook to draw on mounting.
+  
+    // Handles the scroll wheel.
+    function onZoom( event ) {
+        const sourceEvent = event.sourceEvent,
+            offsetX = sourceEvent.offsetX,
+            offsetY = sourceEvent.offsetY,
+            transform = event.transform,
+            svg = d3.select( ref.current.childNodes[ 0 ]),
+            g = svg.select( "g" );
+        sourceEvent.preventDefault();
+        if( offsetY >= height - margin.bottom ) {
+            xScale = transform.rescaleX( xScale0 );
+            // TODO: check for out of domain
+            ScatterPlot.draw( ref, width, height, margin, padding, false, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
+        } else if( offsetX <= margin.left  ) {
+            yScale = transform.rescaleY( yScale0 );
+            // TODO: check for out of domain
+            ScatterPlot.draw( ref, width, height, margin, padding, false, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
+        } else if(( offsetX <= width - padding.right ) && ( offsetY >= padding.top )) {
+            g.attr( "transform", transform );
+        }
+    }
+    
+    // Set hook invoked upon mounting.
     useEffect(() => {
-        ScatterPlot.draw( ref, width, height, margin, padding, Graph.isZooming.get( ref ), false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
+  
+        // Hook up the scroll wheel.
+        const svg = d3.select( ref.current.childNodes[ 0 ]);
+        svg.call( d3.zoom()
+            .extent([[ 0, 0 ], [ width, height ]])
+            .scaleExtent([ 1, 4 ])
+            .on( "zoom", onZoom ));
+        
+        // Draw the plot.
+        ScatterPlot.draw( ref, width, height, margin, padding, false, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
     });
     
     // Return the component.
-    return <Graph width={width} height={height} margin={margin} padding={padding}
+    return <Graph width={width} height={height} margin={margin} padding={padding} onZoom={onZoom}
         onPointerDown={onPointerDown} onPointerUp={onPointerUp} onPointerOver={onPointerOver} onPointerOut={onPointerOut} ref={ref} />
 };
 
@@ -107,7 +137,7 @@ ScatterPlot.draw = ( ref, width, height, margin, padding, isZooming, isXBinning,
     
     // Draw the axes and the controls.
     Graph.drawAxes(     ref, width, height, margin, padding, 0, 0, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
-    Graph.drawControls( ref, width, height, margin, padding, 0, 0, false, isZooming, isZooming, isXBinning, isYBinning, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+    Graph.drawControls( ref, width, height, margin, padding, 0, 0, isZooming, isZooming, isXBinning, isYBinning, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
 };
 
 export default ScatterPlot;
