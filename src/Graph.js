@@ -509,6 +509,27 @@ Graph.getThresholds = ( data, columnIndex, xScale, aggregate ) => {
 };
     
 /**
+ * Adjusts scale domain to be within original domain.
+ *
+ * @param {D3Scale}   scale   scale
+ * @param {number[]}  domain0 original domain
+ */
+Graph.clampDomain = ( scale, domain0 ) => {
+    const domain = scale.domain().concat();
+    if( domain[ 1 ] > domain[ 0 ] + domain0[ 1 ]  - domain0[ 0 ]) {
+        domain[ 1 ] = domain[ 0 ] + domain0[ 1 ]  - domain0[ 0 ];
+    }
+    if( domain[ 0 ] < domain0[ 0 ]) {
+        domain[ 1 ] += domain0[ 0 ] - domain[ 0 ];
+        domain[ 0 ] = domain0[ 0 ];
+    } else if( domain[ 1 ] > domain0[ 1 ]) {
+        domain[ 0 ] += domain0[ 1 ] - domain[ 1 ];
+        domain[ 1 ] = domain0[ 1 ];
+    }
+    scale.domain( domain );
+}
+    
+/**
  * Draws the axes.
  *
  * @param  {Object}   ref           reference to DIV

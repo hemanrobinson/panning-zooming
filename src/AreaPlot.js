@@ -56,9 +56,35 @@ const AreaPlot = ( props ) => {
             AreaPlot.draw( ref, width, height, margin, padding, overviewPadding, false, false, false, xScale, yScale, xScale1, yScale1, xDomain0, yDomain0, xLabel, yLabel, dataSet );
         }
     };
+        
+    // Create reference scale for scroll wheel.
+    const xScale0 = xScale.copy();
+  
+    // Handles the scroll wheel.
+    function onZoom( event ) {
     
-    // Set hook to draw on mounting.
+        // Transform the scale.
+        const transform = event.transform;
+        xScale = transform.rescaleX( xScale0 );
+        
+        // Adjust if out of domain.
+        Graph.clampDomain( xScale, xScale1.domain());
+        
+        // Draw the plot.
+        AreaPlot.draw( ref, width, height, margin, padding, overviewPadding, false, false, false, xScale, yScale, xScale1, yScale1, xDomain0, yDomain0, xLabel, yLabel, dataSet );
+    }
+    
+    // Set hook invoked upon mounting.
     useEffect(() => {
+  
+        // Hook up the scroll wheel.
+        const svg = d3.select( ref.current.childNodes[ 0 ]);
+        svg.call( d3.zoom()
+            .extent([[ 0, 0 ], [ width, height ]])
+            .scaleExtent([ 1, 4 ])
+            .on( "zoom", onZoom ));
+        
+        // Draw the plot.
         AreaPlot.draw( ref, width, height, margin, padding, overviewPadding, false, false, false, xScale, yScale, xScale1, yScale1, xDomain0, yDomain0, xLabel, yLabel, dataSet );
     });
     

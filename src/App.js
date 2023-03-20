@@ -41,15 +41,19 @@ const App = () => {
                 <p>
                 Hover over the graphs below to see the scrollbars.
                 </p>
+                <h2>In One Dimension</h2>
+                <p>
+                A commonly used design is the <a href="https://vega.github.io/vega/examples/overview-plus-detail/">Overview Plus Detail pattern</a> (Tidwell 2006) (Cockburn, Karlson, and Bederson, 2008).  This combines the scrollbar with an overview of the data for one-dimensional zooming.
+                </p>
+            </div>
+            <div className="Graph">
+                <AreaPlot dataSet={ "Stocks" } />
+            </div>
+            <div className="Description">
                 <h2>In Two Dimensions</h2>
                 <p>
-                Scrollbars have three purposes:
+                The principle of <em>consistency</em> also reduces the user's learning curve.  When users learn how things work in one place, they can apply that knowledge in another.  The one-dimensional design can easily extend to two.
                 </p>
-                <ol>
-                <li><strong>Navigation:</strong>  they show the user where they are, and where they can go</li>
-                <li><strong>Panning:</strong>  they enable the user to pan in one dimension</li>
-                <li><strong>Zooming:</strong>  handles on the ends of the scrollbars enable zooming in one dimension.</li>
-                </ol>
             </div>
             <div className="Graph">
                 <ScatterPlot dataSet={ "Iris" } />
@@ -58,18 +62,6 @@ const App = () => {
                 <p>
                 Scrollbars don't preclude use of the scroll wheel for two-dimensional zooming, or the drag action for two-dimensional panning.  They provide <em>feedback</em> when these actions are performed, and <a href="https://xd.adobe.com/ideas/principles/web-design/what-is-affordance-design/">affordance</a> for performing them in one dimension.
                 </p>
-                <h2>In One Dimension</h2>
-                <p>
-                The principle of <em>consistency</em> also reduces the user's learning curve.  When users learn how things work in one place, they can apply that knowledge in another.
-                </p>
-                <p>
-                These controls are consistent with the <a href="https://vega.github.io/vega/examples/overview-plus-detail/">Overview Plus Detail pattern</a> (Tidwell 2006) (Cockburn, Karlson, and Bederson, 2008).  This combines the scrollbar with an overview of the data for one-dimensional zooming.
-                </p>
-            </div>
-            <div className="Graph">
-                <AreaPlot dataSet={ "Stocks" } />
-            </div>
-            <div className="Description">
                 <h2>Design Notes</h2>
                 <p>
                 This implementation reuses some code from the <a href="https://observablehq.com/collection/@d3/d3-zoom">d3-zoom collection</a>.
@@ -81,7 +73,7 @@ const App = () => {
                 When there are no limits to the data, scrollbars are not needed, for example in maps that cover the globe.  When there are limits to the data, scrollbars show those limits, and prevent the user from accidentally scrolling into areas of no data.
                 </p>
                 <p>
-                A drag action in the data display can support panning, but it may be used for other purposes: for example, to drag a rectangle and zoom in on that area, or to drag a brush.  The scrollbars free the drag action to be used for other purposes.
+                A drag action in the data display can support panning, but it may be used for other purposes: for example, to drag a brush.  The scrollbars free the drag action to be used for other purposes.
                 </p>
                 <p>
                 This design follows desktop standards; a mobile design would apply the same principles.  On mobile devices, the user can't hover, but scrollbars are unobtrusive:  they grow when the user scrolls, and shrink when they stop.  Because of the pinch gesture, scrollbars don't need handles.

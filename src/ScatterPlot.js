@@ -29,10 +29,6 @@ const ScatterPlot = ( props ) => {
         xScale = d3.scaleLinear().domain( xDomain0 ).range([ margin.left + padding.left, width - margin.right - padding.right ]),
         yScale = d3.scaleLinear().domain( yDomain0 ).range([ height - margin.bottom - padding.bottom, margin.top + padding.top ]),
         symbolScale = d3.scaleOrdinal( data.map( datum => datum[ 0 ]), d3.symbolsStroke.map( s => d3.symbol().type( s ).size( 80 )()));
-        
-    // Create reference scales for scroll wheel.
-    const xScale0 = xScale.copy(),
-        yScale0 = yScale.copy();
     
     // Zoom in one dimension.
     let onPointerDown = ( event ) => {
@@ -55,27 +51,37 @@ const ScatterPlot = ( props ) => {
             isZooming = (( 0 <= xUp ) && ( xUp < width ) && ( 0 <= yUp ) && ( yUp < height ));
         Graph.drawControls( ref, width, height, margin, padding, 0, 0, isZooming, isZooming, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
     };
-    
+        
+    // Create reference scales for scroll wheel.
+    const xScale0 = xScale.copy(),
+        yScale0 = yScale.copy();
   
     // Handles the scroll wheel.
     function onZoom( event ) {
         const sourceEvent = event.sourceEvent,
             offsetX = sourceEvent.offsetX,
             offsetY = sourceEvent.offsetY,
-            transform = event.transform,
-            svg = d3.select( ref.current.childNodes[ 0 ]),
-            g = svg.select( "g" );
-        sourceEvent.preventDefault();
+            transform = event.transform;
+        let isX = false,
+            isY = false;
         if( offsetY >= height - margin.bottom ) {
-            xScale = transform.rescaleX( xScale0 );
-            // TODO: check for out of domain
-            ScatterPlot.draw( ref, width, height, margin, padding, false, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
+            isX = true;
         } else if( offsetX <= margin.left  ) {
-            yScale = transform.rescaleY( yScale0 );
-            // TODO: check for out of domain
-            ScatterPlot.draw( ref, width, height, margin, padding, false, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
+            isY = true;
         } else if(( offsetX <= width - padding.right ) && ( offsetY >= padding.top )) {
-            g.attr( "transform", transform );
+            isX = true;
+            isY = true;
+        }
+        if( isX ) {
+            xScale = transform.rescaleX( xScale0 );
+            Graph.clampDomain( xScale, xScale0.domain());
+        }
+        if( isY ) {
+            yScale = transform.rescaleY( yScale0 );
+            Graph.clampDomain( yScale, yScale0.domain());
+        }
+        if( isX || isY ) {
+            ScatterPlot.draw( ref, width, height, margin, padding, true, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
         }
     }
     
