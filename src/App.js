@@ -7,9 +7,7 @@ import nielsen from './nielsen.jpg';
 // Application:  Discoverable Zooming
 const App = () => {
     
-    // TODO:  Resolve re-initialization behavior between 1D and 2D zooming.
-    
-    // TODO:  Resolve occasional default panning behavior.
+    // TODO:  Resolve re-initialization behavior between 1D and 2D zooming.  Both examples fix this.
     
     // Return the App.
     return (
@@ -37,7 +35,7 @@ const App = () => {
                     <li>"Use common designs that are familiar to most users." (Seeman-Horwitz et. al., 2021)</li>
                 </ul>
                 <p>
-                For zooming, the most familiar user interface includes scrollbars.  Scrollbars how the user that they can zoom, where they can zoom, and where they have zoomed.  For these familiar controls, the user has no learning curve.
+                For zooming, the most familiar user interface includes scrollbars.  Scrollbars show the user that they can zoom and where they have zoomed.  For these familiar controls, the user has no learning curve.
                 </p>
                 <p>
                 Hover over the graphs below to see the scrollbars.
@@ -52,14 +50,14 @@ const App = () => {
                 Scrollbars don't preclude use of the scroll wheel for zooming, or the drag action for panning.  However, these actions have no <a href="https://xd.adobe.com/ideas/principles/web-design/what-is-affordance-design/">affordance</a>.  Not all graphs can be zoomed and panned.  Scrollbars show which ones can.
                 </p>
                 <p>
-                Scrollbars are also easier for users who have difficulty with scroll wheels, or do not have one.  Handles on the ends of the scrollbars enable zooming in one dimension.
+                Scrollbars are also easier for users who have difficulty with scroll wheels, or don't have one.  Handles on the ends of the scrollbars enable zooming in one dimension.
                 </p>
                 <h2>In One Dimension</h2>
                 <p>
-                <a href="https://www.nngroup.com/articles/consistency-and-standards/">Consistency</a> also reduces the user's learning curve.  When users learn how things work in one place, they can apply that knowledge in another.
+                The principle of <a href="https://www.nngroup.com/articles/consistency-and-standards/">consistency</a> also reduces the user's learning curve.  When users learn how things work in one place, they can apply that knowledge in another.
                 </p>
                 <p>
-                The <a href="https://vega.github.io/vega/examples/overview-plus-detail/">Overview Plus Detail pattern</a> (Tidwell 2006) (Cockburn, Karlson, and Bederson, 2008) combines the scrollbar with an overview of the data.  If the scrollbars are drawn in consistent styles, this eases the user's learning curve.
+                The <a href="https://vega.github.io/vega/examples/overview-plus-detail/">Overview Plus Detail pattern</a> (Tidwell 2006) (Cockburn, Karlson, and Bederson, 2008) combines the scrollbar with an overview of the data.  Drawing the 1D and 2D scrollbars in consistent styles eases the user's learning curve.
                 </p>
             </div>
             <div className="Graph">
@@ -71,13 +69,13 @@ const App = () => {
                 This implementation reuses some code from the <a href="https://observablehq.com/collection/@d3/d3-zoom">d3-zoom collection</a>.
                 </p>
                 <p>
-                To minimize distraction from the data display, controls are fully displayed only when they can be used.  Controls are discoverable by hovering over the graph.
+                To minimize distraction from the data display, controls are fully displayed only when they can be used.
                 </p>
                 <p>
-                A drag action in the data display can support panning, but it may be used for other purposes: for example, to drag a brush.  Scrollbars enable the drag action to be used for other purposes.
+                A drag action in the data display supports panning.  However, since scrollbars also support panning, this frees the drag action.  It could be used for other purposes, for example to drag a brush.
                 </p>
                 <p>
-                To achieve a positive experience, the user must discover how to use our software quickly.  We can achieve discoverability through familiarity.  This ensures that our user interfaces are easily learned, because they are already known.
+                For a positive experience, the user must discover how to use our software quickly.  We can achieve discoverability through familiarity.  This ensures that our user interfaces are easily learned, because they are already known.
                 </p>
                 <br/>
                 <h2>Further Reading</h2>

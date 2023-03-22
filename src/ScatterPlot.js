@@ -52,18 +52,22 @@ const ScatterPlot = ( props ) => {
         Graph.drawControls( ref, width, height, margin, padding, 0, 0, isZooming, isZooming, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
     };
         
-    // Create reference scales and transformation for scroll wheel.
+    // Create reference scales and transform for scroll wheel.
     const xScale0 = xScale.copy(),
         yScale0 = yScale.copy();
     let transform0 = d3.zoomIdentity;
   
     // Handles the scroll wheel.
     function onZoom( event ) {
+    
+        // Initialization.
         const sourceEvent = event.sourceEvent,
             offsetX = sourceEvent.offsetX,
             offsetY = sourceEvent.offsetY,
             transform = event.transform,
             k = transform.k / transform0.k;
+            
+        // Check whether X or Y dimension.
         let isX = false,
             isY = false;
         if( offsetY >= height - margin.bottom ) {
@@ -74,8 +78,10 @@ const ScatterPlot = ( props ) => {
             isX = true;
             isY = true;
         }
+        
+        // Handle X dimension.
         if( isX ) {
-            if( k === 1 ) {
+            if( k === 1 ) {     // panning
                 const domain = xScale.domain(),
                     range = xScale.range(),
                     d = (( domain[ 1 ] - domain[ 0 ]) / ( range[ 1 ] - range[ 0 ])) * ( transform0.x - transform.x );
@@ -83,13 +89,15 @@ const ScatterPlot = ( props ) => {
                     xScale.domain([ domain[ 0 ] + d, domain[ 1 ] + d ]);
                     Graph.clampDomain( xScale, xScale0.domain());
                 }
-            } else {
+            } else {            // zooming
                 xScale = transform.rescaleX( xScale0 );
                 Graph.clampDomain( xScale, xScale0.domain());
             }
         }
+        
+        // Handle Y dimension.
         if( isY ) {
-            if( k === 1 ) {
+            if( k === 1 ) {     // panning
                 const domain = yScale.domain(),
                     range = yScale.range(),
                     d = (( domain[ 1 ] - domain[ 0 ]) / ( range[ 1 ] - range[ 0 ])) * ( transform0.y - transform.y );
@@ -97,7 +105,7 @@ const ScatterPlot = ( props ) => {
                     yScale.domain([ domain[ 0 ] + d, domain[ 1 ] + d ]);
                     Graph.clampDomain( yScale, yScale0.domain());
                 }
-            } else {
+            } else {            // zooming
                 yScale = transform.rescaleY( yScale0 );
                 Graph.clampDomain( yScale, yScale0.domain());
             }
@@ -105,6 +113,8 @@ const ScatterPlot = ( props ) => {
         if( isX || isY ) {
             ScatterPlot.draw( ref, width, height, margin, padding, true, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
         }
+        
+        // Update the reference transform for comparison.
         transform0 = transform;
     }
     
@@ -116,6 +126,7 @@ const ScatterPlot = ( props ) => {
         svg.call( d3.zoom()
             .extent([[ 0, 0 ], [ width, height ]])
             .scaleExtent([ 1, 4 ])
+            .filter( event => { event.preventDefault(); return true; })
             .on( "zoom", onZoom ));
         
         // Draw the plot.

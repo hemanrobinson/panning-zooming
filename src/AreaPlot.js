@@ -66,9 +66,7 @@ const AreaPlot = ( props ) => {
         // Transform the scale.
         const transform = event.transform;
         xScale = transform.rescaleX( xScale0 );
-        
-        // Adjust if out of domain.
-        Graph.clampDomain( xScale, xScale1.domain());
+        Graph.clampDomain( xScale, xScale0.domain());
         
         // Draw the plot.
         AreaPlot.draw( ref, width, height, margin, padding, overviewPadding, false, false, false, xScale, yScale, xScale1, yScale1, xDomain0, yDomain0, xLabel, yLabel, dataSet );
@@ -82,6 +80,7 @@ const AreaPlot = ( props ) => {
         svg.call( d3.zoom()
             .extent([[ 0, 0 ], [ width, height ]])
             .scaleExtent([ 1, 4 ])
+            .filter( event => { event.preventDefault(); return true; })
             .on( "zoom", onZoom ));
         
         // Draw the plot.
