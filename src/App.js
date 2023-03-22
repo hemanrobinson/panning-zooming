@@ -54,16 +54,16 @@ const App = () => {
                 </p>
                 <h2>In One Dimension</h2>
                 <p>
-                The principle of <a href="https://www.nngroup.com/articles/consistency-and-standards/">consistency</a> also reduces the user's learning curve.  When users learn how things work in one place, they can apply that knowledge in another.
-                </p>
-                <p>
-                The <a href="https://vega.github.io/vega/examples/overview-plus-detail/">Overview Plus Detail pattern</a> (Tidwell 2006) (Cockburn, Karlson, and Bederson, 2008) combines the scrollbar with an overview of the data.  Drawing the 1D and 2D scrollbars in consistent styles eases the user's learning curve.
+                The principle of <a href="https://www.nngroup.com/articles/consistency-and-standards/">consistency</a> also eases the user's learning curve.  An example is the <a href="https://vega.github.io/vega/examples/overview-plus-detail/">Overview Plus Detail pattern</a>, which combines the scrollbar with an overview of the data (Tidwell 2006) (Cockburn et. al., 2008). Drawing the 1D and 2D scrollbars in consistent styles enables users to learn how they work in one place, then apply that knowledge in another.  
                 </p>
             </div>
             <div className="Graph">
                 <AreaPlot dataSet={ "Stocks" } />
             </div>
             <div className="Description">
+                <p>
+                
+                </p>
                 <h2>Design Notes</h2>
                 <p>
                 This implementation reuses some code from the <a href="https://observablehq.com/collection/@d3/d3-zoom">d3-zoom collection</a>.
@@ -72,7 +72,7 @@ const App = () => {
                 To minimize distraction from the data display, controls are fully displayed only when they can be used.
                 </p>
                 <p>
-                A drag action in the data display supports panning.  However, since scrollbars also support panning, this frees the drag action.  It could be used for other purposes, for example to drag a brush.
+                A drag action in the data display supports panning.  Because scrollbars also support panning, this frees the drag action.  It could be used for other purposes, for example to drag a brush.
                 </p>
                 <p>
                 For a positive experience, the user must discover how to use our software quickly.  We can achieve discoverability through familiarity.  This ensures that our user interfaces are easily learned, because they are already known.
