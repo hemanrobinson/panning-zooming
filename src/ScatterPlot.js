@@ -52,16 +52,18 @@ const ScatterPlot = ( props ) => {
         Graph.drawControls( ref, width, height, margin, padding, 0, 0, isZooming, isZooming, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
     };
         
-    // Create reference scales for scroll wheel.
+    // Create reference scales and transformation for scroll wheel.
     const xScale0 = xScale.copy(),
         yScale0 = yScale.copy();
+    let transform0 = d3.zoomIdentity;
   
     // Handles the scroll wheel.
     function onZoom( event ) {
         const sourceEvent = event.sourceEvent,
             offsetX = sourceEvent.offsetX,
             offsetY = sourceEvent.offsetY,
-            transform = event.transform;
+            transform = event.transform,
+            k = transform.k / transform0.k;
         let isX = false,
             isY = false;
         if( offsetY >= height - margin.bottom ) {
@@ -73,16 +75,37 @@ const ScatterPlot = ( props ) => {
             isY = true;
         }
         if( isX ) {
-            xScale = transform.rescaleX( xScale0 );
-            Graph.clampDomain( xScale, xScale0.domain());
+            if( k === 1 ) {
+                const domain = xScale.domain(),
+                    range = xScale.range(),
+                    d = (( domain[ 1 ] - domain[ 0 ]) / ( range[ 1 ] - range[ 0 ])) * ( transform0.x - transform.x );
+                if( d ) {
+                    xScale.domain([ domain[ 0 ] + d, domain[ 1 ] + d ]);
+                    Graph.clampDomain( xScale, xScale0.domain());
+                }
+            } else {
+                xScale = transform.rescaleX( xScale0 );
+                Graph.clampDomain( xScale, xScale0.domain());
+            }
         }
         if( isY ) {
-            yScale = transform.rescaleY( yScale0 );
-            Graph.clampDomain( yScale, yScale0.domain());
+            if( k === 1 ) {
+                const domain = yScale.domain(),
+                    range = yScale.range(),
+                    d = (( domain[ 1 ] - domain[ 0 ]) / ( range[ 1 ] - range[ 0 ])) * ( transform0.y - transform.y );
+                if( d ) {
+                    yScale.domain([ domain[ 0 ] + d, domain[ 1 ] + d ]);
+                    Graph.clampDomain( yScale, yScale0.domain());
+                }
+            } else {
+                yScale = transform.rescaleY( yScale0 );
+                Graph.clampDomain( yScale, yScale0.domain());
+            }
         }
         if( isX || isY ) {
             ScatterPlot.draw( ref, width, height, margin, padding, true, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
         }
+        transform0 = transform;
     }
     
     // Set hook invoked upon mounting.

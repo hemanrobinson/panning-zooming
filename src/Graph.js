@@ -208,9 +208,6 @@ Graph.onPointerDown = ( event, width, height, margin, padding, isDragging, xScro
         xDomain = xScale.domain(),
         yDomain = yScale.domain(),
         { xMin0, xMax0, yMin0, yMax0, xMin, xMax, yMin, yMax, xD, yD } = Graph.getDomains( xDomain0, yDomain0, xDomain, yDomain, !!xScale.bandwidth, !!yScale.bandwidth );
-    
-    // Prevent default event handling.
-    event.preventDefault();
         
     // Reset the mousedown coordinates.
     Graph.downLocation.x = xDown;
@@ -227,6 +224,9 @@ Graph.onPointerDown = ( event, width, height, margin, padding, isDragging, xScro
         let w = width - right - left + 1,
             x0 = left + w * ( xMin - xMin0      ) / ( xMax0 - xMin0 + xD ),
             x1 = left + w * ( xMax - xMin0 + xD ) / ( xMax0 - xMin0 + xD );
+        if( event.preventDefault ) {
+            event.preventDefault();
+        }
         Graph.downLocation.xDomain = xScale.domain();
         Graph.downLocation.isX = true;
         if(( x0 <= xDown ) && ( xDown <= x0 + endCapSize )) {
@@ -236,11 +236,14 @@ Graph.onPointerDown = ( event, width, height, margin, padding, isDragging, xScro
         }
     }
     
-    // ...or handle event on Y scrollbar.
+    // ...or handle event on Y scrollbar...
     else if(( 0 <= xDown ) && ( xDown <= scrollSize ) && ( top <= yDown ) && ( yDown <= height - bottom )) {
         let h = height - bottom - top + 1,
             y0 = top + h * ( 1 - ( yMin - yMin0      ) / ( yMax0 - yMin0 + yD )),
             y1 = top + h * ( 1 - ( yMax - yMin0 + yD ) / ( yMax0 - yMin0 + yD ));
+        if( event.preventDefault ) {
+            event.preventDefault();
+        }
         Graph.downLocation.yDomain = yScale.domain();
         Graph.downLocation.isY = true;
         if(( y1 <= yDown ) && ( yDown <= y1 + endCapSize )) {
@@ -279,14 +282,14 @@ Graph.onPointerUp = ( event, width, height, margin, padding, xScale, yScale, xDo
         xDomain = Graph.downLocation.xDomain,
         yDomain = Graph.downLocation.yDomain,
         { xMin0, xMax0, yMin0, yMax0, xMin, xMax, yMin, yMax, xD, yD } = Graph.getDomains( xDomain0, yDomain0, xDomain, yDomain, !!xScale.bandwidth, !!yScale.bandwidth );
-        
-    // Prevent default event handling.
-    if( event.preventDefault ) {
-        event.preventDefault();
-    }
     
     // Handle event on X scrollbar...
     if( Graph.downLocation.isX ) {
+        
+        // Prevent default event handling.
+        if( event.preventDefault ) {
+            event.preventDefault();
+        }
     
         // Calculate the difference.
         const f = ( xMax0 - xMin0 + xD ) / d;
@@ -345,8 +348,13 @@ Graph.onPointerUp = ( event, width, height, margin, padding, xScale, yScale, xDo
         }
     }
     
-    // ...or handle event on Y scrollbar.
+    // ...or handle event on Y scrollbar...
     else if( Graph.downLocation.isY ) {
+        
+        // Prevent default event handling.
+        if( event.preventDefault ) {
+            event.preventDefault();
+        }
     
         // Calculate the difference.
         const f = ( yMax0 - yMin0 + yD ) / d;

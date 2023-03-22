@@ -6,8 +6,10 @@ import nielsen from './nielsen.jpg';
 
 // Application:  Discoverable Zooming
 const App = () => {
-
-    // TODO:  Implement d3.zoom in the data display for two-dimensional zooming, and along the axes for one-dimensional zooming.
+    
+    // TODO:  Resolve re-initialization behavior between 1D and 2D zooming.
+    
+    // TODO:  Resolve occasional default panning behavior.
     
     // Return the App.
     return (
