@@ -54,7 +54,7 @@ const App = () => {
                 </p>
                 <h2>In One Dimension</h2>
                 <p>
-                The principle of <a href="https://www.nngroup.com/articles/consistency-and-standards/">consistency</a> also eases the user's learning curve.  An example is the <a href="https://vega.github.io/vega/examples/overview-plus-detail/">Overview Plus Detail pattern</a>, which combines the scrollbar with an overview of the data (Tidwell 2006) (Cockburn et. al., 2008). Drawing the 1D and 2D scrollbars in consistent styles enables users to learn how they work in one place, then apply that knowledge in another.  
+                The <a href="https://vega.github.io/vega/examples/overview-plus-detail/">Overview Plus Detail pattern</a> combines the scrollbar with an overview of the data (Tidwell 2006) (Cockburn et. al., 2008).
                 </p>
             </div>
             <div className="Graph">
@@ -62,7 +62,7 @@ const App = () => {
             </div>
             <div className="Description">
                 <p>
-                
+                Drawing the 1D and 2D scrollbars in consistent styles enables users to learn how they work in one place, then apply that knowledge in another.  This principle of <a href="https://www.nngroup.com/articles/consistency-and-standards/">consistency</a> provides another way to ease the user's learning curve.
                 </p>
                 <h2>Design Notes</h2>
                 <p>
@@ -77,7 +77,6 @@ const App = () => {
                 <p>
                 For a positive experience, the user must discover how to use our software quickly.  We can achieve discoverability through familiarity.  This ensures that our user interfaces are easily learned, because they are already known.
                 </p>
-                <br/>
                 <h2>Further Reading</h2>
                 <ul>
                     <li>Cockburn, A., Karlson, A., and Bederson, B. B. (2008).  "A Review of Overview+Detail, Zooming, and Focus+Context Interfaces". ACM Computing Surveys 41, 1. <a href="https://faculty.cc.gatech.edu/~stasko/7450/Papers/cockburn-surveys08.pdf">https://faculty.cc.gatech.edu/~stasko/7450/Papers/cockburn-surveys08.pdf</a>.</li><br/>
