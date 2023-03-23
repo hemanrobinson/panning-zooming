@@ -7,8 +7,6 @@ import nielsen from './nielsen.jpg';
 // Application:  Discoverable Zooming
 const App = () => {
     
-    // TODO:  Resolve re-initialization behavior between 1D and 2D zooming.  Both examples fix this.
-    
     // Return the App.
     return (
         <div className="Column">
@@ -18,7 +16,7 @@ const App = () => {
                 The one great lesson of web design is:  <i>people surf</i>.
                 </p>
                 <p>
-                Jakob Nielsen recommends engaging the user <a href="https://www.nngroup.com/articles/how-long-do-users-stay-on-web-pages/">within the first 10 seconds</a> -- because if users don't get value from a web page, quickly, they move on.
+                Jakob Nielsen recommends engaging the user <a href="https://www.nngroup.com/articles/how-long-do-users-stay-on-web-pages/">within the first 10 seconds</a> -- because if users don't find value in a web page, quickly, they move on.
                 </p>
                 <p className="center">
                     <a href="https://www.nngroup.com"><img title="Dr. Jakob Nielsen" alt="Dr. Jakob Nielsen" src={nielsen}/></a>
@@ -35,7 +33,7 @@ const App = () => {
                     <li>"Use common designs that are familiar to most users." (Seeman-Horwitz et. al., 2021)</li>
                 </ul>
                 <p>
-                For zooming, the most familiar user interface includes scrollbars.  Scrollbars show the user that they can zoom and where they have zoomed.  For these familiar controls, the user has no learning curve.
+                For zooming, a familiar user interface includes scrollbars.  Scrollbars show the user that they can zoom and where they have zoomed.  For these familiar controls, the user has no learning curve.
                 </p>
                 <p>
                 Hover over the graphs below to see the scrollbars.
@@ -50,7 +48,7 @@ const App = () => {
                 Scrollbars don't preclude use of the scroll wheel for zooming, or the drag action for panning.  However, these actions have no <a href="https://xd.adobe.com/ideas/principles/web-design/what-is-affordance-design/">affordance</a>.  Not all graphs can be zoomed and panned.  Scrollbars show which ones can.
                 </p>
                 <p>
-                Scrollbars are also easier for users who have difficulty with scroll wheels, or don't have one.  Handles on the ends of the scrollbars enable zooming in one dimension.
+                Scrollbars are also easier for users who don't have a scroll wheel, or have difficulty using one.  Handles on the ends of the scrollbars enable zooming in one dimension.
                 </p>
                 <h2>In One Dimension</h2>
                 <p>
@@ -62,7 +60,7 @@ const App = () => {
             </div>
             <div className="Description">
                 <p>
-                Drawing the 1D and 2D scrollbars in consistent styles enables users to learn how they work in one place, then apply that knowledge in another.  This principle of <a href="https://www.nngroup.com/articles/consistency-and-standards/">consistency</a> provides another way to ease the user's learning curve.
+                Drawing 1D and 2D scrollbars in consistent styles is another way to ease the user's learning curve.  Following the principle of <a href="https://www.nngroup.com/articles/consistency-and-standards/">consistency</a> enables users to learn how things work in one place, then apply that knowledge in another.
                 </p>
                 <h2>Design Notes</h2>
                 <p>

@@ -51,6 +51,13 @@ const ScatterPlot = ( props ) => {
             isZooming = (( 0 <= xUp ) && ( xUp < width ) && ( 0 <= yUp ) && ( yUp < height ));
         Graph.drawControls( ref, width, height, margin, padding, 0, 0, isZooming, isZooming, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
     };
+    
+    // TODO:  Fix "jumping" behavior when zooming in 1D, then in 2D.  The 1D zoom gets applied to both axes.
+    // This does not happen in Fil's https://observablehq.com/@d3/x-y-zoom, but when I try to integrate his code here I get an error in zoom.js:
+    //      Cannot read properties of undefined (reading 'baseVal')
+    // This may be due to React libraries; I've seen this issue in Jest unit tests, and others have also:
+    //      https://github.com/zcreativelabs/react-simple-maps/issues/245
+    // Pragmatic decision for now is to live with this bug in GitHub, and fix it in Observable.
         
     // Create reference scales and transform for scroll wheel.
     const xScale0 = xScale.copy(),
