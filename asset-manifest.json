@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/zoom/static/css/main.59d19439.css",
-    "main.js": "/zoom/static/js/main.0666e48b.js",
+    "main.js": "/zoom/static/js/main.f7e53058.js",
     "index.html": "/zoom/index.html",
     "main.59d19439.css.map": "/zoom/static/css/main.59d19439.css.map",
-    "main.0666e48b.js.map": "/zoom/static/js/main.0666e48b.js.map"
+    "main.f7e53058.js.map": "/zoom/static/js/main.f7e53058.js.map"
   },
   "entrypoints": [
     "static/css/main.59d19439.css",
-    "static/js/main.0666e48b.js"
+    "static/js/main.f7e53058.js"
   ]
 }
