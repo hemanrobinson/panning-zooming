@@ -69,7 +69,7 @@ const AreaPlot = ( props ) => {
         Graph.clampDomain( xScale, xScale0.domain());
         
         // Draw the plot.
-        AreaPlot.draw( ref, width, height, margin, padding, overviewPadding, false, false, false, xScale, yScale, xScale1, yScale1, xDomain0, yDomain0, xLabel, yLabel, dataSet );
+        AreaPlot.draw( ref, width, height, margin, padding, overviewPadding, true, false, false, xScale, yScale, xScale1, yScale1, xDomain0, yDomain0, xLabel, yLabel, dataSet );
     }
     
     // Set hook invoked upon mounting.
