@@ -348,7 +348,7 @@ Graph.onPointerUp = ( event, width, height, margin, padding, xScale, yScale, xDo
         }
     }
     
-    // ...or handle event on Y scrollbar...
+    // ...or handle event on Y scrollbar.
     else if( Graph.downLocation.isY ) {
         
         // Prevent default event handling.
