@@ -52,10 +52,11 @@ const ScatterPlot = ( props ) => {
         Graph.drawControls( ref, width, height, margin, padding, 0, 0, isZooming, isZooming, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
     };
     
-    // TODO:  Fix "jumping" behavior when zooming in 1D, then in 2D.  The 1D zoom gets applied to both axes.
-    // This does not happen in Fil's https://observablehq.com/@d3/x-y-zoom, but when I try to integrate his code here I get an error in zoom.js:
+    // TODO:  Fix "jumping" behavior when zooming in 1D, then in 2D.  The 1D zoom gets suddenly applied to both axes.
+    // This does not happen in Fil's https://observablehq.com/@d3/x-y-zoom.
+    // I tried to integrate his code, commented out below, but it generates an error in zoom.js:
     //      Cannot read properties of undefined (reading 'baseVal')
-    // This may be due to React libraries; I've seen this issue in Jest unit tests, and others have also:
+    // This may be due to React libraries; I've seen this issue in Jest unit tests:
     //      https://github.com/zcreativelabs/react-simple-maps/issues/245
     // Pragmatic decision for now is to live with this bug in GitHub, and fix it in Observable.
         
@@ -63,6 +64,15 @@ const ScatterPlot = ( props ) => {
     const xScale0 = xScale.copy(),
         yScale0 = yScale.copy();
     let transform0 = d3.zoomIdentity;
+  
+    // center the action (handles multitouch)
+//    function center(event, target) {
+//        if (event.sourceEvent) {
+//            const p = d3.pointers(event, target);
+//            return [d3.mean(p, d => d[0]), d3.mean(p, d => d[1])];
+//        }
+//        return [width / 2, height / 2];
+//    }
   
     // Handles the scroll wheel.
     function onZoom( event ) {
@@ -73,6 +83,7 @@ const ScatterPlot = ( props ) => {
             offsetY = sourceEvent.offsetY,
             transform = event.transform,
             k = transform.k / transform0.k;
+//        const point = center(event, this);
             
         // Check whether X or Y dimension.
         let isX = false,
@@ -97,8 +108,9 @@ const ScatterPlot = ( props ) => {
                     Graph.clampDomain( xScale, xScale0.domain());
                 }
             } else {            // zooming
+//                ScatterPlot.gx.call(ScatterPlot.zoomX.scaleBy, k, point);
                 xScale = transform.rescaleX( xScale0 );
-                Graph.clampDomain( xScale, xScale0.domain());
+//                Graph.clampDomain( xScale, xScale0.domain());
             }
         }
         
@@ -113,15 +125,18 @@ const ScatterPlot = ( props ) => {
                     Graph.clampDomain( yScale, yScale0.domain());
                 }
             } else {            // zooming
+//                ScatterPlot.gy.call(ScatterPlot.zoomY.scaleBy, k, point);
                 yScale = transform.rescaleY( yScale0 );
                 Graph.clampDomain( yScale, yScale0.domain());
             }
         }
+        
+        // Redraw the plot.
         if( isX || isY ) {
             ScatterPlot.draw( ref, width, height, margin, padding, true, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
         }
         
-        // Update the reference transform for comparison.
+        // Update the reference transforms for comparison.
         transform0 = transform;
     }
     
@@ -135,6 +150,16 @@ const ScatterPlot = ( props ) => {
             .scaleExtent([ 1, 4 ])
             .filter( event => { event.preventDefault(); return true; })
             .on( "zoom", onZoom ));
+//        ScatterPlot.gx = svg.append("g");
+//        ScatterPlot.gy = svg.append("g");
+//
+//        // set up the ancillary zooms and an accessor for their transforms
+//        ScatterPlot.zoomX = d3.zoom().scaleExtent([0.1, 10]);
+//        ScatterPlot.zoomY = d3.zoom().scaleExtent([0.2, 5]);
+//        const tx = () => d3.zoomTransform(ScatterPlot.gx.node());
+//        const ty = () => d3.zoomTransform(ScatterPlot.gy.node());
+//        ScatterPlot.gx.call(ScatterPlot.zoomX).attr("pointer-events", "none");
+//        ScatterPlot.gy.call(ScatterPlot.zoomY).attr("pointer-events", "none");
         
         // Draw the plot.
         ScatterPlot.draw( ref, width, height, margin, padding, false, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );

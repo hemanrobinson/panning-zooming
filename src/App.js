@@ -33,20 +33,20 @@ const App = () => {
                     <li>"Use common designs that are familiar to most users." (Seeman-Horwitz et. al., 2021)</li>
                 </ul>
                 <p>
-                For zooming, a familiar user interface includes scrollbars.  Scrollbars show the user that they can zoom and where they have zoomed.  For these familiar controls, the user has no learning curve.
+                For zooming, a familiar user interface includes scrollbars, which show the user a) that they can zoom and b) where they have zoomed.  For these familiar controls, the user has no learning curve.
                 </p>
                 <p>
                 Hover over the graphs below to see the scrollbars.
                 </p>
                 <h2>In Two Dimensions</h2>
+                <p>
+                Scrollbars don't preclude use of the scroll wheel for zooming, or the drag action for panning.  However, these actions have no <a href="https://xd.adobe.com/ideas/principles/web-design/what-is-affordance-design/">affordance</a>.  Not all graphs can be zoomed and panned.  Scrollbars show which ones can.
+                </p>
             </div>
             <div className="Graph">
                 <ScatterPlot dataSet={ "Iris" } />
             </div>
             <div className="Description">
-                <p>
-                Scrollbars don't preclude use of the scroll wheel for zooming, or the drag action for panning.  However, these actions have no <a href="https://xd.adobe.com/ideas/principles/web-design/what-is-affordance-design/">affordance</a>.  Not all graphs can be zoomed and panned.  Scrollbars show which ones can.
-                </p>
                 <p>
                 Scrollbars are also easier for users who don't have a scroll wheel, or have difficulty using one.  Handles on the ends of the scrollbars enable zooming in one dimension.
                 </p>
@@ -60,17 +60,17 @@ const App = () => {
             </div>
             <div className="Description">
                 <p>
-                Drawing 1D and 2D scrollbars in consistent styles is another way to ease the user's learning curve.  Following the principle of <a href="https://www.nngroup.com/articles/consistency-and-standards/">consistency</a> enables users to learn how things work in one place, then apply that knowledge in another.
+                Drawing 1D and 2D scrollbars in consistent styles is another way to ease the user's learning curve.  This principle of <a href="https://www.nngroup.com/articles/consistency-and-standards/">consistency</a> enables users to learn how things work in one place, then apply that knowledge in another.
                 </p>
                 <h2>Design Notes</h2>
                 <p>
-                This implementation reuses some code from the <a href="https://observablehq.com/collection/@d3/d3-zoom">d3-zoom collection</a>.
+                This implementation extends <a href="https://observablehq.com/@fil">Fil's</a> <a href="https://observablehq.com/@d3/x-y-zoom?collection=@d3/d3-zoom">X-Y Zoom</a>.
                 </p>
                 <p>
                 To minimize distraction from the data display, controls are fully displayed only when they can be used.
                 </p>
                 <p>
-                A drag action in the data display supports panning.  Because scrollbars also support panning, this frees the drag action.  It could be used for other purposes, for example to drag a brush.
+                A drag action in the data display supports 2D panning.  A drag action in the axes supports 1D panning.  This makes the drag action in the data display available for other uses, for example to drag a brush.
                 </p>
                 <p>
                 For a positive experience, the user must discover how to use our software quickly.  We can achieve discoverability through familiarity.  This ensures that our user interfaces are easily learned, because they are already known.
