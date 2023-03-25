@@ -56,22 +56,19 @@ const ScatterPlot = ( props ) => {
     // This does not happen in Fil's https://observablehq.com/@d3/x-y-zoom.
     // I tried to integrate his code, commented out below, but it generates an error in zoom.js:
     //      Cannot read properties of undefined (reading 'baseVal')
-    // This may be due to React libraries; I've seen this issue in Jest unit tests:
-    //      https://github.com/zcreativelabs/react-simple-maps/issues/245
-    // Pragmatic decision for now is to live with this bug in GitHub, and fix it in Observable.
         
     // Create reference scales and transform for scroll wheel.
     const xScale0 = xScale.copy(),
         yScale0 = yScale.copy();
     let transform0 = d3.zoomIdentity;
   
-    // center the action (handles multitouch)
-//    function center(event, target) {
-//        if (event.sourceEvent) {
-//            const p = d3.pointers(event, target);
-//            return [d3.mean(p, d => d[0]), d3.mean(p, d => d[1])];
+    // Centers the action (handles multitouch) after https://observablehq.com/@d3/x-y-zoom?collection=@d3/d3-zoom.
+//    function center( event, target ) {
+//        if( event.sourceEvent ) {
+//            const p = d3.pointers( event, target );
+//            return [ d3.mean(p, d => d[ 0 ]), d3.mean(p, d => d[ 1 ])];
 //        }
-//        return [width / 2, height / 2];
+//        return [ width / 2, height / 2 ];
 //    }
   
     // Handles the scroll wheel.
@@ -83,7 +80,7 @@ const ScatterPlot = ( props ) => {
             offsetY = sourceEvent.offsetY,
             transform = event.transform,
             k = transform.k / transform0.k;
-//        const point = center(event, this);
+//        const point = center( event, this );
             
         // Check whether X or Y dimension.
         let isX = false,
@@ -109,8 +106,9 @@ const ScatterPlot = ( props ) => {
                 }
             } else {            // zooming
 //                ScatterPlot.gx.call(ScatterPlot.zoomX.scaleBy, k, point);
+//                xScale = ScatterPlot.tx().rescaleX( xScale );
                 xScale = transform.rescaleX( xScale0 );
-//                Graph.clampDomain( xScale, xScale0.domain());
+                Graph.clampDomain( xScale, xScale0.domain());
             }
         }
         
@@ -126,6 +124,7 @@ const ScatterPlot = ( props ) => {
                 }
             } else {            // zooming
 //                ScatterPlot.gy.call(ScatterPlot.zoomY.scaleBy, k, point);
+//                yScale = ScatterPlot.ty().rescaleY( yScale );
                 yScale = transform.rescaleY( yScale0 );
                 Graph.clampDomain( yScale, yScale0.domain());
             }

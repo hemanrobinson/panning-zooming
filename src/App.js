@@ -64,7 +64,7 @@ const App = () => {
                 </p>
                 <h2>Design Notes</h2>
                 <p>
-                This implementation extends <a href="https://observablehq.com/@fil">Fil's</a> <a href="https://observablehq.com/@d3/x-y-zoom?collection=@d3/d3-zoom">X-Y Zoom</a>.
+                This implementation extends <a href="https://observablehq.com/@d3/x-y-zoom?collection=@d3/d3-zoom">Fil's X-Y Zoom</a>.
                 </p>
                 <p>
                 To minimize distraction from the data display, controls are fully displayed only when they can be used.
