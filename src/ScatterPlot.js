@@ -81,10 +81,9 @@ const ScatterPlot = ( props ) => {
 //        const point = center( event, this );
         let offsetX, offsetY;
         if( sourceEvent.touches ) {
-            const svgNode = d3.select( ref.current.childNodes[ 0 ]).node();
             const touch = sourceEvent.touches[ 0 ];
-            offsetX = touch.clientX - sourceEvent.target.getBoundingClientRect().x;
-            offsetY = touch.clientY - sourceEvent.target.getBoundingClientRect().y;
+            offsetX = touch.clientX - sourceEvent.currentTarget.getBoundingClientRect().x;
+            offsetY = touch.clientY - sourceEvent.currentTarget.getBoundingClientRect().y;
         } else {
             offsetX = sourceEvent.offsetX;
             offsetY = sourceEvent.offsetY;
