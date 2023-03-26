@@ -226,6 +226,9 @@ Graph.onPointerDown = ( event, width, height, margin, padding, isDragging, xScro
     Graph.downLocation.isY = false;
     Graph.downLocation.isMin = false;
     Graph.downLocation.isMax = false;
+  
+    // Stop propagation to document.
+    event.stopPropagation();
     
     // Handle event on X scrollbar...
     if(( left <= xDown ) && ( xDown <= width - right ) && ( height - ( xScrollSize ? xScrollSize : scrollSize ) <= yDown ) && ( yDown <= height )) {
@@ -430,7 +433,7 @@ Graph.onPointerUp = ( event, width, height, margin, padding, xScale, yScale, xDo
     }
         
     // Reset the mousedown coordinates.
-    if(( Graph.downLocation.isX || Graph.downLocation.isY ) && ( event.type === "pointerup" )) {
+    if(( Graph.downLocation.isX || Graph.downLocation.isY ) && ( event.type === "pointerup" ) && ( event.pointerType !== "touch" )) {
         Graph.downLocation.isX = false;
         Graph.downLocation.isY = false;
         Graph.downLocation.isMin = false;

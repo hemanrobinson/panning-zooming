@@ -46,11 +46,20 @@ const ScatterPlot = ( props ) => {
         Graph.drawControls( ref, width, height, margin, padding, 0, 0, true, true, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
     };
     let onPointerOut = ( event ) => {
-        let xUp = event.nativeEvent.offsetX,
-            yUp = event.nativeEvent.offsetY,
-            isZooming = (( 0 <= xUp ) && ( xUp < width ) && ( 0 <= yUp ) && ( yUp < height ));
-        Graph.drawControls( ref, width, height, margin, padding, 0, 0, isZooming, isZooming, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+        if( event.pointerType !== "touch" ) {
+            let xUp = event.nativeEvent.offsetX,
+                yUp = event.nativeEvent.offsetY,
+                isZooming = (( 0 <= xUp ) && ( xUp < width ) && ( 0 <= yUp ) && ( yUp < height ));
+            Graph.drawControls( ref, width, height, margin, padding, 0, 0, isZooming, isZooming, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+        }
     };
+    document.addEventListener( "pointerdown", ( event ) => {
+        Graph.downLocation.isX = false;
+        Graph.downLocation.isY = false;
+        Graph.downLocation.isMin = false;
+        Graph.downLocation.isMax = false;
+        Graph.drawControls( ref, width, height, margin, padding, 0, 0, false, false, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+    });
     
     // TODO:  Fix "jumping" behavior when zooming in 1D, then in 2D.  The 1D zoom gets suddenly applied to both axes.
     // This does not happen in Fil's https://observablehq.com/@d3/x-y-zoom.

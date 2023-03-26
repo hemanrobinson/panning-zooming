@@ -51,17 +51,32 @@ const AreaPlot = ( props ) => {
         }
     };
     let onPointerOut = ( event ) => {
-        if( AreaPlot.isOver ) {
+        if( AreaPlot.isOver && ( event.pointerType !== "touch" )) {
             AreaPlot.isOver = false;
             AreaPlot.draw( ref, width, height, margin, padding, overviewPadding, false, false, false, xScale, yScale, xScale1, yScale1, xDomain0, yDomain0, xLabel, yLabel, dataSet );
         }
     };
+    document.addEventListener( "pointerdown", ( event ) => {
+        Graph.downLocation.isX = false;
+        Graph.downLocation.isY = false;
+        Graph.downLocation.isMin = false;
+        Graph.downLocation.isMax = false;
+        if( AreaPlot.isOver ) {
+            AreaPlot.isOver = false;
+            AreaPlot.draw( ref, width, height, margin, padding, overviewPadding, false, false, false, xScale, yScale, xScale1, yScale1, xDomain0, yDomain0, xLabel, yLabel, dataSet );
+        }
+    });
         
     // Create reference scale for scroll wheel.
     const xScale0 = xScale.copy();
   
     // Handles the scroll wheel.
     function onZoom( event ) {
+
+        // Check for X scrollbar events, because event.stopPropagation() does not prevent wheel events on iPad.
+        if( Graph.downLocation.isX ) {
+            return;
+        }
     
         // Transform the scale.
         const transform = event.transform;
@@ -130,7 +145,7 @@ AreaPlot.draw = ( ref, width, height, margin, padding, overviewPadding, isZoomin
     // Draw the area.
     let data = Data.getValues( dataSet );
     const g = svg.append( "g" );
-    g.append("path")
+    g.append( "path" )
         .datum( data )
         .attr( "fill", "#99bbdd" )
         .attr( "stroke", "#99bbdd" )
@@ -143,7 +158,7 @@ AreaPlot.draw = ( ref, width, height, margin, padding, overviewPadding, isZoomin
     
     // Draw the axes and the controls.
     Graph.drawAxes( ref, width, height - overviewPadding, margin, padding, overviewPadding, -1, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
-    g.append("path")
+    g.append( "path" )
         .datum( data )
         .attr( "fill", "#99bbdd" )
         .attr( "stroke", "#99bbdd" )
