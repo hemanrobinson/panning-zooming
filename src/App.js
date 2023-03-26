@@ -28,15 +28,15 @@ const App = () => {
                 The most easily discovered user interface is one that the users already know.  This is the principle of <a href="https://www.educative.io/answers/what-are-learnability-principles-for-usability">familiarity</a>:
                 </p>
                 <ul>
-                 <li>"Users spend most of their time on other sites, and they prefer your site to work the same way." (<a href="https://lawsofux.com/jakobs-law/">Jakob's Law</a>) (Yablonski, 2020)</li>
+                    <li>"Users spend most of their time on other sites, and they prefer your site to work the same way." (<a href="https://lawsofux.com/jakobs-law/">Jakob's Law</a>) (Yablonski, 2020)</li>
                     <li>"Performing learned actions is easy.  Performing novel actions is hard." (Johnson, 2014)</li>
                     <li>"Use common designs that are familiar to most users." (Seeman-Horwitz et. al., 2021)</li>
                 </ul>
                 <p>
-                For zooming, a familiar user interface includes scrollbars, which show the user a) that they can zoom and b) where they have zoomed.  For these familiar controls, the user has no learning curve.
+                For zooming, a familiar user interface includes scrollbars, which show the user a) that they can zoom and b) where they have zoomed.
                 </p>
                 <p>
-                Hover over the graphs below to see the scrollbars.
+                For these familiar controls, the user has no learning curve.  Hover or touch the graphs below to see the scrollbars.
                 </p>
                 <h2>In Two Dimensions</h2>
                 <p>
@@ -60,7 +60,7 @@ const App = () => {
             </div>
             <div className="Description">
                 <p>
-                Drawing 1D and 2D scrollbars in consistent styles is another way to ease the user's learning curve.  This principle of <a href="https://www.nngroup.com/articles/consistency-and-standards/">consistency</a> enables users to learn how things work in one place, then apply that knowledge in another.
+                Drawing 1D and 2D scrollbars in consistent styles is another way to ease the user's learning curve.  <a href="https://www.nngroup.com/articles/consistency-and-standards/">Consistency</a> enables users to learn how things work in one place, then apply that knowledge in another.
                 </p>
                 <h2>Design Notes</h2>
                 <p>
@@ -70,7 +70,10 @@ const App = () => {
                 To minimize distraction from the data display, controls are fully displayed only when they can be used.
                 </p>
                 <p>
-                A drag action in the data display supports 2D panning.  A drag action in the axes supports 1D panning.  This makes the drag action in the data display available for other uses, for example to drag a brush.
+                A drag action in the data display supports 2D panning.  A drag action in the axes supports 1D panning.  This frees the drag action in the data display for other uses, for example to drag a brush.
+                </p>
+                <p>
+                This design can extend to three or more dimensions by displaying scrollbars outside the graph.  Graphs without limits, such as maps of the globe, can be supported by scrollbars that wrap around.
                 </p>
                 <p>
                 For a positive experience, the user must discover how to use our software quickly.  We can achieve discoverability through familiarity.  This ensures that our user interfaces are easily learned, because they are already known.
