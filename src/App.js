@@ -48,7 +48,10 @@ const App = () => {
             </div>
             <div className="Description">
                 <p>
-                Scrollbars are also easier for users who don't have a scroll wheel, or have difficulty using one.  Handles on the ends of the scrollbars enable zooming in one dimension.
+                Also, scrollbars show the result of the scroll wheel or the drag action.  This <a href="https://givegoodux.com/feedback-5-principles-interaction-design-supercharge-ui-5-5/">feedback</a> informs the user of what they've done, and what they can do.
+                </p>
+                <p>
+                Finally, scrollbars are easier for users who don't have a scroll wheel, or have difficulty using one.  Handles on the ends of the scrollbars enable zooming in one dimension.
                 </p>
                 <h2>In One Dimension</h2>
                 <p>
