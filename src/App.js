@@ -2,6 +2,7 @@ import React from 'react';
 import AreaPlot from './AreaPlot';
 import ScatterPlot from './ScatterPlot';
 import './App.css';
+import github from './github.svg';
 import nielsen from './nielsen.jpg';
 
 // Application:  Discoverable Zooming
@@ -11,7 +12,7 @@ const App = () => {
     return (
         <div className="Column">
             <div className="Description">
-                <h1>Discoverable Zooming</h1>
+                <h1>Discoverable Zooming&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/hemanrobinson/zoom/"><img className="icon" title="Code Shared on GitHub" alt="Code Shared on GitHub" src={github}/></a></h1>
                 <p>
                 The one great lesson of web design is:  <i>people surf</i>.
                 </p>
@@ -92,7 +93,6 @@ const App = () => {
                     <li>Yablonski, J. (2020). Laws of UX: Using Psychology to Design Better Products & Services, 1-12. Sebastopol CA: O'Reilly Media. <a href="https://www.oreilly.com/library/view/laws-of-ux/9781492055303/ch01.html">https://www.oreilly.com/library/view/laws-of-ux/9781492055303/ch01.html</a>.</li><br/>
                 </ul>
             </div>
-            <a href="https://github.com/hemanrobinson/zoom/">Code Shared on GitHub</a>
         </div>
     );
 }
