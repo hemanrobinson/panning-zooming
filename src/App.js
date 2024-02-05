@@ -66,7 +66,7 @@ const App = () => {
                 <p>
                 Drawing 1D and 2D scrollbars in consistent styles is another way to ease the user's learning curve.  <a href="https://www.nngroup.com/articles/consistency-and-standards/">Consistency</a> enables users to learn how things work in one place, then apply that knowledge in another.
                 </p>
-                <h2>Design Notes</h2>
+                <h2>Usability</h2>
                 <p>
                 This implementation extends <a href="https://observablehq.com/@d3/x-y-zoom?collection=@d3/d3-zoom">Fil's X-Y Zoom</a>.
                 </p>
