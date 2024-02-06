@@ -82,6 +82,10 @@ const App = () => {
                 <p>
                 For a positive experience, the user must discover how to use our software quickly.  We can achieve discoverability through familiarity.  This ensures that our user interfaces are easily learned, because they are already known.
                 </p>
+                <h2>Implementation</h2>
+                <p>
+                This project uses <a href="https://react.dev">React</a>, <a href="https://github.com/mui-org/material-ui">Material-UI</a>, and <a href="https://github.com/d3/d3">d3</a>.
+                </p>
                 <h2>Further Reading</h2>
                 <ul>
                     <li>Cockburn, A., Karlson, A., and Bederson, B. B. (2008).  "A Review of Overview+Detail, Zooming, and Focus+Context Interfaces". ACM Computing Surveys 41, 1. <a href="https://faculty.cc.gatech.edu/~stasko/7450/Papers/cockburn-surveys08.pdf">https://faculty.cc.gatech.edu/~stasko/7450/Papers/cockburn-surveys08.pdf</a>.</li><br/>

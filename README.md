@@ -6,4 +6,4 @@ Scrollbars provide visual feedback that enables the user to discover where they 
 
 [![Zoom](src/zoom.png "Zoom")](https://hemanrobinson.github.io/zoom/)
 
-This project uses [d3](https://github.com/d3/d3) and [Material-UI](https://github.com/mui-org/material-ui), and was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project uses [React](https://react.dev), [Material-UI](https://github.com/mui-org/material-ui), and [d3](https://github.com/d3/d3).
