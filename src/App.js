@@ -63,12 +63,9 @@ const App = () => {
                 <AreaPlot dataSet={ "Stocks" } />
             </div>
             <div className="Description">
+                <h2>User Interface</h2>
                 <p>
                 Drawing 1D and 2D scrollbars in consistent styles is another way to ease the user's learning curve.  <a href="https://www.nngroup.com/articles/consistency-and-standards/">Consistency</a> enables users to learn how things work in one place, then apply that knowledge in another.
-                </p>
-                <h2>Usability</h2>
-                <p>
-                This implementation extends <a href="https://observablehq.com/@d3/x-y-zoom?collection=@d3/d3-zoom">Fil's X-Y Zoom</a>.
                 </p>
                 <p>
                 To minimize distraction from the data display, controls are fully displayed only when they can be used.
@@ -83,6 +80,9 @@ const App = () => {
                 For a positive experience, the user must discover how to use our software quickly.  We can achieve discoverability through familiarity.  This ensures that our user interfaces are easily learned, because they are already known.
                 </p>
                 <h2>Implementation</h2>
+                <p>
+                This implementation extends <a href="https://observablehq.com/@d3/x-y-zoom?collection=@d3/d3-zoom">Fil's X-Y Zoom</a>.
+                </p>
                 <p>
                 This project uses <a href="https://react.dev">React</a>, <a href="https://github.com/mui-org/material-ui">Material-UI</a>, and <a href="https://github.com/d3/d3">d3</a>.
                 </p>
