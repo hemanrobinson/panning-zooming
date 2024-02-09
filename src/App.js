@@ -81,10 +81,7 @@ const App = () => {
                 </p>
                 <h2>Implementation</h2>
                 <p>
-                This implementation extends <a href="https://observablehq.com/@d3/x-y-zoom?collection=@d3/d3-zoom">Fil's X-Y Zoom</a>.
-                </p>
-                <p>
-                This project uses <a href="https://react.dev">React</a>, <a href="https://github.com/mui-org/material-ui">Material-UI</a>, and <a href="https://github.com/d3/d3">d3</a>.
+                This project uses <a href="https://react.dev">React</a>, <a href="https://github.com/mui-org/material-ui">Material-UI</a>, and <a href="https://github.com/d3/d3">d3</a>, and extends <a href="https://observablehq.com/@d3/x-y-zoom?collection=@d3/d3-zoom">Fil's X-Y Zoom</a>.
                 </p>
                 <h2>Further Reading</h2>
                 <ul>
