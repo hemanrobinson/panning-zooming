@@ -4,4 +4,4 @@ Scrollbars provide visual feedback that enables the user to discover where they 
 
 [This project demonstrates a discoverable user interface for zooming.](https://hemanrobinson.github.io/zoom/)
 
-[![Zoom](src/zoom.png "Zoom")](https://hemanrobinson.github.io/zoom/)
+[![Zoom](public/zoom-small.png "Zoom")](https://hemanrobinson.github.io/zoom/)
