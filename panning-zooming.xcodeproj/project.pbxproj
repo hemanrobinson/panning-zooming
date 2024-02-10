@@ -31,16 +31,16 @@
 /* End PBXGroup section */
 
 /* Begin PBXLegacyTarget section */
-		F8EECFA9258F86CC0043B422 /* zoom */ = {
+		F8EECFA9258F86CC0043B422 /* panning-zooming */ = {
 			isa = PBXLegacyTarget;
 			buildArgumentsString = "$(ACTION)";
-			buildConfigurationList = F8EECFAC258F86CC0043B422 /* Build configuration list for PBXLegacyTarget "zoom" */;
+			buildConfigurationList = F8EECFAC258F86CC0043B422 /* Build configuration list for PBXLegacyTarget "panning-zooming" */;
 			buildPhases = (
 			);
 			buildToolPath = /usr/bin/make;
 			dependencies = (
 			);
-			name = zoom;
+			name = "panning-zooming";
 			passBuildSettingsInEnvironment = 1;
 			productName = zoom;
 		};
@@ -57,7 +57,7 @@
 					};
 				};
 			};
-			buildConfigurationList = F8EECFA8258F86CC0043B422 /* Build configuration list for PBXProject "zoom" */;
+			buildConfigurationList = F8EECFA8258F86CC0043B422 /* Build configuration list for PBXProject "panning-zooming" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -69,7 +69,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				F8EECFA9258F86CC0043B422 /* zoom */,
+				F8EECFA9258F86CC0043B422 /* panning-zooming */,
 			);
 		};
 /* End PBXProject section */
@@ -210,7 +210,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		F8EECFA8258F86CC0043B422 /* Build configuration list for PBXProject "zoom" */ = {
+		F8EECFA8258F86CC0043B422 /* Build configuration list for PBXProject "panning-zooming" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F8EECFAA258F86CC0043B422 /* Debug */,
@@ -219,7 +219,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F8EECFAC258F86CC0043B422 /* Build configuration list for PBXLegacyTarget "zoom" */ = {
+		F8EECFAC258F86CC0043B422 /* Build configuration list for PBXLegacyTarget "panning-zooming" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F8EECFAD258F86CC0043B422 /* Debug */,

@@ -25,7 +25,7 @@ it( "renders App with childnodes", () => {
     const div = container.querySelector( "div" );
     expect( div.className ).toBe( "Column" );
     let n = div.childNodes.length;
-    expect( n ).toBe( 6 );
+    expect( n ).toBe( 5 );
     for( let i = 0; ( i < n - 2 ); i += 2 ) {
         expect( div.childNodes[ i ].className ).toBe( "Description" );
         expect( div.childNodes[ i + 1 ].className ).toBe( "Graph" );
