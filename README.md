@@ -1,4 +1,4 @@
-# Discoverable Panning and Zooming
+# Easily Learned Panning and Zooming
 
 Scrollbars provide visual feedback that enables the user to discover where they have panned and zoomed, and where they can pan and zoom. The  scrollbars support panning, and handles on the ends of the scroll bars support one-dimensional zooming.
 
