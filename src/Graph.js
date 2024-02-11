@@ -228,7 +228,9 @@ Graph.onPointerDown = ( event, width, height, margin, padding, isDragging, xScro
     Graph.downLocation.isMax = false;
   
     // Stop propagation to document.
-    event.stopPropagation();
+    if( event.stopPropagation ) {
+        event.stopPropagation();
+    }
     
     // Handle event on X scrollbar...
     if(( left <= xDown ) && ( xDown <= width - right ) && ( height - ( xScrollSize ? xScrollSize : scrollSize ) <= yDown ) && ( yDown <= height )) {
