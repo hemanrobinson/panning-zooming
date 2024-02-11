@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/zooming-usability/static/css/main.1eb21833.css",
-    "main.js": "/zooming-usability/static/js/main.d29a291e.js",
+    "main.js": "/zooming-usability/static/js/main.a0259ecf.js",
     "static/media/github.svg": "/zooming-usability/static/media/github.6fa18895f6e6c7772cab7049f7e05f59.svg",
     "index.html": "/zooming-usability/index.html",
     "main.1eb21833.css.map": "/zooming-usability/static/css/main.1eb21833.css.map",
-    "main.d29a291e.js.map": "/zooming-usability/static/js/main.d29a291e.js.map"
+    "main.a0259ecf.js.map": "/zooming-usability/static/js/main.a0259ecf.js.map"
   },
   "entrypoints": [
     "static/css/main.1eb21833.css",
-    "static/js/main.d29a291e.js"
+    "static/js/main.a0259ecf.js"
   ]
 }
