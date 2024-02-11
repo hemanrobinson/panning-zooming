@@ -5,7 +5,7 @@ import './App.css';
 import github from './github.svg';
 import nielsen from './nielsen.jpg';
 
-// Application:  Easily Learned Zooming
+// Application:  Learnable Zooming
 const App = () => {
     
     // Return the App.
@@ -14,19 +14,16 @@ const App = () => {
             <div className="Description">
                 <h1>Learnable Zooming&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/hemanrobinson/zooming-usability/"><img className="icon" title="Code Shared on GitHub" alt="Code Shared on GitHub" src={github}/></a></h1>
                 <p>
-                The one great lesson of web design is:  <i>people surf</i>.
+                The one great lesson of web usability is:  <i>people surf</i>.
                 </p>
                 <p>
-                Jakob Nielsen recommends engaging the user <a href="https://www.nngroup.com/articles/how-long-do-users-stay-on-web-pages/">within the first 10 seconds</a> -- because if users don't find value in a web page, quickly, they move on.
+                Jakob Nielsen recommends engaging the user <a href="https://www.nngroup.com/articles/how-long-do-users-stay-on-web-pages/">within the first 10 seconds</a> -- because if users don't find value in a web page quickly, they move on.
                 </p>
                 <p className="center">
                     <a href="https://www.nngroup.com"><img title="Dr. Jakob Nielsen" alt="Dr. Jakob Nielsen" src={nielsen}/></a>
                 </p>
                 <p>
-                For this reason, we want our user interfaces to achieve <a href="https://www.interaction-design.org/literature/article/make-it-easy-on-the-user-designing-for-discoverability-within-mobile-apps">discoverability</a>:  "the ease at which users can find new features or functions... and learn to use the things that they find."
-                </p>
-                <p>
-                The most easily discovered user interface is one that the users already know.  This is the principle of <a href="https://www.educative.io/answers/what-are-learnability-principles-for-usability">familiarity</a>:
+                We can deliver value quickly by following the principle of <a href="https://www.educative.io/answers/what-are-learnability-principles-for-usability">familiarity</a>:
                 </p>
                 <ul>
                     <li>"Users spend most of their time on other sites, and they prefer your site to work the same way." (<a href="https://lawsofux.com/jakobs-law/">Jakob's Law</a>) (Yablonski, 2020)</li>
@@ -34,14 +31,28 @@ const App = () => {
                     <li>"Use common designs that are familiar to most users." (Seeman-Horwitz et. al., 2021)</li>
                 </ul>
                 <p>
-                For zooming, a familiar user interface includes scrollbars, which show the user a) that they can zoom and b) where they have zoomed.
+                For zooming, a familiar user interface includes scrollbars. Hover or touch the graphs below to see the scrollbars.
+                </p>
+                <h2>In One Dimension</h2>
+                <p>
+                The <a href="https://vega.github.io/vega/examples/overview-plus-detail/">Overview Plus Detail pattern</a> is familiar to many users. It combines a scrollbar with an overview of the data (Tidwell 2006) (Cockburn et. al., 2008).
+                </p>
+            </div>
+            <div className="Graph">
+                <AreaPlot dataSet={ "Stocks" } />
+            </div>
+            <div className="Description">
+                <p>
+                The middle of the scrollbar can be dragged to scroll the graph. Handles on the ends of the scrollbars enable zooming in one dimension.</p>
+                <p>
+                Many visualizations, including the ones on this page, also support the <a href="https://en.wikipedia.org/wiki/Scroll_wheel#:~:text=A%20scroll%20wheel%20is%20a,around%20an%20internal%20rotary%20encoder.">scroll wheel</a> for zooming, and drag actions on the data display or the axes for scrolling.
                 </p>
                 <p>
-                For these familiar controls, the user has no learning curve.  Hover or touch the graphs below to see the scrollbars.
+                For all these actions, scrollbars display <a href="https://givegoodux.com/feedback-5-principles-interaction-design-supercharge-ui-5-5/">feedback</a>, showing the user what they've done and what they can do.
                 </p>
                 <h2>In Two Dimensions</h2>
                 <p>
-                Scrollbars don't preclude use of the scroll wheel for zooming, or the drag action for panning.  However, these actions have no <a href="https://xd.adobe.com/ideas/principles/web-design/what-is-affordance-design/">affordance</a>.  Not all graphs can be zoomed and panned.  Scrollbars show which ones can.
+                The familiar scrollbar easily generalizes to two dimensions. It's particularly useful that the scrollbars support one-dimensional zooming, when the scroll wheel does not.
                 </p>
             </div>
             <div className="Graph">
@@ -49,35 +60,29 @@ const App = () => {
             </div>
             <div className="Description">
                 <p>
-                Also, scrollbars show the result of the scroll wheel or the drag action.  This <a href="https://givegoodux.com/feedback-5-principles-interaction-design-supercharge-ui-5-5/">feedback</a> informs the user of what they've done, and what they can do.
+                As in the one-dimensional case, the scrollbars give feedback on the user's actions. Whether they use the scrollbars, the scroll wheel, or dragging, the scrollbars show the user what they've done and what they can do.
                 </p>
-                <p>
-                Finally, scrollbars are easier for users who don't have a scroll wheel, or have difficulty using one.  Handles on the ends of the scrollbars enable zooming in one dimension.
-                </p>
-                <h2>In One Dimension</h2>
-                <p>
-                The <a href="https://vega.github.io/vega/examples/overview-plus-detail/">Overview Plus Detail pattern</a> combines the scrollbar with an overview of the data (Tidwell 2006) (Cockburn et. al., 2008).
-                </p>
-            </div>
-            <div className="Graph">
-                <AreaPlot dataSet={ "Stocks" } />
-            </div>
-            <div className="Description">
                 <h2>User Interface</h2>
                 <p>
-                Drawing 1D and 2D scrollbars in consistent styles is another way to ease the user's learning curve.  <a href="https://www.nngroup.com/articles/consistency-and-standards/">Consistency</a> enables users to learn how things work in one place, then apply that knowledge in another.
+                This design generalizes to higher dimensions: scrollbars can be placed beside the graph and labeled with the appropriate axis name.
                 </p>
                 <p>
-                To minimize distraction from the data display, controls are fully displayed only when they can be used.
+                Graphs without limits, such as maps of the globe, can be supported by scrollbars that wrap around.
                 </p>
                 <p>
-                A drag action in the data display supports 2D panning.  A drag action in the axes supports 1D panning.  This frees the drag action in the data display for other uses, for example to drag a brush.
+                Unlike the scroll wheel or the drag action, scrollbars display a visual <a href="https://xd.adobe.com/ideas/principles/web-design/what-is-affordance-design/">affordance</a>. Not all graphs can be zoomed and panned. The presence of scrollbars shows which ones can.
                 </p>
                 <p>
-                This design can extend to three or more dimensions by displaying scrollbars outside the graph.  Graphs without limits, such as maps of the globe, can be supported by scrollbars that wrap around.
+                Finally, for users who don't have a scroll wheel, or have difficulty using one, scrollbars can support an <a href="https://www.w3.org/WAI/fundamentals/accessibility-principles/">accessible</a> user interface (not implemented here) using Tab, Enter, and other keys to operate the controls.
                 </p>
                 <p>
-                For a positive experience, the user must discover how to use our software quickly.  We can achieve discoverability through familiarity.  This ensures that our user interfaces are easily learned, because they are already known.
+                To minimize distraction from the data display, controls are fully displayed only when they can be used. How much of the controls are displayed depends on the purpose of the graph.
+                </p>
+                <p>
+                In these examples, a drag action supports scrolling, in the data display, in the axes, or on the scrollbars. In practice, the drag action in the data display (<em>panning</em>) could be used for other purposes, for example to drag a brush.
+                </p>
+                <p>
+                For a positive experience, the user must discover how to use our software quickly.  We can achieve this using the principle of <a href="https://www.goodfirms.co/blog/familiarity-in-product-design-and-marketing">familiarity</a>.  This ensures that our user interfaces are easily learned, because they are already known.
                 </p>
                 <h2>Implementation</h2>
                 <p>
