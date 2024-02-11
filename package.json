@@ -1,8 +1,8 @@
 {
-  "name": "panning-zooming",
+  "name": "zooming-usability",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://hemanrobinson.github.io/panning-zooming",
+  "homepage": "https://hemanrobinson.github.io/zooming-usability",
   "dependencies": {
     "@babel/core": "^7.20.12",
     "@emotion/react": "^11.10.5",

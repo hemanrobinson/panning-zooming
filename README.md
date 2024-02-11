@@ -1,7 +1,7 @@
-# Easily Learned Panning and Zooming
+# Easily Learned Zooming
 
-Scrollbars provide visual feedback that enables the user to discover where they have panned and zoomed, and where they can pan and zoom. The  scrollbars support panning, and handles on the ends of the scroll bars support one-dimensional zooming.
+Scrollbars provide visual feedback that enables the user to discover where they have zoomed, and where they can oom. Handles on the ends of the scrollbars support one-dimensional zooming.
 
-[This project demonstrates an easily learned user interface for panning and zooming.](https://hemanrobinson.github.io/panning-zooming/)
+[This project demonstrates an easily learned user interface for zooming visualizations.](https://hemanrobinson.github.io/zooming-usability/)
 
-[![Zoom](public/panning-zooming-small.png "Zoom")](https://hemanrobinson.github.io/panning-zooming/)
+[![Zoom](public/zooming-usability-small.png "Zoom")](https://hemanrobinson.github.io/zooming-usability/)
