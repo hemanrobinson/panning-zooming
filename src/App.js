@@ -64,7 +64,7 @@ const App = () => {
                 </p>
                 <h2>User Interface</h2>
                 <p>
-                This design generalizes to higher dimensions: scrollbars can be placed beside the graph and labeled with the appropriate axis name.
+                This design generalizes to higher dimensions: scrollbars can be placed beside the graph and labeled with the appropriate axis name. This  <a href="https://www.nngroup.com/articles/consistency-and-standards/">consistency</a> enables users to learn how things work in one place, then apply that knowledge in another.
                 </p>
                 <p>
                 Graphs without limits, such as maps of the globe, can be supported by scrollbars that wrap around.
