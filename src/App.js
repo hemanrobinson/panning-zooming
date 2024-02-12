@@ -76,7 +76,7 @@ const App = () => {
                 Finally, for users who don't have a scroll wheel, or have difficulty using one, scrollbars can support an <a href="https://www.w3.org/WAI/fundamentals/accessibility-principles/">accessible</a> user interface (not implemented here) using Tab, Enter, and other keys to operate the controls.
                 </p>
                 <p>
-                To minimize distraction from the data display, controls are fully displayed only when they can be used. How much of the controls are displayed depends on the purpose of the graph.
+                To minimize distraction from the data display, controls are fully displayed only when they can be used. How much of the controls are displayed depends on the purpose of the graph. Similarly, the scrollbars may or may not display histograms, depending on the purpose of the graph.
                 </p>
                 <p>
                 In these examples, a drag action supports scrolling, in the data display, in the axes, or on the scrollbars. In practice, the drag action in the data display (<em>panning</em>) could be used for other purposes, for example to drag a brush.
