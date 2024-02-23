@@ -156,7 +156,7 @@ AreaPlot.draw = ( ref, width, height, margin, padding, overviewPadding, isZoomin
             .y1( d => yScale( d[ 1 ]))
         );
     
-    // Draw the axes and the controls.
+    // Draw the axes, the overview, and the controls.
     Graph.drawAxes( ref, width, height - overviewPadding, margin, padding, overviewPadding, -1, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
     g.append( "path" )
         .datum( data )
