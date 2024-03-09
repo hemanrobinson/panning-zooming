@@ -5,14 +5,14 @@ import './App.css';
 import github from './github.svg';
 import nielsen from './nielsen.jpg';
 
-// Application:  Learnable Zooming
+// Application:  Zooming Usability
 const App = () => {
     
     // Return the App.
     return (
         <div className="Column">
             <div className="Description">
-                <h1>Learnable Zooming&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/hemanrobinson/zooming-usability/"><img className="icon" title="Code Shared on GitHub" alt="Code Shared on GitHub" src={github}/></a></h1>
+                <h1>Zooming Usability&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/hemanrobinson/zooming-usability/"><img className="icon" title="Code Shared on GitHub" alt="Code Shared on GitHub" src={github}/></a></h1>
                 <p>
                 The one great lesson of web usability is:  <i>people surf</i>.
                 </p>

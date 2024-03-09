@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 import Data from './Data';
 import Graph from './Graph';
 import './Graph.css';
+import ZoomBar from './ZoomBar';
 
 /**
  * Scatter plot in an SVG element.
@@ -29,47 +30,39 @@ const ScatterPlot = ( props ) => {
         xScale = d3.scaleLinear().domain( xDomain0 ).range([ margin.left + padding.left, width - margin.right - padding.right ]),
         yScale = d3.scaleLinear().domain( yDomain0 ).range([ height - margin.bottom - padding.bottom, margin.top + padding.top ]),
         symbolScale = d3.scaleOrdinal( data.map( datum => datum[ 0 ]), d3.symbolsStroke.map( s => d3.symbol().type( s ).size( 80 )()));
+  
+    // Redraws the graph.
+    function redraw() {
+        ScatterPlot.draw( ref, width, height, margin, padding, true, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
+    }
     
-    // Zoom in one dimension.
-    let onPointerDown = ( event ) => {
-        Graph.onPointerDown( event, width, height, margin, padding, false, 0, 0, xScale, yScale, xDomain0, yDomain0 );
-    },
-    onPointerUp = ( event ) => {
-        if( Graph.downLocation.isX || Graph.downLocation.isY ) {
-            Graph.onPointerUp( event, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0 );
-            ScatterPlot.draw( ref, width, height, margin, padding, true, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
-        }
-    };
-    
-    // Show or hide the controls.
+    // Show or hide the zoom bars.
     let onPointerOver = ( event ) => {
-        Graph.drawControls( ref, width, height, margin, padding, 0, 0, true, true, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+        if( !ScatterPlot.isOver ) {
+            ScatterPlot.isOver = true;
+            ZoomBar.draw( d3.select( ref.current.childNodes[ 1 ].childNodes[ 0 ]), xScale, xDomain0, true, true, redraw, false );
+            ZoomBar.draw( d3.select( ref.current.childNodes[ 2 ].childNodes[ 0 ]), yScale, yDomain0, true, true, redraw, false );
+        }
     };
     let onPointerOut = ( event ) => {
-        if( event.pointerType !== "touch" ) {
-            let xUp = event.nativeEvent.offsetX,
-                yUp = event.nativeEvent.offsetY,
-                isZooming = (( 0 <= xUp ) && ( xUp < width ) && ( 0 <= yUp ) && ( yUp < height ));
-            Graph.drawControls( ref, width, height, margin, padding, 0, 0, isZooming, isZooming, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+        if( ScatterPlot.isOver && ( event.pointerType !== "touch" )) {
+            ScatterPlot.isOver = false;
+            ZoomBar.draw( d3.select( ref.current.childNodes[ 1 ].childNodes[ 0 ]), xScale, xDomain0, false, false, redraw, false );
+            ZoomBar.draw( d3.select( ref.current.childNodes[ 2 ].childNodes[ 0 ]), yScale, yDomain0, false, false, redraw, false );
         }
     };
-    document.addEventListener( "pointerdown", ( event ) => {
-        Graph.downLocation.isX = false;
-        Graph.downLocation.isY = false;
-        Graph.downLocation.isMin = false;
-        Graph.downLocation.isMax = false;
-        Graph.drawControls( ref, width, height, margin, padding, 0, 0, false, false, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
-    });
+//    document.addEventListener( "pointerdown", ( event ) => {
+//        if( ScatterPlot.isOver ) {
+//            ScatterPlot.isOver = false;
+//            ZoomBar.draw( d3.select( ref.current.childNodes[ 1 ].childNodes[ 0 ]), xScale, xDomain0, false, false, redraw, false );
+//            ZoomBar.draw( d3.select( ref.current.childNodes[ 2 ].childNodes[ 0 ]), yScale, yDomain0, false, false, redraw, false );
+//        }
+//    });
     
     // TODO:  Fix "jumping" behavior when zooming in 1D, then in 2D.  The 1D zoom gets suddenly applied to both axes.
     // This does not happen in Fil's https://observablehq.com/@d3/x-y-zoom.
     // I tried to integrate his code, commented out below, but it generates an error in zoom.js:
     //      Cannot read properties of undefined (reading 'baseVal')
-        
-    // Create reference scales and transform for scroll wheel.
-    const xScale0 = xScale.copy(),
-        yScale0 = yScale.copy();
-    let transform0 = d3.zoomIdentity;
   
     // Centers the action (handles multitouch) after https://observablehq.com/@d3/x-y-zoom?collection=@d3/d3-zoom.
 //    function center( event, target ) {
@@ -81,7 +74,10 @@ const ScatterPlot = ( props ) => {
 //    }
   
     // Handles the scroll wheel.
-    function onZoom( event ) {
+    const xScale0 = xScale.copy(),    // Create reference scales and transform for scroll wheel
+        yScale0 = yScale.copy();
+    let transform0 = d3.zoomIdentity;
+    function onScroll( event ) {
     
         // Initialization.
         const sourceEvent = event.sourceEvent,
@@ -118,13 +114,13 @@ const ScatterPlot = ( props ) => {
                     d = (( domain[ 1 ] - domain[ 0 ]) / ( range[ 1 ] - range[ 0 ])) * ( transform0.x - transform.x );
                 if( d ) {
                     xScale.domain([ domain[ 0 ] + d, domain[ 1 ] + d ]);
-                    Graph.clampDomain( xScale, xScale0.domain());
+                    ZoomBar.clampDomain( xScale, xScale0.domain());
                 }
             } else {            // zooming
 //                ScatterPlot.gx.call(ScatterPlot.zoomX.scaleBy, k, point);
 //                xScale = ScatterPlot.tx().rescaleX( xScale );
-                xScale = transform.rescaleX( xScale0 );
-                Graph.clampDomain( xScale, xScale0.domain());
+                xScale.domain( transform.rescaleX( xScale0 ).domain());
+                ZoomBar.clampDomain( xScale, xScale0.domain());
             }
         }
         
@@ -136,19 +132,21 @@ const ScatterPlot = ( props ) => {
                     d = (( domain[ 1 ] - domain[ 0 ]) / ( range[ 1 ] - range[ 0 ])) * ( transform0.y - transform.y );
                 if( d ) {
                     yScale.domain([ domain[ 0 ] + d, domain[ 1 ] + d ]);
-                    Graph.clampDomain( yScale, yScale0.domain());
+                    ZoomBar.clampDomain( yScale, yScale0.domain());
                 }
             } else {            // zooming
 //                ScatterPlot.gy.call(ScatterPlot.zoomY.scaleBy, k, point);
 //                yScale = ScatterPlot.ty().rescaleY( yScale );
-                yScale = transform.rescaleY( yScale0 );
-                Graph.clampDomain( yScale, yScale0.domain());
+                yScale.domain( transform.rescaleY( yScale0 ).domain());
+                ZoomBar.clampDomain( yScale, yScale0.domain());
             }
         }
         
         // Redraw the plot.
         if( isX || isY ) {
-            ScatterPlot.draw( ref, width, height, margin, padding, true, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
+            ScatterPlot.draw( ref, width, height, margin, padding, true, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
+            ZoomBar.draw( d3.select( ref.current.childNodes[ 1 ].childNodes[ 0 ]), xScale, xDomain0, true, true, redraw, false );
+            ZoomBar.draw( d3.select( ref.current.childNodes[ 2 ].childNodes[ 0 ]), yScale, yDomain0, true, true, redraw, false );
         }
         
         // Update the reference transforms for comparison.
@@ -164,7 +162,7 @@ const ScatterPlot = ( props ) => {
             .extent([[ 0, 0 ], [ width, height ]])
             .scaleExtent([ 1, 4 ])
             .filter( event => { event.preventDefault(); return true; })
-            .on( "zoom", onZoom ));
+            .on( "zoom", onScroll ));
 //        ScatterPlot.gx = svg.append("g");
 //        ScatterPlot.gy = svg.append("g");
 //
@@ -177,13 +175,25 @@ const ScatterPlot = ( props ) => {
 //        ScatterPlot.gy.call(ScatterPlot.zoomY).attr("pointer-events", "none");
         
         // Draw the plot.
-        ScatterPlot.draw( ref, width, height, margin, padding, false, false, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
+        ScatterPlot.draw( ref, width, height, margin, padding, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
     });
     
     // Return the component.
-    return <Graph width={width} height={height} margin={margin} padding={padding} onZoom={onZoom}
-        onPointerDown={onPointerDown} onPointerUp={onPointerUp} onPointerOver={onPointerOver} onPointerOut={onPointerOut} ref={ref} />
+    return(
+        <div style={{width: width, height: height}} onPointerOver={onPointerOver} onPointerOut={onPointerOut} className="parent" ref={ref}>
+            <svg width={width} height={height}/>
+            <ZoomBar x={margin.left + padding.left} y={height - ZoomBar.size} width={width - margin.left - padding.left - margin.right - padding.right + 1} height={ZoomBar.size} scale={xScale} domain0={xDomain0} isZooming={false} redraw={redraw} />
+            <ZoomBar x={1} y={margin.top + padding.top} width={ZoomBar.size} height={height - margin.top - padding.top - margin.bottom - padding.bottom + 1 } scale={yScale} domain0={yDomain0} isZooming={false} redraw={redraw} />
+        </div>
+    );
 };
+    
+/**
+ * Returns whether user event is over the graph.
+ *
+ * @type {boolean}
+ */
+ScatterPlot.isOver = false;
 
 /**
  * Draws the scatter plot.
@@ -194,8 +204,6 @@ const ScatterPlot = ( props ) => {
  * @param  {Box}      margin       margin
  * @param  {Box}      padding      padding
  * @param  {boolean}  isZooming    true iff drawing zoom controls
- * @param  {boolean}  isXBinning   true iff drawing bin controls in X dimension
- * @param  {boolean}  isYBinning   true iff drawing bin controls in Y dimension
  * @param  {D3Scale}  xScale       X scale
  * @param  {D3Scale}  yScale       Y scale
  * @param  {Array}    xDomain0     Initial X domain
@@ -205,7 +213,7 @@ const ScatterPlot = ( props ) => {
  * @param  {string}   dataSet      data set name
  * @param  {D3Scale}  symbolScale  symbol scale
  */
-ScatterPlot.draw = ( ref, width, height, margin, padding, isZooming, isXBinning, isYBinning, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale ) => {
+ScatterPlot.draw = ( ref, width, height, margin, padding, isZooming, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale ) => {
     
     // Initialization.
     const svg = d3.select( ref.current.childNodes[ 0 ]);
@@ -223,8 +231,7 @@ ScatterPlot.draw = ( ref, width, height, margin, padding, isZooming, isXBinning,
     });
     
     // Draw the axes and the controls.
-    Graph.drawAxes(     ref, width, height, margin, padding, 0, 0, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
-    Graph.drawControls( ref, width, height, margin, padding, 0, 0, isZooming, isZooming, isXBinning, isYBinning, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+    Graph.drawAxes( ref, width, height, margin, padding, 0, 0, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
 };
 
 export default ScatterPlot;

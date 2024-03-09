@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 import Data from './Data';
 import Graph from './Graph';
 import './Graph.css';
+import ZoomBar from './ZoomBar';
 
 /**
  * Area plot in an SVG element.
@@ -29,62 +30,50 @@ const AreaPlot = ( props ) => {
         yDomain0 = [ d3.min( data, d => d[ 1 ]), d3.max( data, d => d[ 1 ])],
         xScale = d3.scaleLinear().domain( xDomain0 ).range([ margin.left + padding.left, width - margin.right - padding.right ]),
         yScale = d3.scaleLog().domain( yDomain0 ).range([ height - margin.bottom - padding.bottom - overviewPadding, margin.top + padding.top ]),
-        xScale1 = d3.scaleLinear().domain( xDomain0 ).range([ margin.left + padding.left, width - margin.right - padding.right ]),
-        yScale1 = d3.scaleLog().domain( yDomain0 ).range([ height, height - overviewPadding ]);
-    
-    // Zoom in one dimension.
-    let onPointerDown = ( event ) => {
-        Graph.onPointerDown( event, width, height, margin, padding, false, overviewPadding, -1, xScale, yScale, xDomain0, yDomain0 );
-    },
-    onPointerUp = ( event ) => {
-        if( Graph.downLocation.isX || Graph.downLocation.isY ) {
-            Graph.onPointerUp( event, width, height, margin, padding, xScale, yScale, xDomain0, yDomain0 );
-            AreaPlot.draw( ref, width, height, margin, padding, overviewPadding, true, false, false, xScale, yScale, xScale1, yScale1, xDomain0, yDomain0, xLabel, yLabel, dataSet );
+        xScale1 = d3.scaleLinear().domain( xDomain0 ).range([ 0, width - margin.left - padding.left - margin.right - padding.right ]),
+        yScale1 = d3.scaleLog().domain( yDomain0 ).range([ overviewPadding, 0 ]);
+  
+    // Redraws the graph.
+    function redraw( overviewSVG, isDrawDetail ) {
+        if( overviewSVG ) {
+            AreaPlot.drawOverview( overviewSVG, xScale1, yScale1, dataSet );
         }
-    };
+        if( isDrawDetail ) {
+            AreaPlot.draw( ref, margin, padding, overviewPadding, true, xScale, yScale, xScale1, yScale1, xDomain0, yDomain0, xLabel, yLabel, dataSet );
+        }
+    }
     
-    // Show or hide the controls.
+    // Show or hide the zoom bar.
     let onPointerOver = ( event ) => {
         if( !AreaPlot.isOver ) {
             AreaPlot.isOver = true;
-            AreaPlot.draw( ref, width, height, margin, padding, overviewPadding, true, false, false, xScale, yScale, xScale1, yScale1, xDomain0, yDomain0, xLabel, yLabel, dataSet );
+            ZoomBar.draw( d3.select( ref.current.childNodes[ 1 ].childNodes[ 0 ]), xScale, xDomain0, true, true, redraw, false );
         }
     };
     let onPointerOut = ( event ) => {
         if( AreaPlot.isOver && ( event.pointerType !== "touch" )) {
             AreaPlot.isOver = false;
-            AreaPlot.draw( ref, width, height, margin, padding, overviewPadding, false, false, false, xScale, yScale, xScale1, yScale1, xDomain0, yDomain0, xLabel, yLabel, dataSet );
+            ZoomBar.draw( d3.select( ref.current.childNodes[ 1 ].childNodes[ 0 ]), xScale, xDomain0, true, false, redraw, false );
         }
     };
-    document.addEventListener( "pointerdown", ( event ) => {
-        Graph.downLocation.isX = false;
-        Graph.downLocation.isY = false;
-        Graph.downLocation.isMin = false;
-        Graph.downLocation.isMax = false;
-        if( AreaPlot.isOver ) {
-            AreaPlot.isOver = false;
-            AreaPlot.draw( ref, width, height, margin, padding, overviewPadding, false, false, false, xScale, yScale, xScale1, yScale1, xDomain0, yDomain0, xLabel, yLabel, dataSet );
-        }
-    });
-        
-    // Create reference scale for scroll wheel.
-    const xScale0 = xScale.copy();
+//    document.addEventListener( "pointerdown", ( event ) => {
+//        if( AreaPlot.isOver ) {
+//            AreaPlot.isOver = false;
+//            const overviewSVG = d3.select( ref.current.childNodes[ 1 ].childNodes[ 0 ]);
+//            ZoomBar.draw( overviewSVG, xScale, xDomain0, true, false, redraw, false );
+//        }
+//    });
   
     // Handles the scroll wheel.
-    function onZoom( event ) {
-
-        // Check for X scrollbar events, because event.stopPropagation() does not prevent wheel events on iPad.
-        if( Graph.downLocation.isX ) {
-            return;
-        }
+    const xScale0 = xScale.copy();    // Create reference scale for scroll wheel
+    function onScroll( event ) {
     
         // Transform the scale.
-        const transform = event.transform;
-        xScale = transform.rescaleX( xScale0 );
-        Graph.clampDomain( xScale, xScale0.domain());
+        xScale.domain( event.transform.rescaleX( xScale0 ).domain());
+        ZoomBar.clampDomain( xScale, xScale0.domain());
         
         // Draw the plot.
-        AreaPlot.draw( ref, width, height, margin, padding, overviewPadding, true, false, false, xScale, yScale, xScale1, yScale1, xDomain0, yDomain0, xLabel, yLabel, dataSet );
+        ZoomBar.draw( d3.select( ref.current.childNodes[ 1 ].childNodes[ 0 ]), xScale, xDomain0, true, false, redraw, true );
     }
     
     // Set hook invoked upon mounting.
@@ -96,15 +85,19 @@ const AreaPlot = ( props ) => {
             .extent([[ 0, 0 ], [ width, height ]])
             .scaleExtent([ 1, 4 ])
             .filter( event => { event.preventDefault(); return true; })
-            .on( "zoom", onZoom ));
+            .on( "zoom", onScroll ));
         
-        // Draw the plot.
-        AreaPlot.draw( ref, width, height, margin, padding, overviewPadding, false, false, false, xScale, yScale, xScale1, yScale1, xDomain0, yDomain0, xLabel, yLabel, dataSet );
+        // Draw the graph.
+        ZoomBar.draw( d3.select( ref.current.childNodes[ 1 ].childNodes[ 0 ]), xScale, xDomain0, true, false, redraw, true );
     });
     
     // Return the component.
-    return <Graph width={width} height={height} margin={margin} padding={padding}
-        onPointerDown={onPointerDown} onPointerUp={onPointerUp} onPointerOver={onPointerOver} onPointerOut={onPointerOut} ref={ref} />
+    return(
+        <div style={{width: width, height: height}} onPointerOver={onPointerOver} onPointerOut={onPointerOut} className="parent" ref={ref}>
+            <svg width={width} height={height}/>
+            <ZoomBar x={margin.left + padding.left} y={height - margin.bottom} width={width - margin.left - padding.left - margin.right - padding.right + 1} height={margin.bottom + 1} scale={xScale} domain0={xDomain0} isZooming={true} redraw={redraw} />
+        </div>
+    );
 };
     
 /**
@@ -118,17 +111,13 @@ AreaPlot.isOver = false;
  * Draws the Area plot.
  *
  * @param  {Object}   ref          reference to DIV
- * @param  {number}   width        width, in pixels
- * @param  {number}   height       height, in pixels
  * @param  {Box}      margin       margin
  * @param  {Box}      padding      padding
  * @param  {number}   overviewPadding  padding for overview
  * @param  {boolean}  isZooming    true iff drawing zoom controls
- * @param  {boolean}  isXBinning   true iff drawing bin controls in X dimension
- * @param  {boolean}  isYBinning   true iff drawing bin controls in Y dimension
  * @param  {D3Scale}  xScale       X scale of detail
  * @param  {D3Scale}  yScale       Y scale of detail
- * @param  {D3Scale}  xScales      X scale of overview
+ * @param  {D3Scale}  xScale1      X scale of overview
  * @param  {D3Scale}  yScale1      Y scale of overview
  * @param  {Array}    xDomain0     Initial X domain
  * @param  {Array}    yDomain0     Initial Y domain
@@ -136,14 +125,16 @@ AreaPlot.isOver = false;
  * @param  {string}   yLabel       Y axis label
  * @param  {string}   dataSet      data set name
  */
-AreaPlot.draw = ( ref, width, height, margin, padding, overviewPadding, isZooming, isXBinning, isYBinning, xScale, yScale, xScale1, yScale1, xDomain0, yDomain0, xLabel, yLabel, dataSet ) => {
-    
+AreaPlot.draw = ( ref, margin, padding, overviewPadding, isZooming, xScale, yScale, xScale1, yScale1, xDomain0, yDomain0, xLabel, yLabel, dataSet ) => {
+
     // Initialization.
-    const svg = d3.select( ref.current.childNodes[ 0 ]);
-    svg.selectAll( "*" ).remove();
+    const svg = d3.select( ref.current.childNodes[ 0 ]),
+        width = +svg.attr( "width" ),
+        height = +svg.attr( "height" ),
+        data = Data.getValues( dataSet );
     
     // Draw the area.
-    let data = Data.getValues( dataSet );
+    svg.selectAll( "*" ).remove();
     const g = svg.append( "g" );
     g.append( "path" )
         .datum( data )
@@ -156,8 +147,26 @@ AreaPlot.draw = ( ref, width, height, margin, padding, overviewPadding, isZoomin
             .y1( d => yScale( d[ 1 ]))
         );
     
-    // Draw the axes, the overview, and the controls.
+    // Draw the axes.
     Graph.drawAxes( ref, width, height - overviewPadding, margin, padding, overviewPadding, -1, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+};
+
+/**
+ * Draws the zoom bar.
+ *
+ * @param  {number}   svg       svg element for overview
+ * @param  {D3Scale}  xScale1   X scale of overview
+ * @param  {D3Scale}  yScale1   Y scale of overview
+ * @param  {string}   dataSet   data set name
+ */
+AreaPlot.drawOverview = ( svg, xScale1, yScale1, dataSet ) => {
+
+    // Initialization.
+    const height = +svg.attr( "height" ),
+        data = Data.getValues( dataSet );
+
+    // Draw the overview.
+    const g = svg.append( "g" );
     g.append( "path" )
         .datum( data )
         .attr( "fill", "#99bbdd" )
@@ -168,7 +177,6 @@ AreaPlot.draw = ( ref, width, height, margin, padding, overviewPadding, isZoomin
             .y0( height )
             .y1( d => yScale1( d[ 1 ]))
         );
-    Graph.drawControls( ref, width, height, margin, padding, overviewPadding, -1, isZooming, false, isXBinning, isYBinning, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
 };
 
 export default AreaPlot;

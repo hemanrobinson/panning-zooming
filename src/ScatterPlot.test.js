@@ -1,10 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import * as d3 from 'd3';
-
-import { render, unmountComponentAtNode } from "react-dom";
+import { ReactDOM, render, unmountComponentAtNode } from "react-dom";
 import { act } from "react-dom/test-utils";
-
+import * as d3 from 'd3';
 import Graph from './Graph';
 import ScatterPlot from './ScatterPlot';
 
@@ -37,13 +34,6 @@ it( "creates a ScatterPlot element", () => {
     expect( div.nodeName ).toBe( "DIV" );
     let svg = div.firstChild;
     expect( svg.nodeName ).toBe( "svg" );
-    
-    // Test mouse events.
-    svg.dispatchEvent( new PointerEvent( "pointerdown", { bubbles: true }));
-    Graph.downLocation.isX = true;
-    svg.dispatchEvent( new PointerEvent( "pointerup", { bubbles: true }));
-    Graph.downLocation.isX = false;
-    svg.dispatchEvent( new PointerEvent( "pointerup", { bubbles: true }));
 });
 
 it( "draws the ScatterPlot", () => {
@@ -59,5 +49,5 @@ it( "draws the ScatterPlot", () => {
         xScale = d3.scaleLinear().domain([ 0, 1 ]).range([ 0, 100 ]),
         yScale = d3.scaleLinear().domain([ 0, 1 ]).range([ 0, 100 ]),
         symbolScale = d3.scaleOrdinal([ 0, 1 ], d3.symbols.map( s => d3.symbol().type( s ).size( 100 )()));
-    ScatterPlot.draw( ref, 400, 400, margin, padding, false, false, false, xScale, yScale, [ 0, 1 ], [ 0, 1 ], "X", "Y", "Iris", symbolScale );
+    ScatterPlot.draw( ref, 400, 400, margin, padding, false, xScale, yScale, [ 0, 1 ], [ 0, 1 ], "X", "Y", "Iris", symbolScale );
 });
