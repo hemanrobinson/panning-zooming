@@ -39,7 +39,7 @@ const AreaPlot = ( props ) => {
             AreaPlot.drawOverview( overviewSVG, xScale1, yScale1, dataSet );
         }
         if( isDrawDetail ) {
-            AreaPlot.draw( ref, margin, padding, overviewPadding, true, xScale, yScale, xScale1, yScale1, xDomain0, yDomain0, xLabel, yLabel, dataSet );
+            AreaPlot.draw( ref, margin, padding, overviewPadding, true, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet );
         }
     }
     
@@ -117,19 +117,16 @@ AreaPlot.isOver = false;
  * @param  {boolean}  isZooming    true iff drawing zoom controls
  * @param  {D3Scale}  xScale       X scale of detail
  * @param  {D3Scale}  yScale       Y scale of detail
- * @param  {D3Scale}  xScale1      X scale of overview
- * @param  {D3Scale}  yScale1      Y scale of overview
  * @param  {Array}    xDomain0     Initial X domain
  * @param  {Array}    yDomain0     Initial Y domain
  * @param  {string}   xLabel       X axis label
  * @param  {string}   yLabel       Y axis label
  * @param  {string}   dataSet      data set name
  */
-AreaPlot.draw = ( ref, margin, padding, overviewPadding, isZooming, xScale, yScale, xScale1, yScale1, xDomain0, yDomain0, xLabel, yLabel, dataSet ) => {
+AreaPlot.draw = ( ref, margin, padding, overviewPadding, isZooming, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet ) => {
 
     // Initialization.
     const svg = d3.select( ref.current.childNodes[ 0 ]),
-        width = +svg.attr( "width" ),
         height = +svg.attr( "height" ),
         data = Data.getValues( dataSet );
     
@@ -143,12 +140,12 @@ AreaPlot.draw = ( ref, margin, padding, overviewPadding, isZooming, xScale, ySca
         .attr( "stroke-width", 1.5 )
         .attr( "d", d3.area()
             .x( d => xScale( d[ 0 ]))
-            .y0( height - margin.bottom - overviewPadding )
+            .y0( height - overviewPadding - margin.bottom )
             .y1( d => yScale( d[ 1 ]))
         );
     
     // Draw the axes.
-    Graph.drawAxes( ref, width, height - overviewPadding, margin, padding, overviewPadding, -1, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+    Graph.drawAxes( svg, margin, padding, overviewPadding, -1, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
 };
 
 /**

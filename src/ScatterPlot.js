@@ -33,7 +33,7 @@ const ScatterPlot = ( props ) => {
   
     // Redraws the graph.
     function redraw() {
-        ScatterPlot.draw( ref, width, height, margin, padding, true, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
+        ScatterPlot.draw( d3.select( ref.current.childNodes[ 0 ]), margin, padding, true, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
     }
     
     // Show or hide the zoom bars.
@@ -144,7 +144,7 @@ const ScatterPlot = ( props ) => {
         
         // Redraw the plot.
         if( isX || isY ) {
-            ScatterPlot.draw( ref, width, height, margin, padding, true, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
+            ScatterPlot.draw( d3.select( ref.current.childNodes[ 0 ]), margin, padding, true, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
             ZoomBar.draw( d3.select( ref.current.childNodes[ 1 ].childNodes[ 0 ]), xScale, xDomain0, true, true, redraw, false );
             ZoomBar.draw( d3.select( ref.current.childNodes[ 2 ].childNodes[ 0 ]), yScale, yDomain0, true, true, redraw, false );
         }
@@ -175,7 +175,7 @@ const ScatterPlot = ( props ) => {
 //        ScatterPlot.gy.call(ScatterPlot.zoomY).attr("pointer-events", "none");
         
         // Draw the plot.
-        ScatterPlot.draw( ref, width, height, margin, padding, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
+        ScatterPlot.draw( d3.select( ref.current.childNodes[ 0 ]), margin, padding, false, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale );
     });
     
     // Return the component.
@@ -199,8 +199,6 @@ ScatterPlot.isOver = false;
  * Draws the scatter plot.
  *
  * @param  {Object}   ref          reference to DIV
- * @param  {number}   width        width, in pixels
- * @param  {number}   height       height, in pixels
  * @param  {Box}      margin       margin
  * @param  {Box}      padding      padding
  * @param  {boolean}  isZooming    true iff drawing zoom controls
@@ -213,13 +211,10 @@ ScatterPlot.isOver = false;
  * @param  {string}   dataSet      data set name
  * @param  {D3Scale}  symbolScale  symbol scale
  */
-ScatterPlot.draw = ( ref, width, height, margin, padding, isZooming, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale ) => {
-    
-    // Initialization.
-    const svg = d3.select( ref.current.childNodes[ 0 ]);
-    svg.selectAll( "*" ).remove();
+ScatterPlot.draw = ( svg, margin, padding, isZooming, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, dataSet, symbolScale ) => {
     
     // Draw the points.
+    svg.selectAll( "*" ).remove();
     const g = svg.append( "g" );
     let data = Data.getValues( dataSet );
     data.forEach(( datum ) => {
@@ -231,7 +226,7 @@ ScatterPlot.draw = ( ref, width, height, margin, padding, isZooming, xScale, ySc
     });
     
     // Draw the axes and the controls.
-    Graph.drawAxes( ref, width, height, margin, padding, 0, 0, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
+    Graph.drawAxes( svg, margin, padding, 0, 0, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel );
 };
 
 export default ScatterPlot;

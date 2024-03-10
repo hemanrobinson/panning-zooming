@@ -28,11 +28,11 @@ import ZoomBar from './ZoomBar';
 const Graph = React.forwardRef(( props, ref ) => {
     
     // Initialization.
-    let { width, height, onPointerDown, onPointerUp, onPointerOver, onPointerOut } = props;
+    let { width, height } = props;
     
     // Return the component.
     return <div style={{width: width, height: height}} className="parent" ref={ref}>
-        <svg width={width} height={height} onPointerDown={onPointerDown} onPointerMove={onPointerUp} onPointerUp={onPointerUp} onPointerOver={onPointerOver} onPointerOut={onPointerOut}/>
+        <svg width={width} height={height} />
     </div>;
 });
     
@@ -40,8 +40,6 @@ const Graph = React.forwardRef(( props, ref ) => {
  * Draws the axes.
  *
  * @param  {Object}   ref           reference to DIV
- * @param  {number}   width         width, in pixels
- * @param  {number}   height        height, in pixels
  * @param  {Box}      margin        margin
  * @param  {Box}      padding       padding
  * @param  {number}   xScrollSize   scroll size in the X dimension, or <0 if not supported, or 0 for default
@@ -55,10 +53,11 @@ const Graph = React.forwardRef(( props, ref ) => {
  * @param  {number[]} xThresholds   bin thresholds in the X dimension, or undefined for none
  * @param  {number[]} yThresholds   bin thresholds in the Y dimension, or undefined for none
  */
-Graph.drawAxes = ( ref, width, height, margin, padding, xScrollSize, yScrollSize, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, xThresholds, yThresholds ) => {
+Graph.drawAxes = ( svg, margin, padding, xScrollSize, yScrollSize, xScale, yScale, xDomain0, yDomain0, xLabel, yLabel, xThresholds, yThresholds ) => {
     
     // Initialization.
-    const svg = d3.select( ref.current.childNodes[ 0 ]),
+    const width = +svg.attr( "width" ),
+        height = +svg.attr( "height" ),
         size = ZoomBar.size,
         colorLight = "#ebeeef";
         
@@ -73,11 +72,11 @@ Graph.drawAxes = ( ref, width, height, margin, padding, xScrollSize, yScrollSize
         .attr( "x", width - padding.right )
         .attr( "y", 0 )
         .attr( "width", padding.right )
-        .attr( "height", height + xScrollSize )
+        .attr( "height", height )
         .style( "fill", colorLight );
     svg.append( "rect" )
         .attr( "x", 0 )
-        .attr( "y", height - margin.bottom )
+        .attr( "y", height - xScrollSize - margin.bottom )
         .attr( "width", width )
         .attr( "height", margin.bottom )
         .style( "fill", colorLight );
@@ -85,7 +84,7 @@ Graph.drawAxes = ( ref, width, height, margin, padding, xScrollSize, yScrollSize
         .attr( "x", 0 )
         .attr( "y", 0 )
         .attr( "width", margin.left )
-        .attr( "height", height + xScrollSize )
+        .attr( "height", height )
         .style( "fill", colorLight );
 
     // Get the tick values and format.
@@ -99,10 +98,10 @@ Graph.drawAxes = ( ref, width, height, margin, padding, xScrollSize, yScrollSize
     // Draw the X axis.
     svg.append( "g" )
         .attr( "class", ( margin.bottom > 50 ) ? "axisRotated" : "axis" )
-        .attr( "transform", "translate( 0, " + ( height - margin.bottom ) + " )" )
+        .attr( "transform", "translate( 0, " + ( height - xScrollSize - margin.bottom ) + " )" )
         .call( d3.axisBottom( xScale ).tickSizeOuter( 0 ).ticks( 3 ).tickValues( xTickValues ).tickFormat( xTickFormat ));
     svg.append( "text" )
-        .attr( "transform", "translate( " + ( width / 2 ) + " ," + ( height - 1.5 * size ) + ")" )
+        .attr( "transform", "translate( " + ( width / 2 ) + " ," + ( height - xScrollSize - 1.5 * size ) + ")" )
         .style( "text-anchor", "middle" )
         .text( xLabel );
         

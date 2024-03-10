@@ -49,5 +49,5 @@ it( "draws the ScatterPlot", () => {
         xScale = d3.scaleLinear().domain([ 0, 1 ]).range([ 0, 100 ]),
         yScale = d3.scaleLinear().domain([ 0, 1 ]).range([ 0, 100 ]),
         symbolScale = d3.scaleOrdinal([ 0, 1 ], d3.symbols.map( s => d3.symbol().type( s ).size( 100 )()));
-    ScatterPlot.draw( ref, 400, 400, margin, padding, false, xScale, yScale, [ 0, 1 ], [ 0, 1 ], "X", "Y", "Iris", symbolScale );
+    ScatterPlot.draw( d3.select( ref.current.childNodes[ 0 ]), margin, padding, false, xScale, yScale, [ 0, 1 ], [ 0, 1 ], "X", "Y", "Iris", symbolScale );
 });

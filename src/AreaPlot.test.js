@@ -51,5 +51,5 @@ it( "draws the AreaPlot", () => {
         xScale1 = d3.scaleLinear().domain([ 0, 1 ]).range([ 0, 100 ]),
         yScale1 = d3.scaleLinear().domain([ 0, 1 ]).range([ 0, 100 ]),
         symbolScale = d3.scaleOrdinal([ 0, 1 ], d3.symbols.map( s => d3.symbol().type( s ).size( 100 )()));
-    AreaPlot.draw( ref, margin, padding, 0, false, xScale, yScale, xScale1, yScale1, [ 0, 1 ], [ 0, 1 ], "X", "Y", "Iris" );
+    AreaPlot.draw( ref, margin, padding, 0, false, xScale, yScale, [ 0, 1 ], [ 0, 1 ], "X", "Y", "Iris" );
 });

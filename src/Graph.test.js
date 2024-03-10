@@ -44,5 +44,5 @@ it( "draws the axes", () => {
         padding = { top: 0, right: 0, bottom: 0, left: 0 },
         xScale = d3.scaleLinear().domain([ 0, 1 ]).range([ 0, 100 ]),
         yScale = d3.scaleLinear().domain([ 0, 1 ]).range([ 0, 100 ]);
-    Graph.drawAxes( ref, 400, 400, margin, padding, 0, 0, xScale, yScale, [ 0, 1 ], [ 0, 1 ], "X", "Y" );
+    Graph.drawAxes( d3.select( ref.current.childNodes[ 0 ]), margin, padding, 0, 0, xScale, yScale, [ 0, 1 ], [ 0, 1 ], "X", "Y" );
 });
