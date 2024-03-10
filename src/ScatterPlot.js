@@ -40,22 +40,22 @@ const ScatterPlot = ( props ) => {
     let onPointerOver = ( event ) => {
         if( !ScatterPlot.isOver ) {
             ScatterPlot.isOver = true;
-            ZoomBar.draw( d3.select( ref.current.childNodes[ 1 ].childNodes[ 0 ]), xScale, xDomain0, true, true, redraw, false );
-            ZoomBar.draw( d3.select( ref.current.childNodes[ 2 ].childNodes[ 0 ]), yScale, yDomain0, true, true, redraw, false );
+            ZoomBar.draw( d3.select( ref.current.childNodes[ 1 ].childNodes[ 0 ]), xScale, xDomain0, true, true );
+            ZoomBar.draw( d3.select( ref.current.childNodes[ 2 ].childNodes[ 0 ]), yScale, yDomain0, true, true );
         }
     };
     let onPointerOut = ( event ) => {
         if( ScatterPlot.isOver && ( event.pointerType !== "touch" )) {
             ScatterPlot.isOver = false;
-            ZoomBar.draw( d3.select( ref.current.childNodes[ 1 ].childNodes[ 0 ]), xScale, xDomain0, false, false, redraw, false );
-            ZoomBar.draw( d3.select( ref.current.childNodes[ 2 ].childNodes[ 0 ]), yScale, yDomain0, false, false, redraw, false );
+            ZoomBar.draw( d3.select( ref.current.childNodes[ 1 ].childNodes[ 0 ]), xScale, xDomain0, false, false, );
+            ZoomBar.draw( d3.select( ref.current.childNodes[ 2 ].childNodes[ 0 ]), yScale, yDomain0, false, false );
         }
     };
 //    document.addEventListener( "pointerdown", ( event ) => {
 //        if( ScatterPlot.isOver ) {
 //            ScatterPlot.isOver = false;
-//            ZoomBar.draw( d3.select( ref.current.childNodes[ 1 ].childNodes[ 0 ]), xScale, xDomain0, false, false, redraw, false );
-//            ZoomBar.draw( d3.select( ref.current.childNodes[ 2 ].childNodes[ 0 ]), yScale, yDomain0, false, false, redraw, false );
+//            ZoomBar.draw( d3.select( ref.current.childNodes[ 1 ].childNodes[ 0 ]), xScale, xDomain0, false, false );
+//            ZoomBar.draw( d3.select( ref.current.childNodes[ 2 ].childNodes[ 0 ]), yScale, yDomain0, false, false );
 //        }
 //    });
     
