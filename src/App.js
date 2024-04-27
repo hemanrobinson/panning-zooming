@@ -14,17 +14,14 @@ const App = () => {
             <div className="Description">
                 <h1>Zooming Usability&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/hemanrobinson/zooming-usability/"><img className="icon" title="Code Shared on GitHub" alt="Code Shared on GitHub" src={github}/></a></h1>
                 <p>
-                The Zoom Bar was developed in 1996 by <a href="https://en.wikipedia.org/wiki/Ben_Shneiderman">Dr. Ben Shneiderman</a> and his team at the <a href="https://hcil.umd.edu">University of Maryland’s Human-Computer Interaction Laboratory</a>.
+                A Zoom Bar is a range slider that supports panning and zooming. Zoom Bars were developed in 1996 by <a href="https://en.wikipedia.org/wiki/Ben_Shneiderman">Dr. Ben Shneiderman</a> and his team at the <a href="https://hcil.umd.edu">University of Maryland’s Human-Computer Interaction Laboratory</a>.
                 </p>
                 <p className="center">
                     <a href="https://en.wikipedia.org/wiki/Ben_Shneiderman"><img title="Dr. Ben Shneiderman" alt="Dr. Ben Shneiderman" src={shneiderman}/></a>
                 </p>
-                <p>
-                A Zoom Bar is simply a range slider that supports panning and zooming. The two handles on the ends define the area of the zoom; the thumb in the middle supports panning.
-                </p>
                 <h2>Examples</h2>
                 <p>
-                In one dimension, the Zoom Bar is a familiar part of the <a href="https://vega.github.io/vega/examples/overview-plus-detail/">Overview Plus Detail pattern</a> (Tidwell 2006) (Cockburn et. al., 2008).
+                In one dimension, the Zoom Bar is a familiar part of the <a href="https://vega.github.io/vega/examples/overview-plus-detail/">Overview Plus Detail pattern</a> (Tidwell 2006) (Cockburn et. al., 2008). Drag the handles on the ends of the zoom bar to zoom in or out; drag the "thumb" in the middle to pan the graph.
                 </p>
             </div>
             <div className="Graph">
@@ -32,35 +29,40 @@ const App = () => {
             </div>
             <div className="Description">
                 <p>
-                Zoom Bars were originally used in two dimensions (Jog, 1995). In this example, the Zoom Bars are displayed only when the user hovers over the plot.
+                Zoom Bars were originally used in two dimensions (Jog, 1995). In the scatter plot below, the Zoom Bars are displayed along the axes when the user hovers over the plot. (In higher dimensions, it’s convenient to position Zoom Bars outside the graph.)
                 </p>
             </div>
             <div className="Graph">
                 <ScatterPlot dataSet={ "Iris" } />
             </div>
             <div className="Description">
-                <p>
-                In higher dimensions, it’s convenient to position Zoom Bars outside the graph [TBD].
-                </p>
                 <h2>User Interface</h2>
                 <p>
-                Zoom Bars are familiar controls, used in commercial products from <a href="https://spectrum.adobe.com/page/scroll-zoom-bar/">Adobe</a>, <a href="https://community.amazonquicksight.com/t/zoom-level-in-a-bar-chart/8179">Amazon</a>, <a href="https://www.ibm.com/docs/en/cognos-analytics/11.2.0?topic=dashboards-zoom-bar-in-area-line-bar-visualizations">IBM</a>, <a href="https://powerbi.microsoft.com/en-us/blog/power-bi-november-2020-feature-summary/#_Toc55467056">Microsoft</a>, <a href="https://docs.tibco.com/pub/spotfire/6.5.1/doc/html/vis/vis_zoom_sliders.htm">Tibco</a>,
-                and others. Zoom Bars can be applied consistently in any number of dimensions. Familiar, consistent controls ease the user’s learning curve — which is particularly important in web applications. Jakob Nielsen recommends engaging the user <a href="https://www.nngroup.com/articles/how-long-do-users-stay-on-web-pages/">within the first 10 seconds</a> -- because if users don't find value in a web page quickly, they move on (Nielsen, 2011).
+                Zoom Bars are <a href="https://lawsofux.com/jakobs-law/">familiar</a> controls, used in commercial products from <a href="https://spectrum.adobe.com/page/scroll-zoom-bar/">Adobe</a>, <a href="https://community.amazonquicksight.com/t/zoom-level-in-a-bar-chart/8179">Amazon</a>, <a href="https://www.ibm.com/docs/en/cognos-analytics/11.2.0?topic=dashboards-zoom-bar-in-area-line-bar-visualizations">IBM</a>, <a href="https://powerbi.microsoft.com/en-us/blog/power-bi-november-2020-feature-summary/#_Toc55467056">Microsoft</a>, <a href="https://docs.tibco.com/pub/spotfire/6.5.1/doc/html/vis/vis_zoom_sliders.htm">Tibco</a>,
+                and others. This eases the user’s learning curve, which is particularly important in web applications. Jakob Nielsen recommends engaging the user <a href="https://www.nngroup.com/articles/how-long-do-users-stay-on-web-pages/">within the first 10 seconds</a> -- because if users don't find value in a web page quickly, they move on (Nielsen, 2011).
                 </p>
                 <p>
-                Zoom Bars can be decorated with any graphs. In the one-dimensional example above, both Overview and Detail show different views of the same graph. In higher dimensions, the Zoom Bars can be decorated with histograms to show the distribution of the data. This mitigates the usability problem of applying the linear control to a non-linear distribution (Willett, 2007).
+                A Zoom Bar can be decorated with any graph. The overview in the one-dimensional example above is also useful in higher dimensions. Showing the distribution of the data mitigates the usability problem of applying the linear control to a non-linear distribution (Willett, 2007).
                 </p>
                 <p>
-                Whether to display Zoom Bars persistently or transiently depends on the purpose of the graph. The scatter plot example above assumes that the graph is used for presentation as well as exploration, so to minimize distraction the zoom bars are hidden until they can be used. Zoom Bars gives the user <em>fine-grained control</em>, enabling them to zoom in one dimension at a time.
+                Zoom Bars can be displayed persistently or transiently depending on the graph. In the scatter plot example above, it's assumed that the graph is used for presentation as well as exploration. To minimize distraction during presentation, the zoom bars are hidden until they can be used.
                 </p>
                 <p>
-                A Zoom Bar provides an indicator, showing that a graph can be zoomed; its absence shows that one cannot.
+                Not all graphs can be zoomed. Zoom Bar provides an indicator, showing that a graph can be zoomed; its absence shows that one cannot.
                 </p>
                 <p>
-                The scroll wheel is powerful, but inconsistently used. Some graphics applications use it for its original purpose or scrolling; some use it for zooming; and some  don’t support either. The only way to tell what the scroll wheel does is to try to use it. In contrast, the Zoom Bar provides clear <em>affordance</em>: it shows the user whether they can zoom, where they have zoomed, and where they can zoom.
+                The scroll wheel is powerful, enabling the user to zoom in multiple dimensions simultaneously. Zoom Bars gives the user <em>fine-grained control</em>, enabling them to zoom in one dimension at a time.
                 </p>
                 <p>
-                <em>For all these reasons, we should use Zoom Bars in all our zoomable visualizations.</em>
+                The scroll wheel is inconsistently used. Some graphics applications use it for its original purpose of scrolling; some use it for zooming; and some do neither. The only way to tell what the scroll wheel does is to try to use it. In contrast, the Zoom Bar provides clear <a href="https://uxplanet.org/ux-design-glossary-how-to-use-affordances-in-user-interfaces-393c8e9686e4">affordance</a>: it shows the user
+                <ul>
+                <li>whether they can zoom,</li>
+                <li>where they have zoomed, and</li>
+                <li>where they can zoom.</li>
+                </ul>
+                </p>
+                <p>
+                For all these reasons, we should use Zoom Bars in all our zoomable visualizations.
                 </p>
                 <h2>Implementation</h2>
                 <p>
