@@ -38,23 +38,23 @@ const App = () => {
             <div className="Description">
                 <h2>User Interface</h2>
                 <p>
-                Zoom Bars are <a href="https://lawsofux.com/jakobs-law/">familiar</a> controls, used in commercial products from <a href="https://spectrum.adobe.com/page/scroll-zoom-bar/">Adobe</a>, <a href="https://community.amazonquicksight.com/t/zoom-level-in-a-bar-chart/8179">Amazon</a>, <a href="https://www.ibm.com/docs/en/cognos-analytics/11.2.0?topic=dashboards-zoom-bar-in-area-line-bar-visualizations">IBM</a>, <a href="https://powerbi.microsoft.com/en-us/blog/power-bi-november-2020-feature-summary/#_Toc55467056">Microsoft</a>, <a href="https://docs.tibco.com/pub/spotfire/6.5.1/doc/html/vis/vis_zoom_sliders.htm">Tibco</a>,
-                and others. This eases the user’s learning curve, which is particularly important in web applications. Jakob Nielsen recommends engaging the user <a href="https://www.nngroup.com/articles/how-long-do-users-stay-on-web-pages/">within the first 10 seconds</a> -- because if users don't find value in a web page quickly, they move on (Nielsen, 2011).
+                Why use Zoom Bars?
                 </p>
                 <p>
-                A Zoom Bar can be decorated with any graph. The overview in the one-dimensional example above is also useful in higher dimensions. Showing the distribution of the data mitigates the usability problem of applying the linear control to a non-linear distribution (Willett, 2007).
+                <em><a href="https://lawsofux.com/jakobs-law/">Familiarity</a>:</em> Familiarity eases the user’s learning curve, which is particularly important in web applications. Jakob Nielsen recommends engaging the user <a href="https://www.nngroup.com/articles/how-long-do-users-stay-on-web-pages/">within the first 10 seconds</a> -- because if users don't find value in a web page quickly, they move on (Nielsen, 2011). Zoom Bars are familiar controls, used in commercial products from <a href="https://spectrum.adobe.com/page/scroll-zoom-bar/">Adobe</a>, <a href="https://community.amazonquicksight.com/t/zoom-level-in-a-bar-chart/8179">Amazon</a>, <a href="https://www.ibm.com/docs/en/cognos-analytics/11.2.0?topic=dashboards-zoom-bar-in-area-line-bar-visualizations">IBM</a>, <a href="https://powerbi.microsoft.com/en-us/blog/power-bi-november-2020-feature-summary/#_Toc55467056">Microsoft</a>, <a href="https://docs.tibco.com/pub/spotfire/6.5.1/doc/html/vis/vis_zoom_sliders.htm">Tibco</a>,
+                and others.
                 </p>
                 <p>
-                Zoom Bars can be displayed persistently or transiently depending on the graph. In the scatter plot example above, it's assumed that the graph is used for presentation as well as exploration. To minimize distraction during presentation, the zoom bars are hidden until they can be used.
+                <em>Flexibility:</em> Zoom Bars can be displayed persistently or transiently depending on the graph. It's assumed that the scatter plot example above is used for presentation, so to minimize distraction, the zoom bars are hidden until they can be used.
                 </p>
                 <p>
-                Not all graphs can be zoomed. Zoom Bar provides an indicator, showing that a graph can be zoomed; its absence shows that one cannot.
+                <em>Control:</em> The scroll wheel is powerful, enabling the user to zoom in multiple dimensions simultaneously. Zoom Bars give the user <em>fine-grained</em> control, enabling them to zoom in one dimension at a time.
                 </p>
                 <p>
-                The scroll wheel is powerful, enabling the user to zoom in multiple dimensions simultaneously. Zoom Bars gives the user <em>fine-grained control</em>, enabling them to zoom in one dimension at a time.
+                <em>Context:</em> A Zoom Bar can be decorated with histograms or area plots to show distributions. This mitigates the usability problem of applying the linear control to a non-linear distribution (Willett, 2007). Particularly in higher dimensions, it's much easier to zoom if you know where the data are.
                 </p>
                 <p>
-                The scroll wheel is inconsistently used. Some graphics applications use it for its original purpose of scrolling; some use it for zooming; and some do neither. The only way to tell what the scroll wheel does is to try to use it. In contrast, the Zoom Bar provides clear <a href="https://uxplanet.org/ux-design-glossary-how-to-use-affordances-in-user-interfaces-393c8e9686e4">affordance</a>: it shows the user
+                <em><a href="https://uxplanet.org/ux-design-glossary-how-to-use-affordances-in-user-interfaces-393c8e9686e4">Affordance</a>:</em> Some graphics applications use the scroll wheel for its original purpose of scrolling. Some use it for zooming. Some do neither, because not all graphs can be zoomed. The only way to tell what a scroll wheel does in a graph is to try to use it. In contrast, the Zoom Bar provides clear affordance: it shows the user
                 <ul>
                 <li>whether they can zoom,</li>
                 <li>where they have zoomed, and</li>
