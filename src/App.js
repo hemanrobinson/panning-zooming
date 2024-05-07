@@ -22,7 +22,7 @@ const App = () => {
                 </p>
                 <h2>Examples</h2>
                 <p>
-                In one dimension, the Zoom Bar is a familiar part of the <a href="https://vega.github.io/vega/examples/overview-plus-detail/">Overview Plus Detail pattern</a> (Tidwell 2006) (Cockburn et. al., 2008). Drag the handles on the ends of the zoom bar to zoom in or out; drag the "thumb" in the middle to pan the graph.
+                In one dimension, the Zoom Bar is a familiar part of the <a href="https://vega.github.io/vega/examples/overview-plus-detail/">Overview Plus Detail pattern</a> (Tidwell 2006) (Cockburn et. al., 2008). Drag the handles on the ends of the Zoom Bar to zoom in or out; drag the "thumb" in the middle to pan the graph.
                 </p>
             </div>
             <div className="Graph">
@@ -52,13 +52,13 @@ const App = () => {
                 and others.
                 </p>
                 <p>
-                <strong><em>Flexibility:</em></strong> Zoom Bars can be displayed persistently or transiently, inside or outside, depending on the graph. In the one-dimensional example above, it's assumed that the user wants to see both overview and detail. In the two-dimensional example above, to minimize distraction, the zoom bars are hidden until they can be used. In higher dimensions, it's convenient to display the Zoom Bars persistently and outside the graph.
+                <strong><em>Flexibility:</em></strong> Zoom Bars can be displayed persistently or transiently, inside or outside, depending on the graph. In the one-dimensional example above, it's assumed that the user wants to see both overview and detail. In the two-dimensional example above, to minimize distraction, the Zoom Bars are hidden until they can be used. In higher dimensions, it's convenient to display the Zoom Bars persistently outside the graph.
                 </p>
                 <p>
                 <strong><em>Control:</em></strong> The scroll wheel is powerful, enabling the user to zoom in multiple dimensions simultaneously. Zoom Bars give the user <em>fine-grained</em> control, enabling them to zoom in one dimension at a time.
                 </p>
                 <p>
-                <strong><em>Affordance:</em></strong> Some graphics applications use the scroll wheel for its original purpose of scrolling. Some use it for zooming. Some do neither, because not all graphs can be zoomed. The only way to tell what the scroll wheel does is to try to use it. In contrast, the Zoom Bar provides clear <a href="https://uxplanet.org/ux-design-glossary-how-to-use-affordances-in-user-interfaces-393c8e9686e4">affordance</a>: it shows the user
+                <strong><em>Affordance:</em></strong> Some graphics applications use the scroll wheel for its original purpose of scrolling. Some use it for zooming. Some do neither, because not all graphs can be zoomed. In contrast, the Zoom Bar always shows the results of both scrolling and zooming, and its presence or absence shows whether or not a graph can be zoomed. The Zoom Bar thus provides clear <a href="https://uxplanet.org/ux-design-glossary-how-to-use-affordances-in-user-interfaces-393c8e9686e4">affordance</a>: it shows the user
                 <ul>
                 <li>whether they can zoom,</li>
                 <li>where they have zoomed, and</li>
