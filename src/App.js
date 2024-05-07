@@ -58,12 +58,7 @@ const App = () => {
                 <strong><em>Control:</em></strong> The scroll wheel is powerful, enabling the user to zoom in multiple dimensions simultaneously. Zoom Bars give the user <em>fine-grained</em> control, enabling them to zoom in one dimension at a time.
                 </p>
                 <p>
-                <strong><em>Affordance:</em></strong> Some graphics applications use the scroll wheel for its original purpose of scrolling. Some use it for zooming. Some do neither, because not all graphs can be zoomed. In contrast, the Zoom Bar always shows the results of both scrolling and zooming, and its presence or absence shows whether or not a graph can be zoomed. The Zoom Bar thus provides clear <a href="https://uxplanet.org/ux-design-glossary-how-to-use-affordances-in-user-interfaces-393c8e9686e4">affordance</a>: it shows the user
-                <ul>
-                <li>whether they can zoom,</li>
-                <li>where they have zoomed, and</li>
-                <li>where they can zoom.</li>
-                </ul>
+                <strong><em>Affordance:</em></strong> Some graphics applications use the scroll wheel for its original purpose of scrolling. Some use it for zooming. Some do neither, because not all graphs can be zoomed. The only way to tell what the scroll wheel does is to try to use it. In contrast, the Zoom Bar provides clear <a href="https://uxplanet.org/ux-design-glossary-how-to-use-affordances-in-user-interfaces-393c8e9686e4">affordance</a>: it shows the results of both scrolling and zooming, and its presence or absence shows whether a graph can be zoomed.
                 </p>
                 <p>
                 For all these reasons, we should use Zoom Bars in all our zoomable visualizations.
