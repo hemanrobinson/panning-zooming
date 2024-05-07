@@ -15,7 +15,7 @@ const App = () => {
             <div className="Description">
                 <h1>Zooming Usability&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/hemanrobinson/zooming-usability/"><img className="icon" title="Code Shared on GitHub" alt="Code Shared on GitHub" src={github}/></a></h1>
                 <p>
-                A Zoom Bar is a range slider that supports panning and zooming. Zoom Bars were developed in 1996 by <a href="https://en.wikipedia.org/wiki/Ben_Shneiderman">Dr. Ben Shneiderman</a> and his team at the <a href="https://hcil.umd.edu">University of Maryland’s Human-Computer Interaction Laboratory</a>.
+                A Zoom Bar is a range slider that supports panning and zooming. Zoom Bars were developed in 1996 at the <a href="https://hcil.umd.edu">University of Maryland’s Human-Computer Interaction Laboratory</a> by <a href="https://en.wikipedia.org/wiki/Ben_Shneiderman">Dr. Ben Shneiderman</a> and his team.
                 </p>
                 <p className="center">
                     <a href="https://en.wikipedia.org/wiki/Ben_Shneiderman"><img title="Dr. Ben Shneiderman" alt="Dr. Ben Shneiderman" src={shneiderman}/></a>
@@ -38,7 +38,7 @@ const App = () => {
             </div>
             <div className="Description">
                 <p>
-                In higher dimensions, it helps to decorate the range sliders with histograms. This mitigates the usability problem of applying a linear control to a non-linear distribution (Willett, 2007). A <a href="https://github.com/airbnb/rheostat">nice example</a> has been open-sourced by AirBnB:
+                In higher dimensions, it helps to decorate the range sliders with histograms. This mitigates the usability problem of applying a linear control to a non-linear distribution (Willett, 2007). AirBnB, which supports multi-dimensional queries, has open-sourced a nice <a href="https://github.com/airbnb/rheostat">example</a>:
                 <p className="center">
                     <a href="https://github.com/airbnb/rheostat"><img title="AirBnB Slider" alt="AirBnB Slider" src={airbnb}/></a>
                 </p>
