@@ -15,6 +15,9 @@ const App = () => {
             <div className="Description">
                 <h1>Zooming Usability&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/hemanrobinson/zooming-usability/"><img className="icon" title="Code Shared on GitHub" alt="Code Shared on GitHub" src={github}/></a></h1>
                 <p>
+                What's the best user experience when zooming visualizations?
+                </p>
+                <p>
                 A Zoom Bar is a range slider that supports panning and zooming. Zoom Bars were developed in 1996 at the <a href="https://hcil.umd.edu">University of Maryland’s Human-Computer Interaction Laboratory</a> by <a href="https://en.wikipedia.org/wiki/Ben_Shneiderman">Dr. Ben Shneiderman</a> and his team.
                 </p>
                 <p className="center">
